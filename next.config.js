@@ -8,7 +8,7 @@ const nextConfig = {
   
   // Enable experimental features
   experimental: {
-    optimizeCss: true,
+    // optimizeCss: true, // Disabled due to critters dependency
   },
   
   // Compiler options

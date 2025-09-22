@@ -26,7 +26,7 @@ export async function connectToDatabase() {
 export async function testConnection() {
   try {
     const pool = await connectToDatabase();
-    const result = await pool.request().query('SELECT 1 as test');
+    await pool.request().query('SELECT 1 as test');
     await pool.close();
     return { success: true, message: 'Kết nối database thành công!' };
   } catch (error) {
