@@ -10,17 +10,17 @@
   "orientation": "portrait-primary",
   "icons": [
     {
-      "src": "/favicon/favicon.ico",
+      "src": "/favicon.ico",
       "sizes": "any",
       "type": "image/x-icon"
     },
     {
-      "src": "/favicon/favicon-96x96.png",
+      "src": "/favicon-96x96.png",
       "sizes": "96x96",
       "type": "image/png"
     },
     {
-      "src": "/favicon/apple-touch-icon.png",
+      "src": "/apple-touch-icon.png",
       "sizes": "180x180",
       "type": "image/png"
     },
