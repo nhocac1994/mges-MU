@@ -2,7 +2,6 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import Image from 'next/image';
 
 export default function Register() {
   const [formData, setFormData] = useState({
@@ -127,7 +126,7 @@ export default function Register() {
           <div className="max-w-6xl mx-auto px-5 py-2">
             <div className="flex justify-between items-center">
               <div className="flex items-center space-x-4">
-                <Image 
+                <img 
                   src="/icon.jpg" 
                   alt="Mu Online Logo" 
                   width={40} 
@@ -474,13 +473,13 @@ export default function Register() {
                 </p>
                 <div className="flex space-x-4">
                   <a href="#" className="text-gray-400 hover:text-blue-400 transition-colors">
-                    <Image src="/facebook-logo.webp" alt="Facebook" width={24} height={24} />
+                    <img src="/facebook-logo.webp" alt="Facebook" width={24} height={24} />
                   </a>
                   <a href="#" className="text-gray-400 hover:text-blue-400 transition-colors">
-                    <Image src="/tiktok-logo.webp" alt="TikTok" width={24} height={24} />
+                    <img src="/tiktok-logo.webp" alt="TikTok" width={24} height={24} />
                   </a>
                   <a href="#" className="text-gray-400 hover:text-blue-400 transition-colors">
-                    <Image src="/Zalo-icon.webp" alt="Zalo" width={24} height={24} />
+                    <img src="/Zalo-icon.webp" alt="Zalo" width={24} height={24} />
                   </a>
                 </div>
               </div>

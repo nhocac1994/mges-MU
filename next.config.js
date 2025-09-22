@@ -35,7 +35,11 @@ const nextConfig = {
   },
   
   // Output configuration
-  output: 'standalone',
+  output: 'export',
+  trailingSlash: true,
+  images: {
+    unoptimized: true
+  },
   
   // Disable cache for development
   generateBuildId: async () => {

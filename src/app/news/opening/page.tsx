@@ -1,5 +1,4 @@
 import Link from 'next/link';
-import Image from 'next/image';
 
 export default function NewsOpening() {
   return (
@@ -23,7 +22,7 @@ export default function NewsOpening() {
           <div className="max-w-6xl mx-auto px-5 py-2">
             <div className="flex justify-between items-center">
               <div className="flex items-center space-x-4">
-                <Image 
+                <img 
                   src="/icon.jpg" 
                   alt="Mu Online Logo" 
                   width={40} 
@@ -237,7 +236,7 @@ export default function NewsOpening() {
               {/* Logo & Description */}
               <div className="md:col-span-2">
                 <div className="flex items-center mb-4">
-                  <Image 
+                  <img 
                     src="/icon.jpg" 
                     alt="Mu Online Logo" 
                     width={40} 
@@ -258,13 +257,13 @@ export default function NewsOpening() {
                 </p>
                 <div className="flex space-x-4">
                   <a href="#" className="social-link">
-                    <Image src="/facebook-logo.webp" alt="Facebook" width={20} height={20} />
+                    <img src="/facebook-logo.webp" alt="Facebook" width={20} height={20} />
                   </a>
                   <a href="#" className="social-link">
-                    <Image src="/tiktok-logo.webp" alt="TikTok" width={20} height={20} />
+                    <img src="/tiktok-logo.webp" alt="TikTok" width={20} height={20} />
                   </a>
                   <a href="#" className="social-link">
-                    <Image src="/Zalo-icon.webp" alt="Zalo" width={20} height={20} />
+                    <img src="/Zalo-icon.webp" alt="Zalo" width={20} height={20} />
                   </a>
                 </div>
               </div>
