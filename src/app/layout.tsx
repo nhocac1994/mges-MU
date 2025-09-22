@@ -88,15 +88,32 @@ export default function RootLayout({
   return (
     <html lang="vi">
       <head>
-        <link rel="icon" href="/favicon.ico" sizes="any" />
-        <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-        <link rel="icon" href="/favicon-96x96.png" sizes="96x96" type="image/png" />
-        <link rel="apple-touch-icon" href="/apple-touch-icon.png" sizes="180x180" />
-        <link rel="shortcut icon" href="/favicon.ico" />
+        {/* Favicon */}
+        <link rel="icon" href="/favicon/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon/favicon-16x16.png" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32x32.png" />
+        <link rel="icon" type="image/png" sizes="96x96" href="/favicon/favicon-96x96.png" />
+        
+        {/* Apple Touch Icons */}
+        <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png" />
+        <link rel="apple-touch-icon" sizes="152x152" href="/favicon/apple-touch-icon-152x152.png" />
+        <link rel="apple-touch-icon" sizes="144x144" href="/favicon/apple-touch-icon-144x144.png" />
+        <link rel="apple-touch-icon" sizes="120x120" href="/favicon/apple-touch-icon-120x120.png" />
+        <link rel="apple-touch-icon" sizes="114x114" href="/favicon/apple-touch-icon-114x114.png" />
+        <link rel="apple-touch-icon" sizes="76x76" href="/favicon/apple-touch-icon-76x76.png" />
+        <link rel="apple-touch-icon" sizes="72x72" href="/favicon/apple-touch-icon-72x72.png" />
+        <link rel="apple-touch-icon" sizes="60x60" href="/favicon/apple-touch-icon-60x60.png" />
+        <link rel="apple-touch-icon" sizes="57x57" href="/favicon/apple-touch-icon-57x57.png" />
+        
+        {/* Android Chrome Icons */}
+        <link rel="icon" type="image/png" sizes="192x192" href="/favicon/android-chrome-192x192.png" />
+        <link rel="icon" type="image/png" sizes="512x512" href="/favicon/android-chrome-512x512.png" />
+        
+        {/* Manifest and Meta */}
         <link rel="manifest" href="/site.webmanifest" />
         <meta name="theme-color" content="#3b82f6" />
         <meta name="msapplication-TileColor" content="#3b82f6" />
-        <meta name="msapplication-TileImage" content="/apple-touch-icon.png" />
+        <meta name="msapplication-TileImage" content="/favicon/apple-touch-icon.png" />
       </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
