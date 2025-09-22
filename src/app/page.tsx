@@ -94,13 +94,13 @@ export default function Home() {
       
       {/* Top Header */}
       <div className="bg-black/95 py-2 border-b border-gray-600 relative z-50">
-        <div className="max-w-6xl mx-auto px-5 flex justify-between items-center">
-          <div className="text-green-400 text-sm font-medium">🟢 Server Online</div>
-          <div className="flex gap-5">
-            <Link href="/register" className="text-white text-sm font-medium px-4 py-1 rounded hover:text-blue-300 hover:bg-blue-500/10 transition-all">
+        <div className="max-w-6xl mx-auto px-5 flex flex-col sm:flex-row justify-between items-center gap-2">
+          <div className="text-green-400 text-xs sm:text-sm font-medium">🟢 Server Online</div>
+          <div className="flex gap-2 sm:gap-5">
+            <Link href="/register" className="text-white text-xs sm:text-sm font-medium px-2 sm:px-4 py-1 rounded hover:text-blue-300 hover:bg-blue-500/10 transition-all">
               ĐĂNG KÝ
             </Link>
-            <Link href="/login" className="text-white text-sm font-medium px-4 py-1 rounded hover:text-blue-300 hover:bg-blue-500/10 transition-all">
+            <Link href="/login" className="text-white text-xs sm:text-sm font-medium px-2 sm:px-4 py-1 rounded hover:text-blue-300 hover:bg-blue-500/10 transition-all">
               ĐĂNG NHẬP
             </Link>
           </div>
@@ -111,20 +111,20 @@ export default function Home() {
       <nav className="bg-black/95 py-4 border-b-2 border-blue-400 relative z-50">
         <div className="max-w-6xl mx-auto px-5">
           <div className="flex justify-center">
-            <div className="flex gap-8">
-              <Link href="/" className="text-white font-bold hover:text-blue-300 transition-colors relative z-10 px-4 py-2 rounded hover:bg-blue-500/10">
+            <div className="flex flex-wrap gap-2 sm:gap-4 md:gap-8 justify-center">
+              <Link href="/" className="text-white font-bold hover:text-blue-300 transition-colors relative z-10 px-2 sm:px-4 py-2 rounded hover:bg-blue-500/10 text-sm sm:text-base">
               TRANG CHỦ
             </Link>
-              <Link href="/info" className="text-white font-bold hover:text-blue-300 transition-colors relative z-10 px-4 py-2 rounded hover:bg-blue-500/10">
+              <Link href="/info" className="text-white font-bold hover:text-blue-300 transition-colors relative z-10 px-2 sm:px-4 py-2 rounded hover:bg-blue-500/10 text-sm sm:text-base">
               THÔNG TIN
             </Link>
-              <Link href="/download" className="text-white font-bold hover:text-blue-300 transition-colors relative z-10 px-4 py-2 rounded hover:bg-blue-500/10">
+              <Link href="/download" className="text-blue-300 font-bold hover:text-blue-200 transition-colors relative z-10 px-2 sm:px-4 py-2 rounded hover:bg-blue-500/10 text-sm sm:text-base">
               TẢI GAME
             </Link>
-              <Link href="/donate" className="text-white font-bold hover:text-blue-300 transition-colors relative z-10 px-4 py-2 rounded hover:bg-blue-500/10">
+              <Link href="/donate" className="text-white font-bold hover:text-blue-300 transition-colors relative z-10 px-2 sm:px-4 py-2 rounded hover:bg-blue-500/10 text-sm sm:text-base">
               QUYÊN GÓP
             </Link>
-              <Link href="/news" className="text-white font-bold hover:text-blue-300 transition-colors relative z-10 px-4 py-2 rounded hover:bg-blue-500/10">
+              <Link href="/news" className="text-white font-bold hover:text-blue-300 transition-colors relative z-10 px-2 sm:px-4 py-2 rounded hover:bg-blue-500/10 text-sm sm:text-base">
               TIN TỨC
             </Link>
             </div>
@@ -149,27 +149,27 @@ export default function Home() {
               
               {/* Main Logo with Effects */}
               <div className="relative inline-block">
-                <div className="text-8xl font-black text-white mb-4 relative" style={{fontFamily: 'Orbitron, monospace'}}>
+                <div className="text-4xl sm:text-6xl md:text-8xl font-black text-white mb-4 relative" style={{fontFamily: 'Orbitron, monospace'}}>
                   <span className="bg-gradient-to-r from-blue-400 via-purple-400 to-red-400 bg-clip-text text-transparent animate-pulse">
                     MU
                   </span>
                   {/* Glow Effect */}
-                  <div className="absolute inset-0 text-8xl font-black bg-gradient-to-r from-blue-400 via-purple-400 to-red-400 bg-clip-text text-transparent blur-sm opacity-50 animate-pulse">
+                  <div className="absolute inset-0 text-4xl sm:text-6xl md:text-8xl font-black bg-gradient-to-r from-blue-400 via-purple-400 to-red-400 bg-clip-text text-transparent blur-sm opacity-50 animate-pulse">
                     MU
-          </div>
-        </div>
+                  </div>
+                </div>
 
                 {/* Subtitle with Animation */}
-                <div className="text-3xl font-bold text-blue-300 mb-4 animate-fade-in-up" style={{animationDelay: '0.5s'}}>
+                <div className="text-lg sm:text-2xl md:text-3xl font-bold text-blue-300 mb-4 animate-fade-in-up px-4" style={{animationDelay: '0.5s'}}>
                   <span className="bg-gradient-to-r from-blue-300 to-cyan-300 bg-clip-text text-transparent">
                     ĐẤU TRƯỜNG SS1
                   </span>
                 </div>
                 
                 {/* Domain with Typewriter Effect */}
-                <div className="text-2xl font-semibold text-white animate-fade-in-up" style={{animationDelay: '1s'}}>
+                <div className="text-sm sm:text-lg md:text-2xl font-semibold text-white animate-fade-in-up px-4" style={{animationDelay: '1s'}}>
                   <span className="bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">
-                    MuDauTruongSS1.CoM
+                    MuDauTruongSS1.Net
                   </span>
                 </div>
                 
