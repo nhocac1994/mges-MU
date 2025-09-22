@@ -31,7 +31,7 @@ export default function Download() {
                 className="rounded-lg"
               />
               <div>
-                <h1 className="text-lg font-bold text-white">MuDauTruongSS1.Com</h1>
+                <h1 className="text-lg font-bold text-white">MuDauTruongSS1.Net</h1>
                 <p className="text-blue-300 text-xs">Đấu Trường SS1</p>
               </div>
             </div>
@@ -78,7 +78,7 @@ export default function Download() {
       <section className="py-16 bg-black/30">
         <div className="container mx-auto px-4 text-center">
           <h1 className="text-5xl font-bold text-white mb-4">TẢI GAME</h1>
-          <p className="text-xl text-blue-300">MuDauTruongSS1.Com - Client và Launcher</p>
+          <p className="text-xl text-blue-300">MuDauTruongSS1.Net - Client và Launcher</p>
         </div>
       </section>
 
@@ -278,7 +278,7 @@ export default function Download() {
                   <span className="text-white font-bold text-lg">M</span>
                 </div>
                 <div>
-                  <h3 className="text-xl font-bold text-white">MuDauTruongSS1.Com</h3>
+                  <h3 className="text-xl font-bold text-white">MuDauTruongSS1.Net</h3>
                   <p className="text-blue-300 text-sm">Server Mu Online Season 1</p>
                 </div>
               </div>
@@ -347,7 +347,7 @@ export default function Download() {
                   <span className="text-white text-xs font-bold">M</span>
                 </div>
                 <p className="text-gray-400 text-sm">
-                  © 2024 MuDauTruongSS1.Com. All rights reserved.
+                  © 2024 MuDauTruongSS1.Net. All rights reserved.
                 </p>
               </div>
               <div className="flex items-center space-x-6 text-sm text-gray-400">

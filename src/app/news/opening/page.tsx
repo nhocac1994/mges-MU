@@ -31,7 +31,7 @@ export default function NewsOpening() {
                   className="rounded-lg"
                 />
                 <div>
-                  <h1 className="text-lg font-bold text-white">MuDauTruongSS1.Com</h1>
+                  <h1 className="text-lg font-bold text-white">MuDauTruongSS1.Net</h1>
                   <p className="text-blue-300 text-xs">Đấu Trường SS1</p>
                 </div>
               </div>
@@ -105,7 +105,7 @@ export default function NewsOpening() {
                 <div className="bg-red-800/30 rounded-lg p-6 mb-8 border border-red-500/30">
                   <h2 className="text-2xl font-bold text-red-400 mb-4">🚀 CHÍNH THỨC MỞ SERVER</h2>
                   <p className="text-gray-300 mb-4">
-                    Chúng tôi vui mừng thông báo rằng server MuDauTruongSS1.Com đã chính thức mở cửa!
+                    Chúng tôi vui mừng thông báo rằng server MuDauTruongSS1.Net đã chính thức mở cửa!
                   </p>
                   <div className="text-center">
                     <div className="text-3xl font-bold text-white mb-2">25/09/2024</div>
@@ -246,7 +246,7 @@ export default function NewsOpening() {
                   />
                   <div>
                     <h3 className="text-2xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
-                      MuDauTruongSS1.Com
+                      MuDauTruongSS1.Net
                     </h3>
                     <p className="text-blue-300 text-sm">Đấu Trường SS1</p>
                   </div>
@@ -295,7 +295,7 @@ export default function NewsOpening() {
                     <span className="text-blue-400">Online:</span> 24/7
                   </div>
                   <div className="text-gray-300">
-                    <span className="text-blue-400">Website:</span> mudautruongss1.com
+                    <span className="text-blue-400">Website:</span> mudautruongss1.net
                   </div>
                 </div>
               </div>
@@ -305,7 +305,7 @@ export default function NewsOpening() {
             <div className="border-t border-gray-700 pt-8">
               <div className="flex flex-col md:flex-row justify-between items-center">
                 <div className="text-gray-400 text-sm mb-4 md:mb-0">
-                  © 2024 MuDauTruongSS1.Com. All rights reserved.
+                  © 2024 MuDauTruongSS1.Net. All rights reserved.
                 </div>
                 <div className="flex space-x-6 text-sm text-gray-400">
                   <span>Version 1.0.0</span>

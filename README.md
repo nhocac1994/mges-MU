@@ -213,7 +213,7 @@ MIT License - Xem file [LICENSE](LICENSE) để biết thêm chi tiết.
 
 ## 📞 Support
 
-- **Email**: support@mudautruongss1.com
+- **Email**: support@mudautruongss1.net
 - **Discord**: [Server Discord](https://discord.gg/mudautruongss1)
 - **Facebook**: [Fanpage](https://facebook.com/mudautruongss1)
 

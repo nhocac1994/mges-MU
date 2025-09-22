@@ -31,7 +31,7 @@ export default function News() {
                 className="rounded-lg"
               />
               <div>
-                <h1 className="text-lg font-bold text-white">MuDauTruongSS1.Com</h1>
+                <h1 className="text-lg font-bold text-white">MuDauTruongSS1.Net</h1>
                 <p className="text-blue-300 text-xs">Đấu Trường SS1</p>
               </div>
             </div>
@@ -218,7 +218,7 @@ export default function News() {
                 />
                 <div>
                   <h3 className="text-2xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
-                    MuDauTruongSS1.Com
+                    MuDauTruongSS1.Net
                   </h3>
                   <p className="text-blue-300 text-sm">Đấu Trường SS1</p>
                 </div>
@@ -267,7 +267,7 @@ export default function News() {
                   <span className="text-blue-400">Online:</span> 24/7
                 </div>
                 <div className="text-gray-300">
-                  <span className="text-blue-400">Website:</span> mudautruongss1.com
+                  <span className="text-blue-400">Website:</span> mudautruongss1.net
                 </div>
               </div>
             </div>
@@ -277,7 +277,7 @@ export default function News() {
           <div className="border-t border-gray-700 pt-8">
             <div className="flex flex-col md:flex-row justify-between items-center">
               <div className="text-gray-400 text-sm mb-4 md:mb-0">
-                © 2024 MuDauTruongSS1.Com. All rights reserved.
+                © 2024 MuDauTruongSS1.Net. All rights reserved.
               </div>
               <div className="flex space-x-6 text-sm text-gray-400">
                 <span>Version 1.0.0</span>

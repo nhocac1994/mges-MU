@@ -113,20 +113,20 @@ export default function Home() {
           <div className="flex justify-center">
             <div className="flex gap-8">
               <Link href="/" className="text-white font-bold hover:text-blue-300 transition-colors relative z-10 px-4 py-2 rounded hover:bg-blue-500/10">
-                TRANG CHỦ
-              </Link>
+              TRANG CHỦ
+            </Link>
               <Link href="/info" className="text-white font-bold hover:text-blue-300 transition-colors relative z-10 px-4 py-2 rounded hover:bg-blue-500/10">
-                THÔNG TIN
-              </Link>
+              THÔNG TIN
+            </Link>
               <Link href="/download" className="text-white font-bold hover:text-blue-300 transition-colors relative z-10 px-4 py-2 rounded hover:bg-blue-500/10">
-                TẢI GAME
-              </Link>
+              TẢI GAME
+            </Link>
               <Link href="/donate" className="text-white font-bold hover:text-blue-300 transition-colors relative z-10 px-4 py-2 rounded hover:bg-blue-500/10">
-                QUYÊN GÓP
-              </Link>
+              QUYÊN GÓP
+            </Link>
               <Link href="/news" className="text-white font-bold hover:text-blue-300 transition-colors relative z-10 px-4 py-2 rounded hover:bg-blue-500/10">
-                TIN TỨC
-              </Link>
+              TIN TỨC
+            </Link>
             </div>
           </div>
         </div>
@@ -137,7 +137,7 @@ export default function Home() {
       {/* Main Content */}
       <main className="relative z-10">
         <div className="max-w-6xl mx-auto px-5 py-8">
-          {/* Hero Section */}
+        {/* Hero Section */}
           <section className="text-center mb-12 relative">
             <div className="mb-8 relative">
               {/* Animated Background Effects */}
@@ -145,7 +145,7 @@ export default function Home() {
                 <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-blue-500/20 rounded-full blur-3xl animate-pulse"></div>
                 <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-purple-500/20 rounded-full blur-2xl animate-bounce" style={{animationDelay: '1s'}}></div>
                 <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-32 h-32 bg-red-500/20 rounded-full blur-xl animate-ping" style={{animationDelay: '2s'}}></div>
-              </div>
+          </div>
               
               {/* Main Logo with Effects */}
               <div className="relative inline-block">
@@ -156,9 +156,9 @@ export default function Home() {
                   {/* Glow Effect */}
                   <div className="absolute inset-0 text-8xl font-black bg-gradient-to-r from-blue-400 via-purple-400 to-red-400 bg-clip-text text-transparent blur-sm opacity-50 animate-pulse">
                     MU
-                  </div>
-                </div>
-                
+          </div>
+        </div>
+
                 {/* Subtitle with Animation */}
                 <div className="text-3xl font-bold text-blue-300 mb-4 animate-fade-in-up" style={{animationDelay: '0.5s'}}>
                   <span className="bg-gradient-to-r from-blue-300 to-cyan-300 bg-clip-text text-transparent">
@@ -186,7 +186,7 @@ export default function Home() {
 
           {/* Content Grid */}
           <section className="grid lg:grid-cols-2 gap-8 mb-12">
-            {/* News Section */}
+          {/* News Section */}
             <div className="bg-black/50 backdrop-blur-sm rounded-lg p-6 border border-blue-500/30 hover-lift transition-all duration-300 hover:border-blue-400/50 hover:shadow-lg hover:shadow-blue-500/20">
               <div className="flex justify-between items-center mb-6">
                 <h3 className="text-xl font-bold text-white">Tin Tức Mới Nhất</h3>
@@ -208,10 +208,10 @@ export default function Home() {
                     </div>
                   </div>
                 ))}
-              </div>
             </div>
+          </div>
 
-            {/* Login Section */}
+          {/* Login Section */}
             <div className="space-y-6">
               <div className="bg-black/50 backdrop-blur-sm rounded-lg p-6 border border-blue-500/30 hover-lift transition-all duration-300 hover:border-blue-400/50 hover:shadow-lg hover:shadow-blue-500/20">
                 <h3 className="text-xl font-bold text-white mb-6">Đăng nhập</h3>
@@ -220,16 +220,16 @@ export default function Home() {
                     <Link href="#" className="text-blue-400 hover:text-blue-300 text-sm">quên mật khẩu?</Link>
                   </div>
                   <div>
-                    <input 
-                      type="text" 
-                      placeholder="Tên đăng nhập" 
+              <input 
+                type="text" 
+                placeholder="Tên đăng nhập" 
                       className="w-full bg-white/10 border border-white/30 rounded-lg px-4 py-3 text-white placeholder-gray-400 focus:outline-none focus:border-blue-400"
-                    />
+              />
                   </div>
                   <div>
-                    <input 
-                      type="password" 
-                      placeholder="Mật khẩu" 
+              <input 
+                type="password" 
+                placeholder="Mật khẩu" 
                       className="w-full bg-white/10 border border-white/30 rounded-lg px-4 py-3 text-white placeholder-gray-400 focus:outline-none focus:border-blue-400"
                     />
                   </div>
@@ -238,7 +238,7 @@ export default function Home() {
                     className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-lg font-semibold transition-colors"
                   >
                     Đăng Nhập
-                  </button>
+              </button>
                   <div className="text-center">
                     <Link href="/register" className="text-blue-400 hover:text-blue-300 text-sm">Đăng ký tài khoản mới</Link>
                   </div>
@@ -258,9 +258,9 @@ export default function Home() {
                   <p className="text-white/90 mb-4 drop-shadow-md">TẠO TÀI KHOẢN CỦA BẠN</p>
                   <Link href="/register" className="inline-block bg-white/20 backdrop-blur-sm text-white px-6 py-2 rounded-lg font-bold hover:bg-white/30 transition-all duration-300 border border-white/30 hover:border-white/50">
                     Đăng Ký Ngay
-                  </Link>
-                </div>
-              </div>
+              </Link>
+            </div>
+          </div>
             </div>
           </section>
 
@@ -356,8 +356,8 @@ export default function Home() {
                     </tbody>
                   </table>
                 )}
-              </div>
-            </div>
+          </div>
+        </div>
 
             {/* Top Guilds */}
             <div className="bg-black/50 backdrop-blur-sm rounded-lg border border-blue-500/30 hover-lift transition-all duration-300 hover:border-blue-400/50 hover:shadow-lg hover:shadow-blue-500/20">
@@ -437,7 +437,7 @@ export default function Home() {
                     Chưa có sự kiện nào
                   </div>
                 )}
-              </div>
+            </div>
             </div>
           </section>
         </div>
@@ -454,7 +454,7 @@ export default function Home() {
                   <span className="text-white font-bold text-lg">M</span>
                 </div>
                 <div>
-                  <h3 className="text-xl font-bold text-white">MuDauTruongSS1.Com</h3>
+                  <h3 className="text-xl font-bold text-white">MuDauTruongSS1.Net</h3>
                   <p className="text-blue-300 text-sm">Server Mu Online Season 1</p>
                 </div>
               </div>
@@ -523,7 +523,7 @@ export default function Home() {
                   <span className="text-white text-xs font-bold">M</span>
                 </div>
                 <p className="text-gray-400 text-sm">
-                  © 2024 MuDauTruongSS1.Com. All rights reserved.
+                  © 2024 MuDauTruongSS1.Net. All rights reserved.
                 </p>
               </div>
               <div className="flex items-center space-x-6 text-sm text-gray-400">

@@ -135,7 +135,7 @@ export default function Register() {
                   className="rounded-lg"
                 />
                 <div>
-                  <h1 className="text-lg font-bold text-white">MuDauTruongSS1.Com</h1>
+                  <h1 className="text-lg font-bold text-white">MuDauTruongSS1.Net</h1>
                   <p className="text-blue-300 text-xs">Đấu Trường SS1</p>
                 </div>
               </div>
@@ -464,7 +464,7 @@ export default function Register() {
                     <span className="text-white text-xl font-bold">MU</span>
                   </div>
                   <div>
-                    <h3 className="text-xl font-bold text-white">MuDauTruongSS1.Com</h3>
+                    <h3 className="text-xl font-bold text-white">MuDauTruongSS1.Net</h3>
                     <p className="text-blue-300 text-sm">Đấu Trường SS1</p>
                   </div>
                 </div>
@@ -514,7 +514,7 @@ export default function Register() {
             <div className="border-t border-gray-700 mt-8 pt-8">
               <div className="flex flex-col md:flex-row justify-between items-center">
                 <p className="text-gray-400 text-sm">
-                  © 2025 MuDauTruongSS1.Com. Tất cả quyền được bảo lưu.
+                  © 2025 MuDauTruongSS1.Net. Tất cả quyền được bảo lưu.
                 </p>
                 <div className="flex items-center space-x-4 mt-4 md:mt-0">
                   <span className="text-green-400 text-sm">🟢 Server Online</span>

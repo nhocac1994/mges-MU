@@ -31,7 +31,7 @@ export default function Info() {
                 className="rounded-lg"
               />
               <div>
-                <h1 className="text-lg font-bold text-white">MuDauTruongSS1.Com</h1>
+                <h1 className="text-lg font-bold text-white">MuDauTruongSS1.Net</h1>
                 <p className="text-blue-300 text-xs">Đấu Trường SS1</p>
               </div>
             </div>
@@ -95,7 +95,7 @@ export default function Info() {
             </div>
             <div className="text-2xl font-semibold text-blue-300 mb-4 animate-fade-in-up" style={{animationDelay: '0.5s'}}>
               <span className="bg-gradient-to-r from-blue-300 to-cyan-300 bg-clip-text text-transparent">
-                MuDauTruongSS1.Com - Server Mu Online Season 1
+                MuDauTruongSS1.Net - Server Mu Online Season 1
               </span>
             </div>
             <div className="text-lg text-white/80 animate-fade-in-up" style={{animationDelay: '1s'}}>
@@ -319,7 +319,7 @@ export default function Info() {
               </div>
             </h2>
             <p className="text-xl text-gray-300 max-w-2xl mx-auto">
-              Khám phá những tính năng độc đáo và hấp dẫn của server MuDauTruongSS1.Com
+              Khám phá những tính năng độc đáo và hấp dẫn của server MuDauTruongSS1.Net
             </p>
           </div>
           
@@ -398,7 +398,7 @@ export default function Info() {
                   <span className="text-white font-bold text-lg">M</span>
                 </div>
                 <div>
-                  <h3 className="text-xl font-bold text-white">MuDauTruongSS1.Com</h3>
+                  <h3 className="text-xl font-bold text-white">MuDauTruongSS1.Net</h3>
                   <p className="text-blue-300 text-sm">Server Mu Online Season 1</p>
                 </div>
               </div>
@@ -467,7 +467,7 @@ export default function Info() {
                   <span className="text-white text-xs font-bold">M</span>
                 </div>
                 <p className="text-gray-400 text-sm">
-                  © 2024 MuDauTruongSS1.Com. All rights reserved.
+                  © 2024 MuDauTruongSS1.Net. All rights reserved.
                 </p>
               </div>
               <div className="flex items-center space-x-6 text-sm text-gray-400">

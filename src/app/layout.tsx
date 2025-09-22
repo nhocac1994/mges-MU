@@ -13,32 +13,32 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "MuDauTruongSS1.Com - Mu Online Season 1",
+  title: "MuDauTruongSS1.Net - Mu Online Season 1",
   description: "Server Mu Online Season 1 với tỷ lệ exp cao, drop rate tốt. Cộng đồng game thủ Việt Nam hàng đầu.",
   keywords: ["Mu Online", "Season 1", "Game", "Vietnam", "Server", "Gaming"],
   authors: [{ name: "MuDauTruongSS1 Team" }],
-  creator: "MuDauTruongSS1.Com",
-  publisher: "MuDauTruongSS1.Com",
+  creator: "MuDauTruongSS1.Net",
+  publisher: "MuDauTruongSS1.Net",
   formatDetection: {
     email: false,
     address: false,
     telephone: false,
   },
-  metadataBase: new URL('https://mudautruongss1.com'),
+  metadataBase: new URL('https://mudautruongss1.net'),
   alternates: {
     canonical: '/',
   },
   openGraph: {
-    title: "MuDauTruongSS1.Com - Mu Online Season 1",
+    title: "MuDauTruongSS1.Net - Mu Online Season 1",
     description: "Server Mu Online Season 1 với tỷ lệ exp cao, drop rate tốt. Cộng đồng game thủ Việt Nam hàng đầu.",
-    url: 'https://mudautruongss1.com',
-    siteName: 'MuDauTruongSS1.Com',
+    url: 'https://mudautruongss1.net',
+    siteName: 'MuDauTruongSS1.Net',
     images: [
       {
         url: '/icon.jpg',
         width: 1200,
         height: 630,
-        alt: 'MuDauTruongSS1.Com - Mu Online Season 1',
+        alt: 'MuDauTruongSS1.Net - Mu Online Season 1',
       },
     ],
     locale: 'vi_VN',
@@ -46,7 +46,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: "MuDauTruongSS1.Com - Mu Online Season 1",
+    title: "MuDauTruongSS1.Net - Mu Online Season 1",
     description: "Server Mu Online Season 1 với tỷ lệ exp cao, drop rate tốt. Cộng đồng game thủ Việt Nam hàng đầu.",
     images: ['/icon.jpg'],
   },
