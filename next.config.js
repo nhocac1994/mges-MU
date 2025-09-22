@@ -6,6 +6,24 @@ const nextConfig = {
     formats: ['image/webp', 'image/avif'],
   },
   
+  // Static file handling
+  async rewrites() {
+    return [
+      {
+        source: '/favicon.ico',
+        destination: '/favicon.ico',
+      },
+      {
+        source: '/apple-touch-icon.png',
+        destination: '/apple-touch-icon.png',
+      },
+      {
+        source: '/site.webmanifest',
+        destination: '/site.webmanifest',
+      },
+    ];
+  },
+  
   // Enable experimental features
   experimental: {
     // optimizeCss: true, // Disabled due to critters dependency
@@ -50,6 +68,45 @@ const nextConfig = {
           {
             key: 'Cache-Control',
             value: 'no-cache, no-store, must-revalidate',
+          },
+        ],
+      },
+      {
+        source: '/favicon.ico',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=31536000, immutable',
+          },
+          {
+            key: 'Content-Type',
+            value: 'image/x-icon',
+          },
+        ],
+      },
+      {
+        source: '/apple-touch-icon.png',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=31536000, immutable',
+          },
+          {
+            key: 'Content-Type',
+            value: 'image/png',
+          },
+        ],
+      },
+      {
+        source: '/site.webmanifest',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=31536000, immutable',
+          },
+          {
+            key: 'Content-Type',
+            value: 'application/manifest+json',
           },
         ],
       },
