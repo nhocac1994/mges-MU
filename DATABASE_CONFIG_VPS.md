@@ -1,10 +1,10 @@
 # Cấu hình Database SQL Server cho VPS
 
 ## Thông tin Database:
-- **Server:** 103.200.20.23\\SQLEXPRESS (IP VPS với instance SQLEXPRESS)
+- **Server:** YOUR_VPS_IP\\SQLEXPRESS (Thay YOUR_VPS_IP bằng IP thực của VPS)
 - **Database:** MuOnline
 - **User:** sa
-- **Password:** kRcxWkedQRJhSeV5
+- **Password:** YOUR_DB_PASSWORD (Thay bằng password thực)
 - **Port:** 1433
 
 ## Cách cấu hình:
@@ -12,10 +12,10 @@
 ### 1. Tạo file `.env.local` trong thư mục gốc:
 ```bash
 # Database Configuration
-DB_SERVER=103.200.20.23\\SQLEXPRESS
+DB_SERVER=YOUR_VPS_IP\\SQLEXPRESS
 DB_NAME=MuOnline
 DB_USERNAME=sa
-DB_PASSWORD=kRcxWkedQRJhSeV5
+DB_PASSWORD=YOUR_DB_PASSWORD
 DB_PORT=1433
 NEXT_TELEMETRY_DISABLED=1
 ```

@@ -29,6 +29,15 @@ yarn-error.log*
 .env*.local
 .env
 
+# Database test files (contains sensitive info)
+test-db-connection.js
+*test-db*.js
+
+# Sensitive configuration files
+*config*.js
+*password*.txt
+*secret*.txt
+
 # vercel
 .vercel
 
