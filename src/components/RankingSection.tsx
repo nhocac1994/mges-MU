@@ -2,16 +2,40 @@
 
 import React, { useState, useEffect } from 'react';
 
+interface Character {
+  Name: string;
+  cLevel: number;
+  Class: number;
+  Experience: number;
+  ResetCount: number;
+  MasterResetCount: number;
+  PkCount: number;
+  Money: number;
+  Strength: number;
+  Dexterity: number;
+  Vitality: number;
+  Energy: number;
+  Leadership: number;
+}
+
+interface Guild {
+  G_Name: string;
+  G_Score: number;
+  G_Master: string;
+  G_Count: number;
+  G_Mark: Buffer;
+}
+
 interface CharacterRanking {
-  topLevel: any[];
-  topMasterReset: any[];
-  topReset: any[];
-  topPk: any[];
+  topLevel: Character[];
+  topMasterReset: Character[];
+  topReset: Character[];
+  topPk: Character[];
 }
 
 interface GuildRanking {
-  topGuildScore: any[];
-  topGuildMembers: any[];
+  topGuildScore: Guild[];
+  topGuildMembers: Guild[];
 }
 
 const RankingSection: React.FC = () => {
