@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import Image from 'next/image';
 
 export default function NewsRoadmap() {
   return (
@@ -22,7 +23,7 @@ export default function NewsRoadmap() {
           <div className="max-w-6xl mx-auto px-5 py-2">
             <div className="flex justify-between items-center">
               <div className="flex items-center space-x-4">
-                <img 
+                <Image 
                   src="/icon.jpg" 
                   alt="Mu Online Logo" 
                   width={40} 
@@ -226,7 +227,7 @@ export default function NewsRoadmap() {
               {/* Logo & Description */}
               <div className="md:col-span-2">
                 <div className="flex items-center mb-4">
-                  <img 
+                  <Image 
                     src="/icon.jpg" 
                     alt="Mu Online Logo" 
                     width={40} 
@@ -247,13 +248,13 @@ export default function NewsRoadmap() {
                 </p>
                 <div className="flex space-x-4">
                   <a href="#" className="social-link">
-                    <img src="/facebook-logo.webp" alt="Facebook" width={20} height={20} />
+                    <Image src="/facebook-logo.webp" alt="Facebook" width={20} height={20} />
                   </a>
                   <a href="#" className="social-link">
-                    <img src="/tiktok-logo.webp" alt="TikTok" width={20} height={20} />
+                    <Image src="/tiktok-logo.webp" alt="TikTok" width={20} height={20} />
                   </a>
                   <a href="#" className="social-link">
-                    <img src="/Zalo-icon.webp" alt="Zalo" width={20} height={20} />
+                    <Image src="/Zalo-icon.webp" alt="Zalo" width={20} height={20} />
                   </a>
                 </div>
               </div>
