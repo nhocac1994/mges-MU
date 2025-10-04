@@ -205,17 +205,6 @@ export default function Home() {
               
               <div className="grid md:grid-cols-3 gap-6">
                 <div className="text-center">
-                  <h3 className="text-xl font-bold text-white mb-4">Google Drive</h3>
-                  <a 
-                    href="https://drive.google.com/file/d/18YF91lb4zvcFvcQC_hf-4R000o5L21CV/view" 
-                    target="_blank" 
-                    rel="noopener noreferrer"
-                    className="bg-blue-600 hover:bg-blue-700 text-white py-3 px-6 rounded-lg font-semibold transition-colors inline-block"
-                  >
-                    📥 Tải Client
-                  </a>
-                </div>
-                <div className="text-center">
                   <h3 className="text-xl font-bold text-white mb-4">MediaFire</h3>
                   <a 
                     href="https://www.mediafire.com/file/6pi08fbvd798ptn/MU-DAUTRUONGSS1.zip/file" 
@@ -233,6 +222,17 @@ export default function Home() {
                     target="_blank" 
                     rel="noopener noreferrer"
                     className="bg-purple-600 hover:bg-purple-700 text-white py-3 px-6 rounded-lg font-semibold transition-colors inline-block"
+                  >
+                    📥 Tải Client
+                  </a>
+                </div>
+                <div className="text-center">
+                  <h3 className="text-xl font-bold text-white mb-4">Google Drive</h3>
+                  <a 
+                    href="https://drive.google.com/drive/folders/1S3S4fKAm2bWgxQYG0uoyadCp-hd04LPi?usp=sharing" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="bg-blue-600 hover:bg-blue-700 text-white py-3 px-6 rounded-lg font-semibold transition-colors inline-block"
                   >
                     📥 Tải Client
                   </a>

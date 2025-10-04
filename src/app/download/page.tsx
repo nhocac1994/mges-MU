@@ -90,21 +90,11 @@ export default function Download() {
             <div className="bg-black/50 backdrop-blur-sm rounded-lg p-8 border border-yellow-500/30">
               <h2 className="text-3xl font-bold text-white mb-6 text-center">🔗 LINK TẢI GAME</h2>
               <div className="grid md:grid-cols-3 gap-6">
-                <div className="text-center">
-                  <h3 className="text-xl font-bold text-white mb-4">Google Drive</h3>
-                  <a 
-                    href="https://drive.google.com/file/d/11XWOxM88XId3zXyeTC6HxiwcJr5m2Dth/view?usp=drive_link" 
-                    target="_blank" 
-                    rel="noopener noreferrer"
-                    className="bg-blue-600 hover:bg-blue-700 text-white py-3 px-6 rounded-lg font-semibold transition-colors inline-block"
-                  >
-                    📥 Tải Client
-                  </a>
-                </div>
+
                 <div className="text-center">
                   <h3 className="text-xl font-bold text-white mb-4">MediaFire</h3>
                   <a 
-                    href="https://www.mediafire.com/file/xyz123/client.zip/file" 
+                    href="https://www.mediafire.com/file/6pi08fbvd798ptn/MU-DAUTRUONGSS1.zip/file" 
                     target="_blank" 
                     rel="noopener noreferrer"
                     className="bg-green-600 hover:bg-green-700 text-white py-3 px-6 rounded-lg font-semibold transition-colors inline-block"
@@ -115,10 +105,21 @@ export default function Download() {
                 <div className="text-center">
                   <h3 className="text-xl font-bold text-white mb-4">Mega</h3>
                   <a 
-                    href="https://mega.nz/file/abc123#xyz789" 
+                    href="https://mega.nz/file/RF00SKLZ#1Qkl6KAjQkR99OlB4bpD4ygTDLqq7m87kVe5FIUfur8" 
                     target="_blank" 
                     rel="noopener noreferrer"
                     className="bg-purple-600 hover:bg-purple-700 text-white py-3 px-6 rounded-lg font-semibold transition-colors inline-block"
+                  >
+                    📥 Tải Client
+                  </a>
+                </div>
+                <div className="text-center">
+                  <h3 className="text-xl font-bold text-white mb-4">Google Drive</h3>
+                  <a 
+                    href="https://drive.google.com/drive/folders/1S3S4fKAm2bWgxQYG0uoyadCp-hd04LPi?usp=sharing" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="bg-blue-600 hover:bg-blue-700 text-white py-3 px-6 rounded-lg font-semibold transition-colors inline-block"
                   >
                     📥 Tải Client
                   </a>
