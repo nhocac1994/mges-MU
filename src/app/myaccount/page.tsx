@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 
 export default function MyAccount() {
   const [user, setUser] = useState<{
@@ -198,7 +199,7 @@ export default function MyAccount() {
           <div className="max-w-6xl mx-auto px-5 py-2">
             <div className="flex justify-between items-center">
               <div className="flex items-center space-x-4">
-                <img 
+                <Image 
                   src="/icon.jpg" 
                   alt="Mu Online Logo" 
                   width={40} 
@@ -525,13 +526,13 @@ export default function MyAccount() {
                 </p>
                 <div className="flex space-x-4">
                   <a href="#" className="text-gray-400 hover:text-blue-400 transition-colors">
-                    <img src="/facebook-logo.webp" alt="Facebook" width={24} height={24} />
+                    <Image src="/facebook-logo.webp" alt="Facebook" width={24} height={24} />
                   </a>
                   <a href="#" className="text-gray-400 hover:text-blue-400 transition-colors">
-                    <img src="/tiktok-logo.webp" alt="TikTok" width={24} height={24} />
+                    <Image src="/tiktok-logo.webp" alt="TikTok" width={24} height={24} />
                   </a>
                   <a href="#" className="text-gray-400 hover:text-blue-400 transition-colors">
-                    <img src="/Zalo-icon.webp" alt="Zalo" width={24} height={24} />
+                    <Image src="/Zalo-icon.webp" alt="Zalo" width={24} height={24} />
                   </a>
                 </div>
               </div>

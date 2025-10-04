@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import Image from 'next/image';
 
 export default function Dashboard() {
   const [user, setUser] = useState<{memb___id: string; memb_name: string} | null>(null);
@@ -60,7 +61,7 @@ export default function Dashboard() {
         <div className="max-w-6xl mx-auto px-5 py-4">
           <div className="flex justify-between items-center">
             <div className="flex items-center space-x-4">
-              <img src="/icon.jpg" alt="Mu Online Logo" width="40" height="40" className="rounded-lg"/>
+              <Image src="/icon.jpg" alt="Mu Online Logo" width={40} height={40} className="rounded-lg"/>
               <div>
                 <h1 className="text-lg font-bold text-white">MuDauTruongSS1.Net</h1>
                 <p className="text-blue-300 text-xs">Đấu Trường SS1</p>

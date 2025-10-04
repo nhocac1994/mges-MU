@@ -41,7 +41,7 @@ export async function GET() {
     return NextResponse.json({ 
       success: false, 
       message: `Database connection failed: ${error instanceof Error ? error.message : 'Unknown error'}`,
-      error: (error as any)?.code || 'UNKNOWN_ERROR',
+      error: (error as { code?: string })?.code || 'UNKNOWN_ERROR',
       details: {
         server: process.env.DB_SERVER,
         database: process.env.DB_NAME,

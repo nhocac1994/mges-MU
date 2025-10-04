@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 
 interface SimpleCaptchaProps {
   onVerify: (isValid: boolean) => void;
@@ -11,7 +11,7 @@ export default function SimpleCaptcha({ onVerify }: SimpleCaptchaProps) {
   const [userInput, setUserInput] = useState('');
   const [isValid, setIsValid] = useState(false);
 
-  const generateCaptcha = () => {
+  const generateCaptcha = useCallback(() => {
     const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
     let result = '';
     for (let i = 0; i < 5; i++) {
@@ -21,11 +21,11 @@ export default function SimpleCaptcha({ onVerify }: SimpleCaptchaProps) {
     setUserInput('');
     setIsValid(false);
     onVerify(false);
-  };
+  }, [onVerify]);
 
   useEffect(() => {
     generateCaptcha();
-  }, []);
+  }, [generateCaptcha]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value.toUpperCase();
