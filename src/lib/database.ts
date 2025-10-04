@@ -10,7 +10,7 @@ const config = {
     encrypt: false,
     trustServerCertificate: true,
     enableArithAbort: true,
-    instanceName: process.env.DB_INSTANCE || 'SQLEXPRESS',
+    instanceName: process.env.DB_INSTANCE || '',
     connectionTimeout: 30000,
     requestTimeout: 30000
   }

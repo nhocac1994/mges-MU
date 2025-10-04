@@ -77,7 +77,7 @@ export default function Register() {
     setIsLoading(true);
 
     try {
-            const response = await fetch('/api/register-mock', {
+            const response = await fetch('/api/register', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
