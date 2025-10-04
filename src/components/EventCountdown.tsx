@@ -43,13 +43,10 @@ const EventCountdown: React.FC = () => {
         
         // Find the next occurrence of this event
         let nextEventTime = 0;
-        let eventCycle = 0;
-        
         // Events happen every 2 hours, so we need to find the next occurrence
         while (nextEventTime <= minutesInCycle) {
           nextEventTime += event.duration;
           if (nextEventTime > minutesInCycle) break;
-          eventCycle++;
         }
         
         const timeUntilNext = nextEventTime - minutesInCycle;

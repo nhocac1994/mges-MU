@@ -18,7 +18,7 @@ const SecurityWarning = () => {
 
     // Kiểm tra console cho các dấu hiệu tấn công
     const originalConsoleWarn = console.warn;
-    console.warn = function(...args: any[]) {
+    console.warn = function(...args: unknown[]) {
       const message = args.join(' ');
       if (message.includes('Blocked') || message.includes('Suspicious')) {
         setWarningMessage('Hệ thống bảo mật đã ngăn chặn một cuộc tấn công tiềm ẩn.');

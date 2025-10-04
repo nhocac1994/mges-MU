@@ -2,9 +2,10 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 
 export default function Dashboard() {
-  const [user, setUser] = useState<any>(null);
+  const [user, setUser] = useState<{memb___id: string; memb_name: string} | null>(null);
   const [loading, setLoading] = useState(true);
   const router = useRouter();
 
@@ -26,9 +27,8 @@ export default function Dashboard() {
         
         // Tạm thời set user data
         setUser({
-          username: 'testuser6',
-          characterName: 'TestChar6',
-          email: 'test@example.com'
+          memb___id: 'testuser6',
+          memb_name: 'TestChar6'
         });
         setLoading(false);
       } catch (error) {
@@ -67,7 +67,7 @@ export default function Dashboard() {
               </div>
             </div>
             <div className="flex items-center space-x-4">
-              <span className="text-white text-sm">Xin chào, {user?.characterName}</span>
+              <span className="text-white text-sm">Xin chào, {user?.memb_name}</span>
               <button 
                 onClick={handleLogout}
                 className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg transition-colors"
@@ -84,7 +84,7 @@ export default function Dashboard() {
         <div className="max-w-6xl mx-auto px-5">
           <div className="flex justify-center">
             <div className="flex gap-8">
-              <a className="text-white font-bold hover:text-blue-300 transition-colors px-4 py-2 rounded hover:bg-blue-500/10" href="/">TRANG CHỦ</a>
+              <Link className="text-white font-bold hover:text-blue-300 transition-colors px-4 py-2 rounded hover:bg-blue-500/10" href="/">TRANG CHỦ</Link>
               <a className="text-white font-bold hover:text-blue-300 transition-colors px-4 py-2 rounded hover:bg-blue-500/10" href="/info">THÔNG TIN</a>
               <a className="text-white font-bold hover:text-blue-300 transition-colors px-4 py-2 rounded hover:bg-blue-500/10" href="/download">TẢI GAME</a>
               <a className="text-white font-bold hover:text-blue-300 transition-colors px-4 py-2 rounded hover:bg-blue-500/10" href="/donate">QUYÊN GÓP</a>
@@ -109,9 +109,8 @@ export default function Dashboard() {
             <div className="bg-black bg-opacity-70 rounded-lg p-6">
               <h3 className="text-xl font-bold text-yellow-400 mb-4">Thông tin tài khoản</h3>
               <div className="space-y-2">
-                <p className="text-white"><span className="text-gray-400">Tên đăng nhập:</span> {user?.username}</p>
-                <p className="text-white"><span className="text-gray-400">Tên nhân vật:</span> {user?.characterName}</p>
-                <p className="text-white"><span className="text-gray-400">Email:</span> {user?.email}</p>
+                <p className="text-white"><span className="text-gray-400">Tên đăng nhập:</span> {user?.memb___id}</p>
+                <p className="text-white"><span className="text-gray-400">Tên nhân vật:</span> {user?.memb_name}</p>
               </div>
             </div>
 

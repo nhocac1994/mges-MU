@@ -34,7 +34,9 @@ const SecurityGuard = () => {
       try {
         if (window.top !== window.self) {
           console.warn('Page is being loaded in iframe - potential clickjacking');
-          window.top.location = window.self.location;
+          if (window.top) {
+            window.top.location.href = window.self.location.href;
+          }
         }
       } catch (error) {
         console.warn('Error in clickjacking protection:', error);
