@@ -45,7 +45,7 @@ export default function Login() {
     if (!validateForm()) return;
 
     try {
-      const response = await fetch('/api/login-simple', {
+      const response = await fetch('/api/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
