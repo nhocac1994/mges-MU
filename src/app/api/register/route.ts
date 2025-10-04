@@ -43,7 +43,7 @@ export async function POST(request: NextRequest) {
       }, { status: 400 });
     }
 
-  } catch (error) {
+  } catch {
     console.error('Registration error: [Hidden for security]');
     return NextResponse.json({ 
       success: false, 

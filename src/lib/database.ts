@@ -20,7 +20,7 @@ export async function connectToDatabase() {
   try {
     const pool = await sql.connect(config);
     return pool;
-  } catch (error) {
+  } catch {
     console.error('Database connection error: [Hidden for security]');
     throw new Error('Không thể kết nối đến database');
   }
@@ -32,7 +32,7 @@ export async function testConnection() {
     await pool.request().query('SELECT 1 as test');
     await pool.close();
     return { success: true, message: 'Kết nối database thành công!' };
-  } catch (error) {
+  } catch {
     console.error('Database test error: [Hidden for security]');
     return { success: false, message: 'Lỗi kết nối database' };
   }
@@ -83,7 +83,7 @@ export async function createAccount(accountData: {
 
     await pool.close();
     return { success: true, message: 'Tạo tài khoản thành công!' };
-  } catch (error) {
+  } catch {
     console.error('Create account error: [Hidden for security]');
     return { success: false, message: 'Lỗi tạo tài khoản. Vui lòng thử lại sau.' };
   }
@@ -109,7 +109,7 @@ export async function loginAccount(username: string, password: string) {
     } else {
       return { success: false, message: 'Tên đăng nhập hoặc mật khẩu không đúng!' };
     }
-  } catch (error) {
+  } catch {
     console.error('Login error: [Hidden for security]');
     return { success: false, message: 'Lỗi đăng nhập. Vui lòng thử lại sau.' };
   }

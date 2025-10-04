@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
 import sql from 'mssql';
 
 export async function GET() {
@@ -36,12 +36,12 @@ export async function GET() {
       message: 'Database connection successful!',
       data: result.recordset
     });
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Database connection error:', error);
     return NextResponse.json({ 
       success: false, 
-      message: `Database connection failed: ${error.message}`,
-      error: error.code || 'UNKNOWN_ERROR',
+      message: `Database connection failed: ${error instanceof Error ? error.message : 'Unknown error'}`,
+      error: (error as any)?.code || 'UNKNOWN_ERROR',
       details: {
         server: process.env.DB_SERVER,
         database: process.env.DB_NAME,

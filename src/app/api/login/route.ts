@@ -56,7 +56,7 @@ export async function POST(request: NextRequest) {
       }, { status: 401 });
     }
 
-  } catch (error) {
+  } catch {
     console.error('Login error: [Hidden for security]');
     return NextResponse.json({ 
       success: false, 
