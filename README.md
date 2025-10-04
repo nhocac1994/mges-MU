@@ -60,7 +60,7 @@ npm install
 Tạo file `.env.local`:
 ```env
 DB_SERVER=your_sql_server_ip
-DB_NAME=MuOnline
+DB_NAME=your_database_name
 DB_USERNAME=your_username
 DB_PASSWORD=your_password
 DB_PORT=1433

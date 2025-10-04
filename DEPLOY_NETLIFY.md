@@ -52,7 +52,7 @@ git push -u origin main
 ### 3.2. Thêm các biến môi trường
 ```
 DB_SERVER=your_sql_server_ip
-DB_NAME=MuOnline
+DB_NAME=your_database_name
 DB_USERNAME=sa
 DB_PASSWORD=your_secure_password
 DB_PORT=1433

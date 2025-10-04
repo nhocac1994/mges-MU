@@ -68,7 +68,7 @@ Thêm các biến môi trường trong Vercel Dashboard:
 
 ```
 DB_SERVER=your_sql_server_ip
-DB_NAME=MuOnline
+DB_NAME=your_database_name
 DB_USERNAME=your_username
 DB_PASSWORD=your_password
 DB_PORT=1433
@@ -86,7 +86,7 @@ DB_PORT=1433
 - ✅ Port 1433 đã mở
 - ✅ Remote connections enabled
 - ✅ Firewall rules configured
-- ✅ Database `MuOnline` đã tạo
+- ✅ Database đã tạo
 - ✅ Table `MEMB_INFO` đã tạo
 
 ### 4.2 Test Connection

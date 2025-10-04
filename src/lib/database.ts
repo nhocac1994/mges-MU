@@ -2,15 +2,15 @@ import sql from 'mssql';
 
 const config = {
   server: process.env.DB_SERVER || 'localhost',
-  database: process.env.DB_NAME || 'MuOnline',
-  user: process.env.DB_USERNAME || 'sa',
+  database: process.env.DB_NAME || 'your_database',
+  user: process.env.DB_USERNAME || 'your_username',
   password: process.env.DB_PASSWORD || 'your_password',
   port: parseInt(process.env.DB_PORT || '1433'),
   options: {
     encrypt: false,
     trustServerCertificate: true,
     enableArithAbort: true,
-    instanceName: 'SQLEXPRESS', // For SQL Server Express
+    instanceName: process.env.DB_INSTANCE || 'SQLEXPRESS',
     connectionTimeout: 30000,
     requestTimeout: 30000
   }

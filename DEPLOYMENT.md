@@ -4,7 +4,7 @@
 
 ### 1. Chuẩn bị Database
 - SQL Server đã được cài đặt và chạy
-- Database `MuOnline` đã được tạo
+- Database đã được tạo
 - User có quyền truy cập database
 
 ### 2. Chuẩn bị Environment Variables
@@ -13,7 +13,7 @@ Tạo file `.env.local` trong thư mục gốc với nội dung:
 ```env
 # Database Configuration
 DB_SERVER=your_sql_server_ip
-DB_NAME=MuOnline
+DB_NAME=your_database_name
 DB_USERNAME=sa
 DB_PASSWORD=your_secure_password
 DB_PORT=1433
@@ -38,7 +38,7 @@ git push origin main
 4. Import repository từ GitHub
 5. Cấu hình Environment Variables:
    - `DB_SERVER`: IP của SQL Server
-   - `DB_NAME`: MuOnline
+   - `DB_NAME`: Tên database của bạn
    - `DB_USERNAME`: sa
    - `DB_PASSWORD`: Mật khẩu SQL Server
    - `DB_PORT`: 1433

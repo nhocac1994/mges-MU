@@ -70,11 +70,11 @@ export default function TestDatabase() {
                 <p className="text-white">{result.message}</p>
                 
                 {result.success && (
-                  <div className="mt-4 text-sm text-gray-300">
-                    <p>Server: [Hidden for security]</p>
-                    <p>Database: MuOnline</p>
-                    <p>Port: 1433</p>
-                  </div>
+        <div className="mt-4 text-sm text-gray-300">
+          <p>Server: [Hidden for security]</p>
+          <p>Database: [Hidden for security]</p>
+          <p>Port: [Hidden for security]</p>
+        </div>
                 )}
               </div>
             )}
