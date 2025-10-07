@@ -235,7 +235,7 @@ export default function Donate() {
                     <p>1. Chọn gói ủng hộ phù hợp</p>
                     <p>2. Chuyển khoản theo thông tin trên</p>
                     <p>3. Ghi nội dung: &quot;Tên Tài Khoản + Gói ủng hộ&quot;</p>
-                    <p>4. Gửi bill cho Admin qua Zalo: 0819.402.668</p>
+                    <p>4. Gửi bill cho Admin qua Zalo: 03377.14.654</p>
                     <p>5. Chờ Admin xử lý và cấp phần thưởng</p>
                   </div>
                 </div>
