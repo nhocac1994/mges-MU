@@ -207,7 +207,7 @@ export default function Home() {
                 <div className="text-center">
                   <h3 className="text-xl font-bold text-white mb-4">MediaFire</h3>
                   <a 
-                    href="https://www.mediafire.com/file/435pbu7fen7cq5q/MU-DAUTRUONGSS1.NET_V1.zip/file" 
+                    href="http://www.mediafire.com/file/7hla0cze67jfxc0/MU-DAUTRUONGSS1.NET_V1.zip" 
                     target="_blank" 
                     rel="noopener noreferrer"
                     className="bg-green-600 hover:bg-green-700 text-white py-3 px-6 rounded-lg font-semibold transition-colors inline-block"
@@ -218,7 +218,7 @@ export default function Home() {
                 <div className="text-center">
                   <h3 className="text-xl font-bold text-white mb-4">Mega</h3>
                   <a 
-                    href="https://mega.nz/file/lIEU0KAC#JWIYikKlJHakeJf5HkCDlhgwn2CtpBrW45juRjTKXnE" 
+                    href="https://mega.nz/file/JEsmwLrL#YEh2zgJ4HNlBgVpqAEfVRTCDbCTsMlGewt1ImuILoJ8" 
                     target="_blank" 
                     rel="noopener noreferrer"
                     className="bg-purple-600 hover:bg-purple-700 text-white py-3 px-6 rounded-lg font-semibold transition-colors inline-block"
@@ -229,7 +229,7 @@ export default function Home() {
                 <div className="text-center">
                   <h3 className="text-xl font-bold text-white mb-4">Google Drive</h3>
                   <a 
-                    href="https://drive.google.com/drive/folders/1S3S4fKAm2bWgxQYG0uoyadCp-hd04LPi?usp=sharing" 
+                    href="https://drive.google.com/file/d/1Duuwi6OkHHJro1nmJAtywq5ebMeACaRN/view?usp=sharing" 
                     target="_blank" 
                     rel="noopener noreferrer"
                     className="bg-blue-600 hover:bg-blue-700 text-white py-3 px-6 rounded-lg font-semibold transition-colors inline-block"
