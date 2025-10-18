@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import SecurityGuard from "@/components/SecurityGuard";
-import SecurityWarning from "@/components/SecurityWarning";
 
 // Sử dụng font system thay vì Google Fonts để tránh timeout
 const geistSans = {
@@ -119,7 +118,6 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <SecurityGuard />
-        <SecurityWarning />
         {children}
       </body>
     </html>
