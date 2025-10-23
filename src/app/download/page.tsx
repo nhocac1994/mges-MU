@@ -94,7 +94,7 @@ export default function Download() {
                 <div className="text-center">
                   <h3 className="text-xl font-bold text-white mb-4">MediaFire</h3>
                   <a 
-                     href="https://www.mediafire.com/file/80da7ro14lblw2w/MU-DAUTRUONGSS1.NET_V2.zip/file" 
+                     href="https://www.mediafire.com/file/g74pmzk636jiaql/Mu-DauTruongs1.net.7z/file" 
                     target="_blank" 
                     rel="noopener noreferrer"
                     className="bg-green-600 hover:bg-green-700 text-white py-3 px-6 rounded-lg font-semibold transition-colors inline-block"
@@ -105,7 +105,7 @@ export default function Download() {
                 <div className="text-center">
                   <h3 className="text-xl font-bold text-white mb-4">Mega</h3>
                   <a 
-                    href="https://mega.nz/file/4BkRgY4B#vw5Y2oP0ifXDLhLCSapEdjM-4f4dNd8XtWorO-0I_Oc" 
+                    href="https://mega.nz/file/MIlDRDrT#2JjFPYc5YRDqx2CYe5kPV937-GXakDOgeK5yWdmJPlE" 
                     target="_blank" 
                     rel="noopener noreferrer"
                     className="bg-purple-600 hover:bg-purple-700 text-white py-3 px-6 rounded-lg font-semibold transition-colors inline-block"
