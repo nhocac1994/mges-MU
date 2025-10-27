@@ -1,3 +1,63 @@
+/****** Object:  Table [dbo].[JewelBank]    Script Date: 09/16/2025 14:20:18 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+SET ANSI_PADDING ON
+GO
+
+CREATE TABLE [dbo].[JewelBank](
+	[account] [varchar](10) NOT NULL,
+	[Chaos] [int] NOT NULL,
+	[Bless] [int] NOT NULL,
+	[Soul] [int] NOT NULL,
+	[Life] [int] NOT NULL,
+	[Creation] [int] NOT NULL,
+	[Guardian] [int] NOT NULL,
+	[Stone] [int] NOT NULL,
+	[Harmony] [int] NOT NULL,
+	[Lower] [int] NOT NULL,
+	[Higher] [int] NOT NULL
+) ON [PRIMARY]
+
+GO
+
+SET ANSI_PADDING OFF
+GO
+
+ALTER TABLE [dbo].[JewelBank] ADD  CONSTRAINT [DF_JewelBank_Chaos]  DEFAULT ((0)) FOR [Chaos]
+GO
+
+ALTER TABLE [dbo].[JewelBank] ADD  CONSTRAINT [DF_JewelBank_Bless]  DEFAULT ((0)) FOR [Bless]
+GO
+
+ALTER TABLE [dbo].[JewelBank] ADD  CONSTRAINT [DF_JewelBank_Soul]  DEFAULT ((0)) FOR [Soul]
+GO
+
+ALTER TABLE [dbo].[JewelBank] ADD  CONSTRAINT [DF_JewelBank_Life]  DEFAULT ((0)) FOR [Life]
+GO
+
+ALTER TABLE [dbo].[JewelBank] ADD  CONSTRAINT [DF_JewelBank_Creation]  DEFAULT ((0)) FOR [Creation]
+GO
+
+ALTER TABLE [dbo].[JewelBank] ADD  CONSTRAINT [DF_JewelBank_Guardian]  DEFAULT ((0)) FOR [Guardian]
+GO
+
+ALTER TABLE [dbo].[JewelBank] ADD  CONSTRAINT [DF_JewelBank_Stone]  DEFAULT ((0)) FOR [Stone]
+GO
+
+ALTER TABLE [dbo].[JewelBank] ADD  CONSTRAINT [DF_JewelBank_Harmony]  DEFAULT ((0)) FOR [Harmony]
+GO
+
+ALTER TABLE [dbo].[JewelBank] ADD  CONSTRAINT [DF_JewelBank_Lower]  DEFAULT ((0)) FOR [Lower]
+GO
+
+ALTER TABLE [dbo].[JewelBank] ADD  CONSTRAINT [DF_JewelBank_Higher]  DEFAULT ((0)) FOR [Higher]
+GO
+
+
 /****** Object:  Table [dbo].[ReconnectData]    Script Date: 04/05/2024 00:00:00 ******/
 SET ANSI_NULLS ON
 GO
@@ -498,8 +558,8 @@ GO
 SET ANSI_PADDING OFF
 GO
 SET IDENTITY_INSERT [dbo].[MEMB_INFO] ON
-INSERT [dbo].[MEMB_INFO] ([memb_guid], [memb___id], [memb__pwd], [memb_name], [sno__numb], [post_code], [addr_info], [addr_deta], [tel__numb], [phon_numb], [mail_addr], [fpas_ques], [fpas_answ], [job__code], [appl_days], [modi_days], [out__days], [true_days], [mail_chek], [bloc_code], [ctl1_code], [AccountLevel], [AccountExpireDate]) VALUES (2, N'test', N'test', N'wzteam', N'0                 ', N'1     ', NULL, NULL, NULL, NULL, N'test@wizardteam.com.br', N'question', N'answer', NULL, NULL, NULL, NULL, NULL, N'0', N'0', N'0', 0, CAST(0x00000000 AS SmallDateTime))
-INSERT [dbo].[MEMB_INFO] ([memb_guid], [memb___id], [memb__pwd], [memb_name], [sno__numb], [post_code], [addr_info], [addr_deta], [tel__numb], [phon_numb], [mail_addr], [fpas_ques], [fpas_answ], [job__code], [appl_days], [modi_days], [out__days], [true_days], [mail_chek], [bloc_code], [ctl1_code], [AccountLevel], [AccountExpireDate]) VALUES (1, N'admin', N'admin', N'wzteam', N'0                 ', N'1     ', NULL, NULL, NULL, NULL, N'admin@wizardteam.com.br', N'question', N'answer', NULL, NULL, NULL, NULL, NULL, N'0', N'0', N'0', 0, CAST(0x00000000 AS SmallDateTime))
+INSERT [dbo].[MEMB_INFO] ([memb_guid], [memb___id], [memb__pwd], [memb_name], [sno__numb], [post_code], [addr_info], [addr_deta], [tel__numb], [phon_numb], [mail_addr], [fpas_ques], [fpas_answ], [job__code], [appl_days], [modi_days], [out__days], [true_days], [mail_chek], [bloc_code], [ctl1_code], [AccountLevel], [AccountExpireDate]) VALUES (2, N'test', N'test', N'SSeMU', N'0                 ', N'1     ', NULL, NULL, NULL, NULL, N'test@ssemu.com', N'question', N'answer', NULL, NULL, NULL, NULL, NULL, N'0', N'0', N'0', 0, CAST(0x00000000 AS SmallDateTime))
+INSERT [dbo].[MEMB_INFO] ([memb_guid], [memb___id], [memb__pwd], [memb_name], [sno__numb], [post_code], [addr_info], [addr_deta], [tel__numb], [phon_numb], [mail_addr], [fpas_ques], [fpas_answ], [job__code], [appl_days], [modi_days], [out__days], [true_days], [mail_chek], [bloc_code], [ctl1_code], [AccountLevel], [AccountExpireDate]) VALUES (1, N'admin', N'admin', N'SSeMU', N'0                 ', N'1     ', NULL, NULL, NULL, NULL, N'admin@ssemu.com', N'question', N'answer', NULL, NULL, NULL, NULL, NULL, N'0', N'0', N'0', 0, CAST(0x00000000 AS SmallDateTime))
 SET IDENTITY_INSERT [dbo].[MEMB_INFO] OFF
 /****** Object:  Table [dbo].[GuildMember]    Script Date: 02/16/2022 17:02:07 ******/
 SET ANSI_NULLS ON
@@ -539,8 +599,7 @@ CREATE TABLE [dbo].[Guild](
 	[G_Type] [int] NOT NULL,
 	[G_Rival] [int] NOT NULL,
 	[G_Union] [int] NOT NULL,
-	[MemberCount] [int] NULL,
-	[Vault] [varbinary](3840) NULL,
+	[G_Date] [date] NOT NULL,
  CONSTRAINT [PK_Guild] PRIMARY KEY CLUSTERED 
 (
 	[G_Name] ASC
@@ -4543,7 +4602,7 @@ GO
 ALTER TABLE [dbo].[Guild] ADD  CONSTRAINT [DF__Guild__G_Union__0F624AF8]  DEFAULT ((0)) FOR [G_Union]
 GO
 /****** Object:  Default [DF__Guild__MemberCou__10566F31]    Script Date: 02/16/2022 17:02:07 ******/
-ALTER TABLE [dbo].[Guild] ADD  CONSTRAINT [DF__Guild__MemberCou__10566F31]  DEFAULT ((0)) FOR [MemberCount]
+ALTER TABLE [dbo].[Guild] ADD  DEFAULT (CONVERT([date],getdate(),0)) FOR [G_Date]
 GO
 /****** Object:  Default [DF__GuildMemb__G_Sta__01D345B0]    Script Date: 02/16/2022 17:02:07 ******/
 ALTER TABLE [dbo].[GuildMember] ADD  CONSTRAINT [DF__GuildMemb__G_Sta__01D345B0]  DEFAULT ((0)) FOR [G_Status]

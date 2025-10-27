@@ -138,6 +138,9 @@ export default function Login() {
                 <Link href="/news" className="text-white font-bold hover:text-blue-300 transition-colors relative z-10 px-4 py-2 rounded hover:bg-blue-500/10">
                   TIN TỨC
                 </Link>
+                <Link href="/rankings" className="text-white font-bold hover:text-blue-300 transition-colors relative z-10 px-4 py-2 rounded hover:bg-blue-500/10">
+                  XẾP HẠNG
+                </Link>
               </div>
             </div>
           </div>
@@ -168,7 +171,7 @@ export default function Login() {
                   name="username"
                   value={formData.username}
                   onChange={handleInputChange}
-                  className={`w-full p-3 bg-gray-800 border rounded-lg focus:outline-none ${
+                  className={`w-full p-3 bg-gray-800 text-white border rounded-lg focus:outline-none ${
                     errors.username ? 'border-red-500' : 'border-gray-600 focus:border-yellow-400'
                   }`}
                   placeholder="Nhập tên đăng nhập"
@@ -185,7 +188,7 @@ export default function Login() {
                   name="password"
                   value={formData.password}
                   onChange={handleInputChange}
-                  className={`w-full p-3 bg-gray-800 border rounded-lg focus:outline-none ${
+                  className={`w-full p-3 bg-gray-800 text-white border rounded-lg focus:outline-none ${
                     errors.password ? 'border-red-500' : 'border-gray-600 focus:border-yellow-400'
                   }`}
                   placeholder="Nhập mật khẩu"
@@ -234,9 +237,13 @@ export default function Login() {
               {/* Logo và mô tả */}
               <div className="md:col-span-2">
                 <div className="flex items-center mb-4">
-                  <div className="w-12 h-12 bg-gradient-to-r from-blue-500 to-purple-500 rounded-lg flex items-center justify-center mr-3">
-                    <span className="text-white text-xl font-bold">MU</span>
-                  </div>
+                  <Image 
+                    src="/icon.jpg" 
+                    alt="Mu Logo" 
+                    width={48}
+                    height={48}
+                    className="w-12 h-12 rounded-lg mr-3"
+                  />
                   <div>
                     <h3 className="text-xl font-bold text-white">MuDauTruongSS1.Net</h3>
                     <p className="text-blue-300 text-sm">Đấu Trường SS1</p>

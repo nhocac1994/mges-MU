@@ -67,6 +67,9 @@ export default function Download() {
               <Link href="/news" className="text-white font-bold hover:text-blue-300 transition-colors relative z-10 px-4 py-2 rounded hover:bg-blue-500/10">
                 TIN TỨC
               </Link>
+              <Link href="/rankings" className="text-white font-bold hover:text-blue-300 transition-colors relative z-10 px-4 py-2 rounded hover:bg-blue-500/10">
+                XẾP HẠNG
+              </Link>
             </div>
           </div>
         </div>
@@ -93,24 +96,26 @@ export default function Download() {
 
                 <div className="text-center">
                   <h3 className="text-xl font-bold text-white mb-4">MediaFire</h3>
+                  <p className="text-sm text-gray-400 mb-3">File size: 155.35MB</p>
                   <a 
-                     href="https://www.mediafire.com/file/g74pmzk636jiaql/Mu-DauTruongs1.net.7z/file" 
+                     href="https://www.mediafire.com/file/3o03twf640sbgg6/Mu-DauTruongs1.net_v1.7z/file" 
                     target="_blank" 
                     rel="noopener noreferrer"
                     className="bg-green-600 hover:bg-green-700 text-white py-3 px-6 rounded-lg font-semibold transition-colors inline-block"
                   >
-                    📥 Tải Client
+                    📥 Tải Client v1
                   </a>
                 </div>
                 <div className="text-center">
-                  <h3 className="text-xl font-bold text-white mb-4">Mega</h3>
+                  <h3 className="text-xl font-bold text-white mb-4">MEGA</h3>
+                  <p className="text-sm text-gray-400 mb-3">Alternative download</p>
                   <a 
-                    href="https://mega.nz/file/MIlDRDrT#2JjFPYc5YRDqx2CYe5kPV937-GXakDOgeK5yWdmJPlE" 
+                    href="https://mega.nz/file/pNdlTZDS#1z8QH4q-BKyF_UfTgBlIpQdYHOJ_La5IMrX7RzuUYPY" 
                     target="_blank" 
                     rel="noopener noreferrer"
                     className="bg-purple-600 hover:bg-purple-700 text-white py-3 px-6 rounded-lg font-semibold transition-colors inline-block"
                   >
-                    📥 Tải Client
+                    📥 Tải Client v1
                   </a>
                 </div>
                 
@@ -235,7 +240,7 @@ export default function Download() {
                   <div className="bg-blue-600 text-white rounded-full w-8 h-8 flex items-center justify-center font-bold">2</div>
                   <div>
                     <h3 className="text-xl font-bold text-white mb-2">Giải nén file</h3>
-                    <p className="text-gray-300">Giải nén file .zip vào thư mục bạn muốn</p>
+                    <p className="text-gray-300">Giải nén file .7z bằng WinRAR hoặc 7-Zip vào thư mục bạn muốn</p>
                   </div>
                 </div>
                 <div className="flex items-start space-x-4">
@@ -265,9 +270,13 @@ export default function Download() {
             {/* Brand Section */}
             <div className="space-y-4">
               <div className="flex items-center space-x-3">
-                <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
-                  <span className="text-white font-bold text-lg">M</span>
-                </div>
+                <Image 
+                  src="/icon.jpg" 
+                  alt="Mu Logo" 
+                  width={40}
+                  height={40}
+                  className="w-10 h-10 rounded-lg"
+                />
                 <div>
                   <h3 className="text-xl font-bold text-white">MuDauTruongSS1.Net</h3>
                   <p className="text-blue-300 text-sm">Server Mu Online Season 1</p>
@@ -334,9 +343,13 @@ export default function Download() {
           <div className="border-t border-gradient-to-r from-blue-500/30 via-purple-500/30 to-blue-500/30 pt-6">
             <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
               <div className="flex items-center space-x-2">
-                <div className="w-6 h-6 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center">
-                  <span className="text-white text-xs font-bold">M</span>
-                </div>
+                <Image 
+                  src="/icon.jpg" 
+                  alt="Mu Logo" 
+                  width={24}
+                  height={24}
+                  className="w-6 h-6 rounded"
+                />
                 <p className="text-gray-400 text-sm">
                   © 2024 MuDauTruongSS1.Net. All rights reserved.
                 </p>

@@ -67,6 +67,9 @@ export default function Info() {
               <Link href="/news" className="text-white font-bold hover:text-blue-300 transition-colors relative z-10 px-4 py-2 rounded hover:bg-blue-500/10">
                 TIN TỨC
               </Link>
+              <Link href="/rankings" className="text-white font-bold hover:text-blue-300 transition-colors relative z-10 px-4 py-2 rounded hover:bg-blue-500/10">
+                XẾP HẠNG
+              </Link>
             </div>
           </div>
         </div>
@@ -390,12 +393,16 @@ export default function Info() {
             {/* Brand Section */}
             <div className="space-y-4">
               <div className="flex items-center space-x-3">
-                <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
-                  <span className="text-white font-bold text-lg">M</span>
-                </div>
+                <Image 
+                  src="/icon.jpg" 
+                  alt="Mu Logo" 
+                  width={40}
+                  height={40}
+                  className="w-10 h-10 rounded-lg"
+                />
                 <div>
                   <h3 className="text-xl font-bold text-white">MuDauTruongSS1.Net</h3>
-                  <p className="text-blue-300 text-sm">Server Mu Online Season 1</p>
+                  <p className="text-blue-300 text-sm">033.77.14.654</p>
                 </div>
               </div>
               <p className="text-gray-300 text-sm leading-relaxed">
@@ -426,6 +433,10 @@ export default function Info() {
                 <Link href="/news" className="block text-gray-300 hover:text-blue-400 transition-colors flex items-center group">
                   <span className="w-1 h-1 bg-gray-400 rounded-full mr-3 group-hover:bg-blue-400 transition-colors"></span>
                   Tin Tức
+                </Link>
+                <Link href="/rankings" className="block text-gray-300 hover:text-blue-400 transition-colors flex items-center group">
+                  <span className="w-1 h-1 bg-gray-400 rounded-full mr-3 group-hover:bg-blue-400 transition-colors"></span>
+                  Bảng Xếp Hạng
                 </Link>
               </div>
             </div>
@@ -459,22 +470,25 @@ export default function Info() {
           <div className="border-t border-gradient-to-r from-blue-500/30 via-purple-500/30 to-blue-500/30 pt-6">
             <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
               <div className="flex items-center space-x-2">
-                <div className="w-6 h-6 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center">
-                  <span className="text-white text-xs font-bold">M</span>
-                </div>
+                <Image 
+                  src="/icon.jpg" 
+                  alt="Mu Logo" 
+                  width={24}
+                  height={24}
+                  className="w-6 h-6 rounded"
+                />
                 <p className="text-gray-400 text-sm">
-                  © 2024 MuDauTruongSS1.Net. All rights reserved.
+                  © 2025 MuDauTruongSS1.Net. Tất cả quyền được bảo lưu.
                 </p>
               </div>
               <div className="flex items-center space-x-6 text-sm text-gray-400">
-                <span>Được phát triển với ❤️</span>
+                <span>Được phát triển với MGeS</span>
                 <span>•</span>
-                <span>Version 1.0</span>
+                <span>Version 1.2</span>
               </div>
             </div>
           </div>
         </div>
-
       </footer>
       </div>
     </div>
