@@ -108,7 +108,7 @@ export default function RankingTable({ title, endpoint }: RankingTableProps) {
 
   if (loading) {
     return (
-      <div className="bg-gray-800 rounded-lg p-6">
+      <div className="bg-black/80 rounded-lg p-6 border border-gray-800">
         <h2 className="text-2xl font-bold text-yellow-400 mb-4">{title}</h2>
         <div className="flex justify-center items-center h-64">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-yellow-400"></div>
@@ -119,7 +119,7 @@ export default function RankingTable({ title, endpoint }: RankingTableProps) {
 
   if (error) {
     return (
-      <div className="bg-gray-800 rounded-lg p-6">
+      <div className="bg-black/80 rounded-lg p-6 border border-gray-800">
         <h2 className="text-2xl font-bold text-yellow-400 mb-4">{title}</h2>
         <div className="text-red-400 text-center">{error}</div>
       </div>
@@ -127,7 +127,7 @@ export default function RankingTable({ title, endpoint }: RankingTableProps) {
   }
 
   return (
-    <div className="bg-gray-800 rounded-lg p-6">
+    <div className="bg-black/80 rounded-lg p-6 border border-gray-800">
       <h2 className="text-2xl font-bold text-yellow-400 mb-6">{title}</h2>
       
       {/* Search Box */}
@@ -139,19 +139,19 @@ export default function RankingTable({ title, endpoint }: RankingTableProps) {
             onChange={(e) => setSearchTerm(e.target.value)}
             onKeyPress={handleKeyPress}
             placeholder="Nhập tên nhân vật..."
-            className="flex-1 px-4 py-2 bg-gray-700 text-white border border-gray-600 rounded-lg focus:outline-none focus:border-blue-500"
+            className="flex-1 px-4 py-2 bg-black/60 text-white border border-gray-700 rounded-lg focus:outline-none focus:border-blue-500"
           />
           <button
             onClick={handleSearch}
             disabled={isSearching}
-            className="px-6 py-2 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-600 text-white rounded-lg font-medium transition-colors"
+            className="px-6 py-2 bg-blue-600 hover:bg-blue-700 disabled:bg-black/60 text-white rounded-lg font-medium transition-colors"
           >
             {isSearching ? '🔍' : 'Tìm kiếm'}
           </button>
           {isSearchMode && (
             <button
               onClick={handleClearSearch}
-              className="px-4 py-2 bg-gray-600 hover:bg-gray-700 text-white rounded-lg font-medium transition-colors"
+              className="px-4 py-2 bg-black/60 hover:bg-black/80 text-white rounded-lg font-medium transition-colors border border-gray-700"
             >
               ✕
             </button>
@@ -167,7 +167,7 @@ export default function RankingTable({ title, endpoint }: RankingTableProps) {
       <div className="overflow-x-auto">
         <table className="w-full text-xs sm:text-sm">
           <thead>
-            <tr className="border-b border-gray-600">
+            <tr className="border-b border-gray-800">
               <th className="text-left py-2 sm:py-3 px-1 sm:px-2 text-yellow-400">Hạng</th>
               <th className="text-left py-2 sm:py-3 px-1 sm:px-2 text-yellow-400">Nhân vật</th>
               <th className="text-left py-2 sm:py-3 px-1 sm:px-2 text-yellow-400">Class</th>
@@ -182,7 +182,7 @@ export default function RankingTable({ title, endpoint }: RankingTableProps) {
           </thead>
           <tbody>
             {characters.map((char, index) => (
-              <tr key={`${char.account}-${char.character}`} className="border-b border-gray-700 hover:bg-gray-700">
+              <tr key={`${char.account}-${char.character}`} className="border-b border-gray-800 hover:bg-black/60">
                 <td className="py-2 sm:py-3 px-1 sm:px-2 text-yellow-300 font-bold">
                   {isSearchMode ? `#${index + 1}` : getRankIcon(index)}
                 </td>

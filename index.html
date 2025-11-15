@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GIF MuDauTruongSS1.net - Hiệu ứng phóng to từng chữ</title>
+    <style>
+        body, html { 
+            margin: 0; 
+            padding: 0; 
+            background: #000; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            height: 100vh; 
+            font-family: Arial, sans-serif;
+        }
+        canvas { 
+            image-rendering: auto;
+            border: 1px solid #333;
+        }
+        .controls {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            color: white;
+            font-size: 14px;
+        }
+        button {
+            margin-top: 10px;
+            padding: 10px 20px;
+            background: #0ff;
+            color: #000;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+            border-radius: 5px;
+        }
+        button:hover:not(:disabled) {
+            background: #0aa;
+        }
+        button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+<body>
+    <div class="controls">
+        <div>Hiệu ứng phóng to từng chữ - MuDauTruongSS1.net</div>
+        <button id="downloadBtn" disabled>Đang tải thư viện...</button>
+    </div>
+    <canvas id="c" width="500" height="120"></canvas>
+    <script>
+        const canvas = document.getElementById('c');
+        const ctx = canvas.getContext('2d');
+        const text = 'MuDauTruongSS1.net';
+        let startTime = Date.now();
+        let isRecording = false;
+        let gif = null;
+        let frames = [];
+        let gifJsLoaded = false;
+        let workerScriptUrl = null;
+        let loadAttempts = 0;
+        const glowColors = ['#0ff', '#0f0', '#ff0', '#f0f', '#00ffff'];
+        
+        // Hàm tải worker script và tạo blob URL để tránh CORS
+        async function loadWorkerScript() {
+            const workerUrls = [
+                'https://cdn.jsdelivr.net/npm/gif.js@0.2.0/dist/gif.worker.js',
+                'https://unpkg.com/gif.js@0.2.0/dist/gif.worker.js',
+                'https://cdnjs.cloudflare.com/ajax/libs/gif.js/0.2.0/gif.worker.js'
+            ];
+            
+            for (const url of workerUrls) {
+                try {
+                    const response = await fetch(url);
+                    if (response.ok) {
+                        const workerCode = await response.text();
+                        // Tạo blob URL từ worker code
+                        const blob = new Blob([workerCode], { type: 'application/javascript' });
+                        workerScriptUrl = URL.createObjectURL(blob);
+                        console.log('Đã tải worker script thành công');
+                        return true;
+                    }
+                } catch (error) {
+                    console.warn(`Lỗi tải worker từ ${url}:`, error);
+                    continue;
+                }
+            }
+            return false;
+        }
+        
+        // Load GIF.js động với nhiều CDN dự phòng
+        function loadGifJs() {
+            const btn = document.getElementById('downloadBtn');
+            btn.textContent = 'Đang tải thư viện...';
+            
+            // Danh sách CDN dự phòng (thử nhiều nguồn khác nhau)
+            const cdnUrls = [
+                {
+                    url: 'https://cdn.jsdelivr.net/npm/gif.js@0.2.0/dist/gif.min.js',
+                    name: 'jsDelivr'
+                },
+                {
+                    url: 'https://unpkg.com/gif.js@0.2.0/dist/gif.min.js',
+                    name: 'unpkg'
+                },
+                {
+                    url: 'https://cdnjs.cloudflare.com/ajax/libs/gif.js/0.2.0/gif.min.js',
+                    name: 'Cloudflare'
+                },
+                {
+                    url: 'https://raw.githubusercontent.com/jnordberg/gif.js/master/dist/gif.min.js',
+                    name: 'GitHub'
+                }
+            ];
+            
+            let timeoutId = null;
+            
+            function tryLoadScript(index) {
+                if (index >= cdnUrls.length) {
+                    btn.textContent = 'Không thể tải thư viện. Thử lại?';
+                    btn.disabled = false;
+                    btn.setAttribute('onclick', 'location.reload()');
+                    return;
+                }
+                
+                const cdn = cdnUrls[index];
+                btn.textContent = `Đang tải từ ${cdn.name}...`;
+                
+                // Xóa script cũ nếu có
+                const oldScript = document.querySelector(`script[data-cdn-index="${index}"]`);
+                if (oldScript) {
+                    oldScript.remove();
+                }
+                
+                const script = document.createElement('script');
+                script.src = cdn.url;
+                script.async = true;
+                script.setAttribute('data-cdn-index', index);
+                
+                // Timeout sau 10 giây
+                timeoutId = setTimeout(() => {
+                    script.onload = null;
+                    script.onerror = null;
+                    script.remove();
+                    tryLoadScript(index + 1);
+                }, 10000);
+                
+                script.onload = async () => {
+                    clearTimeout(timeoutId);
+                    // Kiểm tra lại sau khi load
+                    setTimeout(async () => {
+                        if (typeof GIF !== 'undefined') {
+                            // Tải worker script
+                            btn.textContent = 'Đang tải worker...';
+                            const workerLoaded = await loadWorkerScript();
+                            if (workerLoaded) {
+                                gifJsLoaded = true;
+                                btn.disabled = false;
+                                btn.textContent = 'Tải về GIF';
+                                btn.removeAttribute('onclick');
+                                console.log(`Đã tải thành công từ ${cdn.name}`);
+                            } else {
+                                // Nếu không tải được worker, vẫn cho phép sử dụng nhưng không dùng workers
+                                console.warn('Không tải được worker, sẽ dùng workers: 0');
+                                gifJsLoaded = true;
+                                btn.disabled = false;
+                                btn.textContent = 'Tải về GIF';
+                                btn.removeAttribute('onclick');
+                            }
+                        } else {
+                            // Thử CDN tiếp theo
+                            tryLoadScript(index + 1);
+                        }
+                    }, 200);
+                };
+                
+                script.onerror = () => {
+                    clearTimeout(timeoutId);
+                    console.warn(`Lỗi tải từ ${cdn.name}, thử CDN khác...`);
+                    // CDN này lỗi, thử CDN tiếp theo
+                    tryLoadScript(index + 1);
+                };
+                
+                document.head.appendChild(script);
+            }
+            
+            // Bắt đầu thử load từ CDN đầu tiên
+            tryLoadScript(0);
+        }
+        
+        // Bắt đầu load khi trang sẵn sàng
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', loadGifJs);
+        } else {
+            loadGifJs();
+        }
+        
+        // Tính toán vị trí và kích thước text
+        const baseFontSize = 40;
+        const fontSize = baseFontSize;
+        const centerX = canvas.width / 2;
+        const centerY = canvas.height / 2;
+        
+        // Tính toán vị trí của mỗi ký tự khi ở kích thước bình thường
+        ctx.font = 'bold ' + fontSize + 'px Arial';
+        ctx.textAlign = 'left';
+        ctx.textBaseline = 'middle';
+        const charPositions = [];
+        let totalWidth = 0;
+        for (let i = 0; i < text.length; i++) {
+            const charWidth = ctx.measureText(text[i]).width;
+            charPositions.push({
+                x: totalWidth,
+                width: charWidth
+            });
+            totalWidth += charWidth;
+        }
+        const startX = centerX - totalWidth / 2;
+        
+        // Cấu hình vòng lặp 3 giây
+        const cycleDuration = 3000; // 3 giây tính bằng milliseconds
+        const waveLength = 2.2; // Độ dài sóng (số ký tự bị ảnh hưởng)
+        const waveSpeed = 0.1; // Tốc độ sóng (điều chỉnh để phù hợp với 3 giây)
+
+        function draw() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            // Tính toán phase dựa trên thời gian để tạo vòng lặp 3 giây
+            const currentTime = Date.now();
+            const elapsed = (currentTime - startTime) % cycleDuration;
+            const progress = elapsed / cycleDuration; // 0 đến 1
+            
+            // Tính phase dựa trên progress (từ 0 đến text.length + waveLength)
+            // Để sóng chạy hết từ đầu đến cuối text
+            const maxPhase = (text.length + waveLength) / waveSpeed;
+            const phase = progress * maxPhase;
+            
+            const baseY = centerY;
+            
+            // Tính toán lại vị trí tổng thể khi có các ký tự phóng to
+            let currentX = startX;
+            
+            // Trước tiên, tính toán scale cho tất cả các ký tự
+            const scales = [];
+            for (let i = 0; i < text.length; i++) {
+                const wavePosition = (phase * waveSpeed) - i;
+                let scale = 1.0;
+                if (wavePosition >= 0 && wavePosition < waveLength) {
+                    const waveProgress = wavePosition / waveLength;
+                    scale = 1.0 + (Math.sin(waveProgress * Math.PI) * 0.5); // Phóng to từ 1.0 đến 1.5
+                }
+                scales.push(scale);
+            }
+            
+            // Vẽ từng ký tự với hiệu ứng phóng to
+            for (let i = 0; i < text.length; i++) {
+                const char = text[i];
+                const scale = scales[i];
+                
+                // Tính kích thước font theo scale
+                const currentFontSize = baseFontSize * scale;
+                ctx.font = 'bold ' + currentFontSize + 'px Arial';
+                
+                // Tính vị trí X - căn giữa ký tự
+                const charWidth = ctx.measureText(char).width;
+                const x = currentX + (charPositions[i].width - charWidth) / 2;
+                const y = baseY;
+                
+                // Màu sáng theo phase và vị trí - màu sáng hơn khi phóng to
+                const colorIndex = Math.floor((phase * waveSpeed + i * 0.15) % glowColors.length);
+                const glowColor = glowColors[colorIndex];
+                
+                // Vẽ glow effect (nhiều lớp) - glow mạnh hơn khi phóng to
+                const glowIntensity = scale > 1.0 ? 1.0 + (scale - 1.0) * 1.5 : 0.8;
+                for (let layer = 12; layer > 0; layer--) {
+                    ctx.shadowBlur = layer * 2.5 * glowIntensity;
+                    ctx.shadowColor = glowColor;
+                    ctx.fillStyle = layer === 1 ? '#fff' : `rgba(255,255,255,${0.15 / layer})`;
+                    ctx.fillText(char, x, y);
+                }
+                
+                // Reset shadow
+                ctx.shadowBlur = 0;
+                
+                // Cập nhật vị trí X cho ký tự tiếp theo
+                currentX += charPositions[i].width;
+            }
+            
+            // Lưu frame nếu đang recording
+            if (isRecording) {
+                frames.push(ctx.getImageData(0, 0, canvas.width, canvas.height));
+            }
+            
+            requestAnimationFrame(draw);
+        }
+        
+        draw();
+
+        // Xử lý tải về GIF
+        document.getElementById('downloadBtn').addEventListener('click', () => {
+            if (!gifJsLoaded || typeof GIF === 'undefined') {
+                alert('Thư viện GIF.js đang được tải. Vui lòng đợi và thử lại sau vài giây.');
+                return;
+            }
+            
+            if (isRecording) {
+                alert('Đang tạo GIF, vui lòng đợi...');
+                return;
+            }
+            
+            isRecording = true;
+            frames = [];
+            const recordFrames = 90; // 3 giây ở 30fps
+            let frameCount = 0;
+            
+            // Vô hiệu hóa nút trong khi đang tạo
+            const btn = document.getElementById('downloadBtn');
+            btn.disabled = true;
+            btn.textContent = 'Đang tạo GIF...';
+            
+            const recordInterval = setInterval(() => {
+                frameCount++;
+                if (frameCount >= recordFrames) {
+                    clearInterval(recordInterval);
+                    isRecording = false;
+                    
+                    try {
+                        // Sử dụng worker script từ blob URL nếu có, nếu không thì dùng workers: 0
+                        const gifOptions = {
+                            quality: 10,
+                            width: canvas.width,
+                            height: canvas.height
+                        };
+                        
+                        if (workerScriptUrl) {
+                            gifOptions.workers = 2;
+                            gifOptions.workerScript = workerScriptUrl;
+                        } else {
+                            // Không dùng workers nếu không tải được worker script
+                            gifOptions.workers = 0;
+                            console.warn('Sử dụng chế độ không workers (có thể chậm hơn)');
+                        }
+                        
+                        gif = new GIF(gifOptions);
+                        
+                        frames.forEach((frameData) => {
+                            const tempCanvas = document.createElement('canvas');
+                            tempCanvas.width = canvas.width;
+                            tempCanvas.height = canvas.height;
+                            const tempCtx = tempCanvas.getContext('2d');
+                            tempCtx.putImageData(frameData, 0, 0);
+                            gif.addFrame(tempCanvas, { delay: 33 });
+                        });
+                        
+                        gif.on('finished', (blob) => {
+                            const url = URL.createObjectURL(blob);
+                            const a = document.createElement('a');
+                            a.href = url;
+                            a.download = 'MuDauTruongSS1.net-zoom.gif';
+                            document.body.appendChild(a);
+                            a.click();
+                            document.body.removeChild(a);
+                            URL.revokeObjectURL(url);
+                            btn.disabled = false;
+                            btn.textContent = 'Tải về GIF';
+                            alert('Đã tải về GIF thành công!');
+                        });
+                        
+                        gif.on('progress', (p) => {
+                            btn.textContent = `Đang tạo GIF... ${Math.round(p * 100)}%`;
+                        });
+                        
+                        gif.render();
+                    } catch (error) {
+                        console.error('Lỗi tạo GIF:', error);
+                        alert('Có lỗi xảy ra khi tạo GIF. Vui lòng thử lại.');
+                        btn.disabled = false;
+                        btn.textContent = 'Tải về GIF';
+                    }
+                }
+            }, 33); // ~30fps
+        });
+    </script>
+</body>
+</html>

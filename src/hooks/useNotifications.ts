@@ -89,7 +89,7 @@ export function useNotifications() {
     let title, body;
     
     if (eventName === 'Chào mừng!') {
-      title = '🎉 Chào mừng đến với MuDauTruongSS1!';
+      title = '🎉 Chào mừng đến với MuDauTruongSS1.net!';
       body = 'Bạn sẽ nhận thông báo về các sự kiện quan trọng trong game!';
     } else if (isStarting) {
       title = '🎮 Sự kiện đã bắt đầu!';

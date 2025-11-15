@@ -1,0 +1,102 @@
+0       "Tu Dong Danh"
+
+1       "Camera 3D Bat"
+
+2       "Camera 3D Tat"
+
+3       "Camera 3D Khoi Phuc"
+
+4       "Bat Thanh Mau"
+
+5       "Tat Thanh Mau"
+
+6       "Tuy Chon Menu Nang Cao"
+
+7       "Tuy Chon Render"
+
+8       "Tong Quat"
+
+9       "Do Phan Giai"
+
+10      "Phong Chu"
+
+11      "Ban Do San"
+
+12      "Doi Tuong Ban Do"
+
+13      "Thuc The"
+
+14      "Bong Do"
+
+15      "Hieu Ung"
+
+16      "Hieu Ung Ky Nang"
+
+17      "Thanh Mau Quai Vat"
+
+18      "Thanh Tu Dong Tan Cong"
+
+19      "Tu Dong Tan Cong"
+
+20      "Am Thanh Thi Tham"
+
+21      "Am Luong"
+
+22      "Tro Giup Slide"
+
+23      "+Gioi Han Hieu Ung"
+
+24      "%Y-%m-%d %H:%M"
+
+25      "Ngay Het Han"
+
+26      "Dang Ket Noi Lai..."
+
+27      "Dang Dang Nhap..."
+
+28      "Cho Danh Sach Nhan Vat..."
+
+29      "Cho Thong Tin Nhan Vat..."
+
+30      "Gia Mua: %s Coin 1"
+
+31      "Gia Mua: %s Coin 2"
+
+32      "Gia Mua: %s Coin 3"
+
+33      "Thoi Gian Su Kien"
+
+34      "Vo Hieu"
+
+35      "%02d ngay"
+
+36      "%02d:%02d:%02d"
+
+37      "Mo Ngay Bay Gio"
+
+38      "Da Bat Dau"
+
+39      "Dong Cua So"
+
+40      "Cap Do: %d | Reset: %d"
+
+41      "MuOnline"
+
+42      "Cung Thu Vang"
+
+43      "Phan Thuong Cho 10 Renas"
+
+44      "Phan Thuong Cho 20 Renas"
+
+45      "Phan Thuong Cho 30 Renas"
+
+46      "Phan Thuong Cho 50 Renas"
+
+47      "Phan Thuong Cho 100 Renas"
+
+48      "Dang Ky Rena"
+
+49      "Rena Da Dang Ky %d"
+
+50      "Rena Da Thu Thap %d"
+

@@ -1,0 +1,35 @@
+Subject: Technical Support Request - ChaosMix Rate Configuration for Fruits (Index 13,015)
+
+Dear [Developer/Support Team],
+
+I hope this email finds you well. I am writing to request technical assistance regarding the configuration of ChaosMix rates for the Fruits item in our MU Online server.
+
+**Issue Description:**
+We need to set up the ChaosMix functionality for Fruits with the following specifications:
+- Item Index: 13,015
+- Level Range: 0-5
+- Item Type: Fruits
+
+**Requested Support:**
+Could you please provide detailed guidance on how to configure the ChaosMix rates for this specific item? We would appreciate step-by-step instructions covering:
+
+1. Database configuration (table structure and required fields)
+2. Rate settings for each level (0-5)
+3. Any additional configuration files that need to be modified
+4. Server-side script changes (if applicable)
+5. Testing procedures to verify the configuration
+
+**Additional Information:**
+- Server Version: [Your server version]
+- Database Type: [MySQL/SQL Server/etc.]
+- Current ChaosMix Status: [Working/Not configured]
+
+We understand that this is a technical configuration task and would greatly appreciate your expertise in resolving this matter. If you need any additional information from our side, please do not hesitate to ask.
+
+Thank you for your time and assistance. I look forward to your response.
+
+Best regards,
+[Your Name]
+[Your Position]
+[Contact Information]
+

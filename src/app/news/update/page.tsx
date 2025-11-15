@@ -7,10 +7,10 @@ export default function NewsUpdate() {
       {/* Background Image */}
       <div 
         className="fixed inset-0 bg-cover bg-center bg-no-repeat"
-        style={{
-          backgroundImage: 'url(/logoweb.jpg)',
-          backgroundAttachment: 'fixed'
-        }}
+        // style={{
+        //   backgroundImage: 'url(/logoweb.jpg)',
+        //   backgroundAttachment: 'fixed'
+        // }}
       ></div>
       
       {/* Background Overlay */}
@@ -31,7 +31,7 @@ export default function NewsUpdate() {
                   className="rounded-lg"
                 />
                 <div>
-                  <h1 className="text-lg font-bold text-white">MuDauTruongSS1.Net</h1>
+                  <h1 className="text-lg font-bold text-white">MuDauTruongSS1.net</h1>
                   <p className="text-blue-300 text-xs">Đấu Trường SS1</p>
                 </div>
               </div>
@@ -104,7 +104,7 @@ export default function NewsUpdate() {
               <div className="prose prose-invert max-w-none">
                 <h2 className="text-2xl font-bold text-white mb-4">🔄 Cập Nhật Phiên Bản 1.1</h2>
                 <p className="text-gray-300 mb-6">
-                  Chúng tôi vui mừng thông báo về bản cập nhật mới nhất cho server MuDauTruongSS1.Net!
+                  Chúng tôi vui mừng thông báo về bản cập nhật mới nhất cho server MuDauTruongSS1.net!
                 </p>
                 
                 <div className="bg-gray-800/50 rounded-lg p-6 mb-8">
@@ -237,7 +237,7 @@ export default function NewsUpdate() {
                   />
                   <div>
                     <h3 className="text-2xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
-                      MuDauTruongSS1.Net
+                      MuDauTruongSS1.net
                     </h3>
                     <p className="text-blue-300 text-sm">Đấu Trường SS1</p>
                   </div>
@@ -277,7 +277,7 @@ export default function NewsUpdate() {
                 <h4 className="text-lg font-semibold text-white mb-4">Thông Tin Game</h4>
                 <div className="space-y-3">
                   <div className="text-gray-300">
-                    <span className="text-blue-400">Server:</span> MuDauTruongSS1
+                    <span className="text-blue-400">Server:</span> MuDauTruongSS1.net
                   </div>
                   <div className="text-gray-300">
                     <span className="text-blue-400">Season:</span> Season 1
@@ -286,7 +286,7 @@ export default function NewsUpdate() {
                     <span className="text-blue-400">Online:</span> 24/7
                   </div>
                   <div className="text-gray-300">
-                    <span className="text-blue-400">Website:</span> mudautruongss1.net
+                    <span className="text-blue-400">Website:</span> MuDauTruongSS1.net
                   </div>
                 </div>
               </div>
@@ -296,7 +296,7 @@ export default function NewsUpdate() {
             <div className="border-t border-gray-700 pt-8">
               <div className="flex flex-col md:flex-row justify-between items-center">
                 <div className="text-gray-400 text-sm mb-4 md:mb-0">
-                  © 2024 MuDauTruongSS1.Net. All rights reserved.
+                  © 2024 MuDauTruongSS1.net. All rights reserved.
                 </div>
                 <div className="flex space-x-6 text-sm text-gray-400">
                   <span>Version 1.0.0</span>

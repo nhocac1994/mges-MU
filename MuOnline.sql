@@ -4379,24 +4379,8 @@ GO
 
 CREATE PROCEDURE	[dbo].[WZ_CS_GetAllGuildMarkRegInfo]
 	@iMapSvrGroup		SMALLINT	-- ??? ??
-As
-Begin
-	BEGIN TRANSACTION
-	
-	SET NOCOUNT ON	
 
-	SELECT TOP 100 * FROM MuCastle_REG_SIEGE WITH (READUNCOMMITTED)
-	WHERE MAP_SVR_GROUP = @iMapSvrGroup
-	ORDER BY SEQ_NUM DESC
 
-	IF(@@Error <> 0 )
-		ROLLBACK TRANSACTION
-	ELSE	
-		COMMIT TRANSACTION
-
-	SET NOCOUNT OFF	
-End
-GO
 /****** Object:  StoredProcedure [dbo].[WZ_CS_CheckSiegeGuildList]    Script Date: 02/16/2022 17:02:08 ******/
 SET ANSI_NULLS ON
 GO

@@ -99,7 +99,7 @@ export default function GuildRankingTable({ title, endpoint }: GuildRankingTable
 
   if (loading) {
     return (
-      <div className="bg-gray-800 rounded-lg p-6">
+      <div className="bg-black/80 rounded-lg p-6 border border-gray-800">
         <h2 className="text-2xl font-bold text-yellow-400 mb-4">{title}</h2>
         <div className="flex justify-center items-center h-64">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-yellow-400"></div>
@@ -110,7 +110,7 @@ export default function GuildRankingTable({ title, endpoint }: GuildRankingTable
 
   if (error) {
     return (
-      <div className="bg-gray-800 rounded-lg p-6">
+      <div className="bg-black/80 rounded-lg p-6 border border-gray-800">
         <h2 className="text-2xl font-bold text-yellow-400 mb-4">{title}</h2>
         <div className="text-red-400 text-center">{error}</div>
       </div>
@@ -118,13 +118,13 @@ export default function GuildRankingTable({ title, endpoint }: GuildRankingTable
   }
 
   return (
-    <div className="bg-gray-800 rounded-lg p-6">
+    <div className="bg-black/80 rounded-lg p-6 border border-gray-800">
       <h2 className="text-2xl font-bold text-yellow-400 mb-6">{title}</h2>
       
       <div className="overflow-x-auto">
         <table className="w-full text-xs sm:text-sm">
           <thead>
-            <tr className="border-b border-gray-600">
+            <tr className="border-b border-gray-800">
               <th className="text-left py-2 sm:py-3 px-1 sm:px-2 text-yellow-400">Hạng</th>
               <th className="text-left py-2 sm:py-3 px-1 sm:px-2 text-yellow-400">Logo</th>
               <th className="text-left py-2 sm:py-3 px-1 sm:px-2 text-yellow-400">Tên Guild</th>
@@ -135,7 +135,7 @@ export default function GuildRankingTable({ title, endpoint }: GuildRankingTable
           </thead>
           <tbody>
             {guilds.map((guild, index) => (
-              <tr key={guild.guildName} className="border-b border-gray-700 hover:bg-gray-700">
+              <tr key={guild.guildName} className="border-b border-gray-800 hover:bg-black/60">
                 <td className="py-2 sm:py-3 px-1 sm:px-2 text-yellow-300 font-bold">
                   {getRankIcon(index)}
                 </td>

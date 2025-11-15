@@ -1,0 +1,104 @@
+LỖI: State (42000) - WZ_DesblocAccount
+
+===========================================
+PHÂN TÍCH LỖI:
+===========================================
+
+Lỗi: [QueryManager] State (42000), Diagnostic: [Microsoft][ODBC SQL Server
+
+Nguyên nhân có thể:
+
+1. **Stored Procedure không tồn tại**
+   - Procedure WZ_DesblocAccount chưa được tạo trong database
+   - Tên procedure bị sai chính tả
+
+2. **Lỗi cú pháp SQL**
+   - Cú pháp gọi stored procedure không đúng
+   - Thiếu hoặc thừa tham số
+
+3. **Quyền truy cập**
+   - User database không có quyền EXECUTE stored procedure
+   - User không có quyền truy cập database
+
+4. **Database connection**
+   - Kết nối database không đúng
+   - Database name không đúng
+
+===========================================
+GIẢI PHÁP:
+===========================================
+
+BƯỚC 1: Kiểm tra Stored Procedure có tồn tại không
+---------------------------------------------------
+Chạy query trong SQL Server Management Studio:
+
+SELECT * FROM sys.procedures 
+WHERE name = 'WZ_DesblocAccount'
+
+Nếu không có kết quả → Procedure chưa được tạo
+
+BƯỚC 2: Tạo Stored Procedure (nếu chưa có)
+---------------------------------------------------
+CREATE PROCEDURE WZ_DesblocAccount
+    @AccountID VARCHAR(10)
+AS
+BEGIN
+    SET NOCOUNT ON;
+    
+    UPDATE MEMB_INFO 
+    SET bloc_code = 0 
+    WHERE memb___id = @AccountID;
+    
+    IF @@ROWCOUNT > 0
+        SELECT 'Account unblocked successfully' AS Result;
+    ELSE
+        SELECT 'Account not found' AS Result;
+END
+GO
+
+BƯỚC 3: Cấp quyền EXECUTE
+---------------------------------------------------
+GRANT EXECUTE ON WZ_DesblocAccount TO [username]
+GO
+
+BƯỚC 4: Kiểm tra cú pháp gọi procedure
+---------------------------------------------------
+Đúng: EXEC WZ_DesblocAccount 'mges123'
+Hoặc: EXEC WZ_DesblocAccount @AccountID = 'mges123'
+
+BƯỚC 5: Kiểm tra connection string
+---------------------------------------------------
+- Kiểm tra server name
+- Kiểm tra database name
+- Kiểm tra username/password
+- Kiểm tra ODBC driver version
+
+BƯỚC 6: Kiểm tra log chi tiết
+---------------------------------------------------
+Xem full error message trong SQL Server log để biết chi tiết lỗi
+
+===========================================
+CÁCH KHẮC PHỤC NHANH:
+===========================================
+
+1. Mở SQL Server Management Studio
+2. Connect vào database MUOnline
+3. Chạy query kiểm tra:
+   USE MuOnline
+   GO
+   EXEC WZ_DesblocAccount 'mges123'
+   GO
+
+4. Nếu lỗi → Xem error message chi tiết
+5. Tạo procedure nếu chưa có (dùng script ở BƯỚC 2)
+6. Test lại trong game server
+
+===========================================
+LƯU Ý:
+===========================================
+
+- State 42000 thường là lỗi syntax hoặc object không tồn tại
+- Cần xem full error message để biết chính xác nguyên nhân
+- Kiểm tra cả database name trong connection string
+- Đảm bảo user có quyền EXECUTE stored procedure
+

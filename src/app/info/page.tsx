@@ -3,6 +3,10 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
+import { motion } from 'framer-motion';
+import AnimatedSection from '@/components/AnimatedSection';
+import FloatingParticles from '@/components/FloatingParticles';
+import NetworkOverlay from '@/components/NetworkOverlay';
 
 export default function Info() {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -29,15 +33,21 @@ export default function Info() {
     <div className="min-h-screen relative overflow-hidden" style={{
       fontFamily: 'Roboto, sans-serif'
     }}>
+      {/* Network Overlay - Luôn chạy trên background */}
+      <NetworkOverlay />
+      
+      {/* Floating Particles Background */}
+      <FloatingParticles count={25} />
+      
       {/* Background Image - Desktop Only */}
       {isClient && (
         <>
           <div 
             className="hidden md:block fixed inset-0 bg-cover bg-center bg-no-repeat"
-            style={{
-              backgroundImage: 'url(/logoweb.jpg)',
-              backgroundAttachment: 'fixed'
-            }}
+            // style={{
+            //   backgroundImage: 'url(/logoweb.jpg)',
+            //   backgroundAttachment: 'fixed'
+            // }}
           ></div>
           
           {/* Mobile Background - Simple gradient */}
@@ -46,100 +56,10 @@ export default function Info() {
       )}
       
       {/* Background Overlay */}
-      <div className="fixed inset-0 bg-black/60"></div>
+      <div className="fixed inset-0 bg-black/20"></div>
       
       {/* Content */}
-      <div className="relative z-10">
-        {/* Top Header - Hidden initially, shows on scroll */}
-        <div className={`fixed top-0 left-0 right-0 bg-black/95 py-2 border-b border-gray-600 z-50 transition-all duration-500 ${
-          isClient && isScrolled ? 'translate-y-0 opacity-100' : '-translate-y-full opacity-0'
-        }`}>
-        <div className="max-w-6xl mx-auto px-5 flex justify-between items-center">
-          <div className="text-green-400 text-sm font-medium whitespace-nowrap">🟢 Server Online</div>
-          <div className="flex gap-3 items-center">
-            <Link href="/register" className="text-white text-sm font-medium px-3 py-1 rounded hover:text-blue-300 hover:bg-blue-500/10 transition-all whitespace-nowrap">
-              ĐĂNG KÝ
-            </Link>
-            <span className="text-gray-400">|</span>
-            <Link href="/login" className="text-white text-sm font-medium px-3 py-1 rounded hover:text-blue-300 hover:bg-blue-500/10 transition-all whitespace-nowrap">
-              ĐĂNG NHẬP
-            </Link>
-          </div>
-        </div>
-        </div>
-
-        {/* Navigation - Hidden initially, shows on scroll */}
-        <nav className={`fixed top-12 left-0 right-0 bg-black/95 py-4 border-b-2 border-blue-400 z-50 transition-all duration-500 ${
-          isClient && isScrolled ? 'translate-y-0 opacity-100' : '-translate-y-full opacity-0'
-        }`}>
-          <div className="max-w-6xl mx-auto px-5">
-            {/* Desktop Navigation */}
-            <div className="hidden md:flex justify-center">
-              <div className="flex gap-8 justify-center">
-                <Link href="/" className="text-white font-bold hover:text-blue-300 transition-colors px-4 py-2 rounded hover:bg-blue-500/10">
-                  TRANG CHỦ
-                </Link>
-                <Link href="/info" className="text-blue-300 font-bold hover:text-blue-200 transition-colors px-4 py-2 rounded hover:bg-blue-500/10">
-                  THÔNG TIN
-                </Link>
-                <Link href="/download" className="text-white font-bold hover:text-blue-300 transition-colors px-4 py-2 rounded hover:bg-blue-500/10">
-                  TẢI GAME
-                </Link>
-                <Link href="/donate" className="text-white font-bold hover:text-blue-300 transition-colors px-4 py-2 rounded hover:bg-blue-500/10">
-                  QUYÊN GÓP
-                </Link>
-                <Link href="/news" className="text-white font-bold hover:text-blue-300 transition-colors px-4 py-2 rounded hover:bg-blue-500/10">
-                  TIN TỨC
-                </Link>
-                <Link href="/rankings" className="text-white font-bold hover:text-blue-300 transition-colors px-4 py-2 rounded hover:bg-blue-500/10">
-                  XẾP HẠNG
-                </Link>
-              </div>
-            </div>
-            
-            {/* Mobile Navigation */}
-            <div className="md:hidden">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center space-x-2">
-                  <Image 
-                    src="/Mu.PNG" 
-                    alt="Mu Logo" 
-                    width={40}
-                    height={16}
-                    className="w-8 h-auto"
-                  />
-                  <span className="text-white font-bold text-sm">MuDauTruongSS1</span>
-                </div>
-                
-                <button 
-                  className="text-white p-2"
-                  onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                >
-                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-                  </svg>
-                </button>
-              </div>
-              
-              {/* Mobile Menu */}
-              <div className={`transition-all duration-300 ${
-                mobileMenuOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
-              } overflow-hidden`}>
-                <div className="py-4 space-y-3 border-t border-gray-700 mt-3">
-                  <Link href="/" className="block text-white hover:text-blue-400 transition-colors py-2">TRANG CHỦ</Link>
-                  <Link href="/info" className="block text-blue-300 hover:text-blue-200 transition-colors py-2">THÔNG TIN</Link>
-                  <Link href="/download" className="block text-white hover:text-blue-400 transition-colors py-2">TẢI GAME</Link>
-                  <Link href="/donate" className="block text-white hover:text-blue-400 transition-colors py-2">QUYÊN GÓP</Link>
-                  <Link href="/news" className="block text-white hover:text-blue-400 transition-colors py-2">TIN TỨC</Link>
-                  <Link href="/rankings" className="block text-white hover:text-blue-400 transition-colors py-2">XẾP HẠNG</Link>
-                </div>
-              </div>
-            </div>
-          </div>
-          {/* Navigation dot */}
-          <div className="absolute bottom-[-10px] left-1/2 transform -translate-x-1/2 w-5 h-5 bg-blue-400 rounded-full shadow-lg shadow-blue-400/50"></div>
-        </nav>
-
+      <div className="relative z-10 pt-28">
         {/* Main Content */}
         <main className="relative z-10 py-8">
 
@@ -147,30 +67,88 @@ export default function Info() {
       <section className="py-20 bg-gradient-to-b from-black/40 to-black/60 relative overflow-hidden">
         {/* Background Effects */}
         <div className="absolute inset-0">
-          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-blue-500/20 rounded-full blur-3xl animate-pulse"></div>
-          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-purple-500/20 rounded-full blur-2xl animate-bounce" style={{animationDelay: '1s'}}></div>
+          <motion.div 
+            className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-blue-500/20 rounded-full blur-3xl"
+            animate={{
+              scale: [1, 1.2, 1],
+              opacity: [0.3, 0.5, 0.3]
+            }}
+            transition={{
+              duration: 4,
+              repeat: Infinity,
+              ease: "easeInOut"
+            }}
+          />
+          <motion.div 
+            className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-purple-500/20 rounded-full blur-2xl"
+            animate={{
+              scale: [1, 1.3, 1],
+              opacity: [0.3, 0.6, 0.3],
+              y: [-20, 20, -20]
+            }}
+            transition={{
+              duration: 5,
+              delay: 1,
+              repeat: Infinity,
+              ease: "easeInOut"
+            }}
+          />
         </div>
         
         <div className="container mx-auto px-4 text-center relative z-10">
-          <div className="mb-8">
-            <div className="text-6xl font-black text-white mb-4 relative" style={{fontFamily: 'Orbitron, monospace'}}>
-              <span className="bg-gradient-to-r from-blue-400 via-purple-400 to-red-400 bg-clip-text text-transparent animate-pulse">
+          <motion.div 
+            className="mb-8"
+            initial={{ opacity: 0, y: 50 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+          >
+            <motion.div 
+              className="text-6xl font-black text-white mb-4 relative"
+              style={{fontFamily: 'Orbitron, monospace'}}
+              animate={{
+                backgroundPosition: ['0% 50%', '100% 50%', '0% 50%']
+              }}
+              transition={{
+                duration: 3,
+                repeat: Infinity,
+                ease: "linear"
+              }}
+            >
+              <span 
+                className="bg-gradient-to-r from-blue-400 via-purple-400 to-red-400 bg-clip-text text-transparent"
+                style={{ backgroundSize: '200% 200%' }}
+              >
                 THÔNG TIN SERVER
               </span>
               {/* Glow Effect */}
-              <div className="absolute inset-0 text-6xl font-black bg-gradient-to-r from-blue-400 via-purple-400 to-red-400 bg-clip-text text-transparent blur-sm opacity-50 animate-pulse">
+              <motion.div 
+                className="absolute inset-0 text-6xl font-black bg-gradient-to-r from-blue-400 via-purple-400 to-red-400 bg-clip-text text-transparent blur-sm opacity-50"
+                animate={{
+                  opacity: [0.3, 0.6, 0.3],
+                  scale: [1, 1.02, 1]
+                }}
+                transition={{
+                  duration: 2,
+                  repeat: Infinity,
+                  ease: "easeInOut"
+                }}
+              >
                 THÔNG TIN SERVER
+              </motion.div>
+            </motion.div>
+            <AnimatedSection direction="up" delay={0.2}>
+              <div className="text-2xl font-semibold text-blue-300 mb-4">
+                <span className="bg-gradient-to-r from-blue-300 to-cyan-300 bg-clip-text text-transparent">
+                  MuDauTruongSS1.net - Server Mu Online Season 1
+                </span>
               </div>
-            </div>
-            <div className="text-2xl font-semibold text-blue-300 mb-4 animate-fade-in-up" style={{animationDelay: '0.5s'}}>
-              <span className="bg-gradient-to-r from-blue-300 to-cyan-300 bg-clip-text text-transparent">
-                MuDauTruongSS1.Net - Server Mu Online Season 1
-              </span>
-            </div>
-            <div className="text-lg text-white/80 animate-fade-in-up" style={{animationDelay: '1s'}}>
-              Thông tin chi tiết về server và các tính năng nổi bật
-            </div>
-          </div>
+            </AnimatedSection>
+            <AnimatedSection direction="up" delay={0.4}>
+              <div className="text-lg text-white/80">
+                Thông tin chi tiết về server và các tính năng nổi bật
+              </div>
+            </AnimatedSection>
+          </motion.div>
         </div>
       </section>
       
@@ -180,7 +158,12 @@ export default function Info() {
         <div className="container mx-auto px-4">
           <div className="grid lg:grid-cols-2 gap-12">
             {/* Server Stats */}
-            <div className="bg-black/50 backdrop-blur-sm rounded-lg p-8 border border-blue-500/30 hover-lift transition-all duration-300 hover:border-blue-400/50 hover:shadow-lg hover:shadow-blue-500/20">
+            <AnimatedSection direction="left" delay={0.2}>
+              <motion.div 
+                className="bg-black/50 backdrop-blur-sm rounded-lg p-8 border border-blue-500/30 glass hover-lift transition-all duration-300 hover:border-blue-400/50 hover:shadow-lg hover:shadow-blue-500/20 hover-glow hover-3d"
+                whileHover={{ y: -10, scale: 1.02 }}
+                transition={{ type: "spring", stiffness: 300, damping: 20 }}
+              >
               <div className="flex items-center mb-8">
                 <div className="w-12 h-12 bg-gradient-to-r from-green-500 to-blue-500 rounded-lg flex items-center justify-center mr-4">
                   <span className="text-white text-2xl">📊</span>
@@ -217,10 +200,16 @@ export default function Info() {
                   <span className="text-purple-400 font-bold text-2xl">Season 1</span>
                 </div>
               </div>
-            </div>
+              </motion.div>
+            </AnimatedSection>
 
             {/* Server Settings */}
-            <div className="bg-black/50 backdrop-blur-sm rounded-lg p-8 border border-purple-500/30 hover-lift transition-all duration-300 hover:border-purple-400/50 hover:shadow-lg hover:shadow-purple-500/20">
+            <AnimatedSection direction="right" delay={0.3}>
+              <motion.div 
+                className="bg-black/50 backdrop-blur-sm rounded-lg p-8 border border-purple-500/30 glass hover-lift transition-all duration-300 hover:border-purple-400/50 hover:shadow-lg hover:shadow-purple-500/20 hover-glow hover-3d"
+                whileHover={{ y: -10, scale: 1.02 }}
+                transition={{ type: "spring", stiffness: 300, damping: 20 }}
+              >
               <div className="flex items-center mb-8">
                 <div className="w-12 h-12 bg-gradient-to-r from-purple-500 to-pink-500 rounded-lg flex items-center justify-center mr-4">
                   <span className="text-white text-2xl">⚙️</span>
@@ -257,7 +246,8 @@ export default function Info() {
                   <span className="text-purple-400 font-bold text-2xl">400</span>
                 </div>
               </div>
-            </div>
+              </motion.div>
+            </AnimatedSection>
           </div>
         </div>
       </section>
@@ -385,7 +375,7 @@ export default function Info() {
               </div>
             </h2>
             <p className="text-xl text-gray-300 max-w-2xl mx-auto">
-              Khám phá những tính năng độc đáo và hấp dẫn của server MuDauTruongSS1.Net
+              Khám phá những tính năng độc đáo và hấp dẫn của server MuDauTruongSS1.net
             </p>
           </div>
           
@@ -453,112 +443,8 @@ export default function Info() {
         </div>
       </section>
       </main>
-      {/* Footer */}
-      <footer className="bg-gradient-to-b from-black/90 to-black backdrop-blur-sm border-t border-blue-500/30 py-12 mt-12">
-        <div className="max-w-6xl mx-auto px-5">
-          <div className="grid md:grid-cols-3 gap-8 mb-8">
-            {/* Brand Section */}
-            <div className="space-y-4">
-              <div className="flex items-center space-x-3">
-                <Image 
-                  src="/icon.jpg" 
-                  alt="Mu Logo" 
-                  width={40}
-                  height={40}
-                  className="w-10 h-10 rounded-lg"
-                />
-                <div>
-                  <h3 className="text-xl font-bold text-white">MuDauTruongSS1.Net</h3>
-                  <p className="text-blue-300 text-sm">033.77.14.654</p>
-                </div>
-              </div>
-              <p className="text-gray-300 text-sm leading-relaxed">
-                Server Mu Online Season 1 chuyên nghiệp với hệ thống game ổn định, 
-                cộng đồng sôi động và sự kiện thường xuyên.
-              </p>
-            </div>
-
-            {/* Links Section */}
-            <div className="space-y-4">
-              <h4 className="text-lg font-semibold text-white flex items-center">
-                <span className="w-2 h-2 bg-blue-500 rounded-full mr-2"></span>
-                Liên Kết
-              </h4>
-              <div className="space-y-3">
-                <Link href="/info" className="block text-gray-300 hover:text-blue-400 transition-colors flex items-center group">
-                  <span className="w-1 h-1 bg-gray-400 rounded-full mr-3 group-hover:bg-blue-400 transition-colors"></span>
-                  Thông Tin Server
-                </Link>
-                <Link href="/download" className="block text-gray-300 hover:text-blue-400 transition-colors flex items-center group">
-                  <span className="w-1 h-1 bg-gray-400 rounded-full mr-3 group-hover:bg-blue-400 transition-colors"></span>
-                  Tải Game
-                </Link>
-                <Link href="/donate" className="block text-gray-300 hover:text-blue-400 transition-colors flex items-center group">
-                  <span className="w-1 h-1 bg-gray-400 rounded-full mr-3 group-hover:bg-blue-400 transition-colors"></span>
-                  Ủng Hộ Server
-                </Link>
-                <Link href="/news" className="block text-gray-300 hover:text-blue-400 transition-colors flex items-center group">
-                  <span className="w-1 h-1 bg-gray-400 rounded-full mr-3 group-hover:bg-blue-400 transition-colors"></span>
-                  Tin Tức
-                </Link>
-                <Link href="/rankings" className="block text-gray-300 hover:text-blue-400 transition-colors flex items-center group">
-                  <span className="w-1 h-1 bg-gray-400 rounded-full mr-3 group-hover:bg-blue-400 transition-colors"></span>
-                  Bảng Xếp Hạng
-                </Link>
-              </div>
-            </div>
-
-            {/* Social Media Section */}
-            <div className="space-y-4">
-              <h4 className="text-lg font-semibold text-white flex items-center">
-                <span className="w-2 h-2 bg-purple-500 rounded-full mr-2"></span>
-                Mạng Xã Hội
-              </h4>
-              <div className="flex space-x-4">
-                <a href="https://www.facebook.com/share/1K54dD4kW1/?mibextid=wwXIfr" className="group flex items-center justify-center w-12 h-12 bg-blue-600/20 hover:bg-blue-600/40 rounded-lg border border-blue-500/30 hover:border-blue-400/50 transition-all duration-300 hover:scale-110">
-                  <Image src="/facebook-logo.webp" alt="Facebook" width={20} height={20} className="group-hover:scale-110 transition-transform" />
-                </a>
-                <a href="https://www.tiktok.com/@mudautruongss1?_t=ZS-90eQbTHy1sf&_r=1" className="group flex items-center justify-center w-12 h-12 bg-pink-600/20 hover:bg-pink-600/40 rounded-lg border border-pink-500/30 hover:border-pink-400/50 transition-all duration-300 hover:scale-110">
-                  <Image src="/tiktok-logo.webp" alt="TikTok" width={20} height={20} className="group-hover:scale-110 transition-transform" />
-                </a>
-                <a href="https://zalo.me/g/xeupyo721" className="group flex items-center justify-center w-12 h-12 bg-blue-500/20 hover:bg-blue-500/40 rounded-lg border border-blue-400/30 hover:border-blue-300/50 transition-all duration-300 hover:scale-110">
-                  <Image src="/Zalo-icon.webp" alt="Zalo" width={20} height={20} className="group-hover:scale-110 transition-transform" />
-                </a>
-              </div>
-              <div className="pt-4">
-                <p className="text-gray-400 text-sm">
-                  Theo dõi chúng tôi để cập nhật tin tức mới nhất
-                </p>
-              </div>
-            </div>
-          </div>
-
-          {/* Bottom Section */}
-          <div className="border-t border-gradient-to-r from-blue-500/30 via-purple-500/30 to-blue-500/30 pt-6">
-            <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
-              <div className="flex items-center space-x-2">
-                <Image 
-                  src="/icon.jpg" 
-                  alt="Mu Logo" 
-                  width={24}
-                  height={24}
-                  className="w-6 h-6 rounded"
-                />
-                <p className="text-gray-400 text-sm">
-                  © 2025 MuDauTruongSS1.Net. Tất cả quyền được bảo lưu.
-                </p>
-              </div>
-              <div className="flex items-center space-x-6 text-sm text-gray-400">
-                <span>Được phát triển với MGeS</span>
-                <span>•</span>
-                <span>Version 1.2</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </footer>
+      </div>
     </div>
-  </div>
   );
 }
 

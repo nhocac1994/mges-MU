@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import "./globals.css";
 import "../styles/mobile.css";
 import SecurityGuard from "@/components/SecurityGuard";
+import Header from "@/components/Header";
+import Footer from "@/components/Footer";
 
 // Sử dụng font system thay vì Google Fonts để tránh timeout
 const geistSans = {
@@ -12,19 +14,23 @@ const geistMono = {
   variable: "--font-geist-mono",
 };
 
+import { getSiteConfig } from '@/lib/config';
+
+const config = getSiteConfig();
+
 export const metadata: Metadata = {
-  title: "MuDauTruongSS1.Net - Mu Online Season 1",
-  description: "Server Mu Online Season 1 với tỷ lệ exp cao, drop rate tốt. Cộng đồng game thủ Việt Nam hàng đầu.",
-  keywords: ["Mu Online", "Season 1", "Game", "Vietnam", "Server", "Gaming"],
-  authors: [{ name: "MuDauTruongSS1 Team" }],
-  creator: "MuDauTruongSS1.Net",
-  publisher: "MuDauTruongSS1.Net",
+  title: `${config.nameGame} - ${config.gameTitle} | Server Game MU Online Việt Nam`,
+  description: config.metaDescription,
+  keywords: config.metaKeywords,
+  authors: [{ name: `${config.nameGame} Team` }],
+  creator: config.nameGame,
+  publisher: config.nameGame,
   formatDetection: {
     email: false,
     address: false,
     telephone: false,
   },
-  metadataBase: new URL('https://mudautruongss1.net'),
+  metadataBase: new URL(config.websiteUrl),
   alternates: {
     canonical: '/',
   },
@@ -37,16 +43,28 @@ export const metadata: Metadata = {
     userScalable: false,
   },
   openGraph: {
-    title: "MuDauTruongSS1.Net - Mu Online Season 1",
-    description: "Server Mu Online Season 1 với tỷ lệ exp cao, drop rate tốt. Cộng đồng game thủ Việt Nam hàng đầu.",
-    url: 'https://mudautruongss1.net',
-    siteName: 'MuDauTruongSS1.Net',
+    title: `${config.nameGame} - ${config.gameTitle} | Server Game MU Online Việt Nam`,
+    description: config.metaDescription,
+    url: config.websiteUrl,
+    siteName: config.websiteName,
     images: [
       {
-        url: '/icon.jpg',
+        url: '/panael-mu.jpg',
         width: 1200,
         height: 630,
-        alt: 'MuDauTruongSS1.Net - Mu Online Season 1',
+        alt: `${config.nameGame} - ${config.gameTitle} - Hệ thống PvP và chiến đấu`,
+      },
+      {
+        url: '/logoweb.jpg',
+        width: 1200,
+        height: 630,
+        alt: `${config.nameGame} - ${config.gameTitle} - Logo chính thức`,
+      },
+      {
+        url: '/muonline-panael.jpg',
+        width: 1200,
+        height: 630,
+        alt: `${config.nameGame} - ${config.gameTitle} - Khung cảnh game 3D`,
       },
     ],
     locale: 'vi_VN',
@@ -54,9 +72,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: "MuDauTruongSS1.Net - Mu Online Season 1",
-    description: "Server Mu Online Season 1 với tỷ lệ exp cao, drop rate tốt. Cộng đồng game thủ Việt Nam hàng đầu.",
-    images: ['/icon.jpg'],
+    title: `${config.nameGame} - ${config.gameTitle} | Server Game MU Online`,
+    description: "Server Mu Online Season 1 với tỷ lệ exp cao, drop rate tốt. Game MMORPG miễn phí với PvP, Guild System. Tải game ngay!",
+    images: ['/panael-mu.jpg', '/logoweb.jpg'],
   },
   robots: {
     index: true,
@@ -124,7 +142,7 @@ export default function RootLayout({
         <meta name="mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-        <meta name="apple-mobile-web-app-title" content="MuDauTruongSS1" />
+        <meta name="apple-mobile-web-app-title" content={config.nameGame} />
         <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
         
         {/* Service Worker Registration */}
@@ -163,7 +181,9 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <SecurityGuard />
+        <Header />
         {children}
+        <Footer />
       </body>
     </html>
   );
