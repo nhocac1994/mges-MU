@@ -4,7 +4,12 @@ import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
+import { motion } from 'framer-motion';
 import NetworkOverlay from '@/components/NetworkOverlay';
+import FloatingParticles from '@/components/FloatingParticles';
+import AnimatedSection from '@/components/AnimatedSection';
+import MuClassicModal from '@/components/MuClassicModal';
+import { useConfig } from '@/contexts/ConfigContext';
 
 interface Character {
   name: string;
@@ -102,12 +107,12 @@ interface DashboardData {
   reset: ResetData;
   warehouse: {
     money: number;
-  };
+  } | null;
   guild: GuildData | null;
 }
 
 export default function Dashboard() {
-  const [user, setUser] = useState<{memb___id: string; memb_name: string} | null>(null);
+  const [user, setUser] = useState<{memb___id: string; memb_name: string; Username?: string; username?: string} | null>(null);
   const [dashboardData, setDashboardData] = useState<DashboardData | null>(null);
   const [loading, setLoading] = useState(true);
   const [characters, setCharacters] = useState<Character[]>([]);
@@ -116,26 +121,13 @@ export default function Dashboard() {
   const [showAccountModal, setShowAccountModal] = useState(false);
   const [showPasswordModal, setShowPasswordModal] = useState(false);
   const [updateLoading, setUpdateLoading] = useState(false);
-  const [isScrolled, setIsScrolled] = useState(false);
-  const [scrollY, setScrollY] = useState(0);
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [isClient, setIsClient] = useState(false);
   const router = useRouter();
+  const { config } = useConfig();
 
-  useEffect(() => {
-    setIsClient(true);
-  }, []);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      const scrollTop = window.scrollY;
-      setScrollY(scrollTop);
-      setIsScrolled(scrollTop > 100);
-    };
-
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+  // Đảm bảo config có giá trị
+  if (!config) {
+    return null;
+  }
 
   const getClassName = (classId: number): string => {
     const classNames: {[key: number]: string} = {
@@ -173,20 +165,67 @@ export default function Dashboard() {
   const fetchCharacters = async (accountId: string) => {
     try {
       setCharactersLoading(true);
-      const response = await fetch(`/api/characters?accountId=${accountId}`);
+      const trimmedAccountId = accountId.trim();
+      
+      const response = await fetch(`/api/characters?accountId=${encodeURIComponent(trimmedAccountId)}`);
+      
+      if (!response.ok) {
+        console.error('Characters API error:', response.status, response.statusText);
+        return;
+      }
+      
       const result = await response.json();
       
-      if (result.success) {
-        setCharacters(result.data.characters);
-        // Set first character as default selected
-        if (result.data.characters.length > 0) {
-          setSelectedCharacter(result.data.characters[0]);
+      if (result.success && result.data) {
+        const charactersList = result.data.characters || result.data || [];
+        
+        if (!Array.isArray(charactersList)) {
+          console.error('Invalid characters data format');
+          setCharacters([]);
+          return;
+        }
+        
+        if (charactersList.length === 0) {
+          console.warn('No characters found for account:', trimmedAccountId);
+        }
+        
+        const mappedCharacters: Character[] = charactersList.map((char: any) => ({
+          name: char.Name || char.name,
+          level: char.Level || char.level,
+          class: char.Class || char.class,
+          className: char.ClassName || char.className,
+          resetCount: char.ResetCount || char.resetCount || 0,
+          masterResetCount: char.MasterResetCount || char.masterResetCount || 0,
+          stats: {
+            strength: char.Stats?.Strength || char.stats?.strength || char.Strength || char.strength || 0,
+            dexterity: char.Stats?.Dexterity || char.stats?.dexterity || char.Dexterity || char.dexterity || 0,
+            vitality: char.Stats?.Vitality || char.stats?.vitality || char.Vitality || char.vitality || 0,
+            energy: char.Stats?.Energy || char.stats?.energy || char.Energy || char.energy || 0,
+            leadership: char.Stats?.Leadership || char.stats?.leadership || char.Leadership || char.leadership || 0,
+          },
+          life: char.Life || char.life || 0,
+          maxLife: char.MaxLife || char.maxLife || 0,
+          mana: char.Mana || char.mana || 0,
+          maxMana: char.MaxMana || char.maxMana || 0,
+          money: char.Money || char.money || 0,
+          mapNumber: char.MapNumber || char.mapNumber || 0,
+          mapPosX: char.MapPosX || char.mapPosX || 0,
+          mapPosY: char.MapPosY || char.mapPosY || 0,
+          pkCount: char.PkCount || char.pkCount || char.PKCount || 0,
+          pkLevel: char.PkLevel || char.pkLevel || char.PKLevel || 0,
+        }));
+        
+        setCharacters(mappedCharacters);
+        if (mappedCharacters.length > 0) {
+          setSelectedCharacter(mappedCharacters[0]);
         }
       } else {
-        console.error('Failed to fetch characters:', result.message);
+        console.error('Failed to fetch characters:', result.message || 'Unknown error');
+        setCharacters([]);
       }
     } catch (error) {
       console.error('Error fetching characters:', error);
+      setCharacters([]);
     } finally {
       setCharactersLoading(false);
     }
@@ -202,13 +241,19 @@ export default function Dashboard() {
   const handleUpdateAccount = async (updateData: Record<string, string>) => {
     try {
       setUpdateLoading(true);
+      const accountId = user?.Username || user?.username || user?.memb___id;
+      if (!accountId) {
+        alert('Không tìm thấy thông tin tài khoản');
+        return;
+      }
+      
       const response = await fetch('/api/account/update', {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          accountId: user?.memb___id,
+          accountId: accountId,
           updateData
         })
       });
@@ -239,7 +284,8 @@ export default function Dashboard() {
 
   const handleChangePassword = async (passwordData: { currentPassword: string; newPassword: string }) => {
     try {
-      if (!user?.memb___id) {
+      const accountId = user?.Username || user?.username || user?.memb___id;
+      if (!accountId) {
         alert('Không tìm thấy thông tin tài khoản. Vui lòng đăng nhập lại.');
         return;
       }
@@ -251,7 +297,7 @@ export default function Dashboard() {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          accountId: user.memb___id,
+          accountId: accountId,
           currentPassword: passwordData.currentPassword,
           newPassword: passwordData.newPassword
         })
@@ -286,9 +332,15 @@ export default function Dashboard() {
         
         // Parse user data để lấy account ID
         const user = JSON.parse(userData);
-        const accountId = user.memb___id;
+        // Backend trả về Username (chữ U hoa), nhưng có thể là username (chữ thường)
+        const accountId = user.Username || user.username || user.memb___id;
         
-        console.log('Loading dashboard for account:', accountId);
+        if (!accountId) {
+          console.error('Account ID not found in user data:', user);
+          router.push('/login');
+          return;
+        }
+        
         
         // Fetch characters first
         await fetchCharacters(accountId);
@@ -306,10 +358,17 @@ export default function Dashboard() {
           const result = await response.json();
           if (result.success) {
             setDashboardData(result.data);
-            setUser({
-              memb___id: result.data.account.id,
+            // Lưu user data với format đúng
+            const accountId = result.data.account.id;
+            const updatedUserData = {
+              Username: accountId,
+              username: accountId,
+              memb___id: accountId,
+              CharacterName: result.data.character.name,
               memb_name: result.data.character.name
-            });
+            };
+            localStorage.setItem('user_data', JSON.stringify(updatedUserData));
+            setUser(updatedUserData);
           } else {
             console.error('Failed to load dashboard data:', result.message);
           }
@@ -334,22 +393,35 @@ export default function Dashboard() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-gray-900 via-blue-900 to-purple-900 flex items-center justify-center">
-        <div className="text-white text-xl">Đang tải...</div>
+      <div className="min-h-screen bg-gradient-to-br from-gray-900 via-blue-900 to-purple-900 flex items-center justify-center relative">
+        <NetworkOverlay />
+        <FloatingParticles count={25} />
+        <div className="relative z-10">
+          <motion.div
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.5 }}
+            className="text-white text-xl mu-text-glow"
+            style={{ fontFamily: 'Arial, sans-serif' }}
+          >
+            Đang tải...
+          </motion.div>
+        </div>
       </div>
     );
   }
 
   return (
     <div className="min-h-screen relative overflow-hidden" style={{
-      fontFamily: 'Roboto, sans-serif'
+      fontFamily: 'Arial, sans-serif'
     }}>
       {/* Network Overlay - Luôn chạy trên background */}
       <NetworkOverlay />
       
+      {/* Floating Particles Background */}
+      <FloatingParticles count={25} />
+      
       {/* Background Image - Desktop Only */}
-      {isClient && (
-        <>
           <div 
             className="hidden md:block fixed inset-0 bg-cover bg-center bg-no-repeat"
             // style={{
@@ -360,37 +432,43 @@ export default function Dashboard() {
           
           {/* Mobile Background - Simple gradient */}
           <div className="md:hidden fixed inset-0 bg-gradient-to-br from-gray-900 via-blue-900 to-purple-900"></div>
-        </>
-      )}
       
       {/* Background Overlay */}
       <div className="fixed inset-0 bg-black/60"></div>
       
       {/* Content */}
-      <div className="relative z-10 pt-28">
-        {/* User Info Header - Always visible */}
-        <div className="bg-gradient-to-r from-blue-900/80 to-purple-900/80 backdrop-blur-sm border-b border-blue-500/30">
-          <div className="max-w-6xl mx-auto px-5 py-4">
+      <div className="relative z-10 pt-32">
+        {/* User Info Header - Classic MU Style */}
+        <div className="relative bg-gradient-to-r from-gray-900/90 via-black/90 to-gray-900/90 backdrop-blur-sm border-b-2 border-yellow-500/60">
+          <div className="absolute inset-0 mu-modal-border-glow"></div>
+          <div className="relative max-w-6xl mx-auto px-5 py-4">
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
               <div className="flex items-center space-x-4">
-                <Image src="/icon.jpg" alt="Mu Online Logo" width={40} height={40} className="rounded-lg"/>
+                <motion.div
+                  whileHover={{ scale: 1.1 }}
+                  whileTap={{ scale: 0.9 }}
+                >
+                  <Image src="/icon.jpg" alt="Mu Online Logo" width={40} height={40} className="rounded-lg border border-yellow-500/30"/>
+                </motion.div>
                 <div>
-                  <h1 className="text-lg font-bold text-white">MuDauTruongSS1.net</h1>
-                  <p className="text-blue-300 text-xs">Đấu Trường SS1</p>
+                  <h1 className="text-lg font-bold text-yellow-400 mu-text-glow" style={{ fontFamily: 'Arial, sans-serif' }}>{config.nameGame}</h1>
+                  <p className="text-blue-300 text-xs" style={{ fontFamily: 'Arial, sans-serif' }}>{config.gameTitle}</p>
                 </div>
               </div>
-              <div className="flex flex-col md:flex-row items-start md:items-center space-y-2 md:space-y-0 md:space-x-4">
-                <span className="text-white text-sm">Xin chào, {user?.memb_name}</span>
+              <div className="flex flex-col md:flex-row items-start md:items-center gap-3 md:gap-4 w-full md:w-auto">
+                <span className="text-yellow-300 text-sm whitespace-nowrap" style={{ fontFamily: 'Arial, sans-serif' }}>Xin chào, <span className="font-bold">{user?.memb_name}</span></span>
                 
-                {/* Character Selector */}
-                {characters.length > 0 && (
-                  <div className="flex items-center space-x-2">
-                    <span className="text-gray-300 text-sm">Character:</span>
+                {/* Character Selector - Luôn hiển thị */}
+                <div className="flex items-center space-x-2 w-full md:w-auto">
+                  <span className="text-yellow-400 text-sm font-semibold whitespace-nowrap" style={{ fontFamily: 'Arial, sans-serif' }}>Character:</span>
+                  {charactersLoading ? (
+                    <span className="text-gray-400 text-sm" style={{ fontFamily: 'Arial, sans-serif' }}>Đang tải...</span>
+                  ) : characters.length > 0 ? (
                     <select
                       value={selectedCharacter?.name || ''}
                       onChange={(e) => handleCharacterChange(e.target.value)}
-                      disabled={charactersLoading}
-                      className="bg-gray-800 text-white px-3 py-1 rounded border border-gray-600 focus:border-blue-500 focus:outline-none"
+                      className="bg-black/40 text-white px-3 py-1 rounded border border-yellow-500/30 focus:border-yellow-400/60 focus:outline-none mu-button-glow min-w-[200px] w-full md:w-auto"
+                      style={{ fontFamily: 'Arial, sans-serif' }}
                     >
                       {characters.map((char) => (
                         <option key={char.name} value={char.name}>
@@ -398,23 +476,31 @@ export default function Dashboard() {
                         </option>
                       ))}
                     </select>
-                  </div>
-                )}
+                  ) : (
+                    <span className="text-gray-400 text-sm" style={{ fontFamily: 'Arial, sans-serif' }}>Chưa có nhân vật</span>
+                  )}
+                </div>
                 
                 <div className="flex gap-2">
-                  <button
+                  <motion.button
                     onClick={() => setShowAccountModal(true)}
-                    className="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded text-sm transition-colors"
+                    className="bg-gradient-to-r from-yellow-600/30 to-orange-600/30 border border-yellow-500/60 text-yellow-300 px-3 py-1 rounded text-sm mu-button-glow"
+                    style={{ fontFamily: 'Arial, sans-serif' }}
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
                   >
                     Quản lý
-                  </button>
+                  </motion.button>
                   
-                  <button 
+                  <motion.button 
                     onClick={handleLogout}
-                    className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded text-sm transition-colors"
+                    className="bg-gradient-to-r from-red-600/30 to-orange-600/30 border border-red-500/60 text-red-300 px-3 py-1 rounded text-sm mu-button-glow"
+                    style={{ fontFamily: 'Arial, sans-serif' }}
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
                   >
                     Đăng xuất
-                  </button>
+                  </motion.button>
                 </div>
               </div>
             </div>
@@ -423,177 +509,376 @@ export default function Dashboard() {
 
         {/* Main Content */}
         <main className="relative z-10 py-8">
-        <div className="max-w-6xl mx-auto">
-          <div className="text-center text-white mb-12">
-            <h1 className="text-5xl font-bold mb-4 bg-gradient-to-r from-yellow-400 to-red-500 bg-clip-text text-transparent">
+          {/* Page Header - Classic MU Style */}
+          <section className="py-20 bg-gradient-to-b from-black/40 to-black/60 relative overflow-hidden mb-8">
+            {/* Background Effects */}
+            <div className="absolute inset-0">
+              <motion.div 
+                className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-yellow-500/20 rounded-full blur-3xl"
+                animate={{
+                  scale: [1, 1.2, 1],
+                  opacity: [0.3, 0.5, 0.3]
+                }}
+                transition={{
+                  duration: 4,
+                  repeat: Infinity,
+                  ease: "easeInOut"
+                }}
+              />
+            </div>
+            
+            <div className="container mx-auto px-4 text-center relative z-10">
+              <motion.div 
+                initial={{ opacity: 0, y: 50 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+              >
+                <motion.h1 
+                  className="text-6xl font-black text-white mb-4 relative"
+                  style={{ fontFamily: 'Arial, sans-serif', textShadow: '0 0 20px rgba(234, 179, 8, 0.5)' }}
+                >
+                  <span 
+                    className="bg-gradient-to-r from-yellow-400 via-orange-400 to-yellow-400 bg-clip-text text-transparent mu-text-glow"
+                    style={{ backgroundSize: '200% 200%' }}
+                  >
               DASHBOARD
-            </h1>
-            <p className="text-xl text-gray-300">Chào mừng bạn đến với MuDauTruongSS1.net</p>
+                  </span>
+                  {/* Glow Effect */}
+                  <motion.div 
+                    className="absolute inset-0 text-6xl font-black bg-gradient-to-r from-yellow-400 via-orange-400 to-yellow-400 bg-clip-text text-transparent blur-sm opacity-50"
+                    animate={{
+                      opacity: [0.3, 0.6, 0.3],
+                      scale: [1, 1.02, 1]
+                    }}
+                    transition={{
+                      duration: 2,
+                      repeat: Infinity,
+                      ease: "easeInOut"
+                    }}
+                  >
+                    DASHBOARD
+                  </motion.div>
+                </motion.h1>
+                <AnimatedSection direction="up" delay={0.2}>
+                  <div className="text-2xl font-semibold text-blue-300 mb-4">
+                    <span className="bg-gradient-to-r from-blue-300 to-cyan-300 bg-clip-text text-transparent">
+                      Chào mừng bạn đến với {config.nameGame}
+                    </span>
           </div>
+                </AnimatedSection>
+              </motion.div>
+            </div>
+          </section>
+
+        <div className="max-w-6xl mx-auto px-4">
 
           {/* User Info Cards */}
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
             {/* Thông tin tài khoản */}
-            <div className="bg-black bg-opacity-70 rounded-lg p-6">
-              <h3 className="text-xl font-bold text-yellow-400 mb-4">Thông tin tài khoản</h3>
+            <AnimatedSection direction="up" delay={0.1}>
+              <div className="relative">
+                <div className="absolute inset-0 mu-modal-border-glow rounded-lg"></div>
+                <div className="relative bg-gradient-to-b from-gray-900 via-black to-gray-900 border-2 border-yellow-500/60 mu-modal-container rounded-lg p-6">
+                  {/* Corner decorations */}
+                  <div className="absolute top-0 left-0 w-6 h-6 border-t-2 border-l-2 border-yellow-500/60"></div>
+                  <div className="absolute top-0 right-0 w-6 h-6 border-t-2 border-r-2 border-yellow-500/60"></div>
+                  <div className="absolute bottom-0 left-0 w-6 h-6 border-b-2 border-l-2 border-yellow-500/60"></div>
+                  <div className="absolute bottom-0 right-0 w-6 h-6 border-b-2 border-r-2 border-yellow-500/60"></div>
+                  
+                  <h3 className="text-xl font-bold text-yellow-400 mb-4 mu-text-glow" style={{ fontFamily: 'Arial, sans-serif' }}>Thông tin tài khoản</h3>
               <div className="space-y-2">
-                <p className="text-white"><span className="text-gray-400">Tên đăng nhập:</span> {dashboardData?.account.id}</p>
-                <p className="text-white"><span className="text-gray-400">Nhân vật chính:</span> {dashboardData?.character.name}</p>
-                <p className="text-white"><span className="text-gray-400">Số nhân vật:</span> {dashboardData?.account.characterCount}</p>
-                <div className="flex items-center space-x-2">
-                  <span className="text-gray-400">Loại tài khoản:</span>
+                    {[
+                      { label: 'Tên đăng nhập:', value: dashboardData?.account.id || 'N/A' },
+                      { label: 'Nhân vật chính:', value: dashboardData?.character.name || 'N/A' },
+                      { label: 'Số nhân vật:', value: dashboardData?.account.characterCount || 0 }
+                    ].map((item, idx) => (
+                      <motion.p 
+                        key={idx}
+                        className="text-white flex items-center gap-2"
+                        initial={{ opacity: 0, x: -10 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ delay: 0.1 + idx * 0.05 }}
+                        style={{ fontFamily: 'Arial, sans-serif' }}
+                      >
+                        <span className="text-yellow-400">{item.label}</span>
+                        <span className="font-semibold">{item.value}</span>
+                      </motion.p>
+                    ))}
+                    <div className="flex items-center space-x-2 pt-2">
+                      <span className="text-yellow-400" style={{ fontFamily: 'Arial, sans-serif' }}>Loại tài khoản:</span>
                   <span 
-                    className="px-2 py-1 rounded text-sm font-semibold"
+                        className="px-2 py-1 rounded text-sm font-semibold border border-yellow-500/30"
                     style={{ 
                       backgroundColor: dashboardData?.account.levelColor || '#808080',
-                      color: '#000'
+                          color: '#000',
+                          fontFamily: 'Arial, sans-serif'
                     }}
                   >
                     {dashboardData?.account.levelName || 'Thường'}
                   </span>
                 </div>
                 {dashboardData?.account.expireDate && (
-                  <p className="text-white">
-                    <span className="text-gray-400">Hết hạn:</span> 
-                    <span className={dashboardData?.account.isExpired ? 'text-red-400' : 'text-green-400'}>
+                      <motion.p 
+                        className="text-white flex items-center gap-2"
+                        initial={{ opacity: 0, x: -10 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ delay: 0.25 }}
+                        style={{ fontFamily: 'Arial, sans-serif' }}
+                      >
+                        <span className="text-yellow-400">Hết hạn:</span> 
+                        <span className={dashboardData?.account.isExpired ? 'text-red-400 font-semibold' : 'text-green-400 font-semibold'}>
                       {new Date(dashboardData.account.expireDate).toLocaleDateString('vi-VN')}
                     </span>
-                  </p>
-                )}
-                <p className="text-white"><span className="text-gray-400">Trạng thái:</span> 
-                  <span className={`ml-2 ${dashboardData?.character.isOnline ? 'text-green-400' : 'text-red-400'}`}>
+                      </motion.p>
+                    )}
+                    <motion.p 
+                      className="text-white flex items-center gap-2"
+                      initial={{ opacity: 0, x: -10 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: 0.3 }}
+                      style={{ fontFamily: 'Arial, sans-serif' }}
+                    >
+                      <span className="text-yellow-400">Trạng thái:</span> 
+                      <span className={`font-semibold ${dashboardData?.character.isOnline ? 'text-green-400' : 'text-red-400'}`}>
                     {dashboardData?.character.isOnline ? 'Online' : 'Offline'}
                   </span>
-                </p>
+                    </motion.p>
               </div>
             </div>
+              </div>
+            </AnimatedSection>
 
             {/* Trạng thái game */}
-            <div className="bg-black bg-opacity-70 rounded-lg p-6">
-              <h3 className="text-xl font-bold text-yellow-400 mb-4">Trạng thái game</h3>
+            <AnimatedSection direction="up" delay={0.15}>
+              <div className="relative">
+                <div className="absolute inset-0 mu-modal-border-glow rounded-lg"></div>
+                <div className="relative bg-gradient-to-b from-gray-900 via-black to-gray-900 border-2 border-yellow-500/60 mu-modal-container rounded-lg p-6">
+                  {/* Corner decorations */}
+                  <div className="absolute top-0 left-0 w-6 h-6 border-t-2 border-l-2 border-yellow-500/60"></div>
+                  <div className="absolute top-0 right-0 w-6 h-6 border-t-2 border-r-2 border-yellow-500/60"></div>
+                  <div className="absolute bottom-0 left-0 w-6 h-6 border-b-2 border-l-2 border-yellow-500/60"></div>
+                  <div className="absolute bottom-0 right-0 w-6 h-6 border-b-2 border-r-2 border-yellow-500/60"></div>
+                  
+                  <h3 className="text-xl font-bold text-yellow-400 mb-4 mu-text-glow" style={{ fontFamily: 'Arial, sans-serif' }}>Trạng thái game</h3>
               <div className="space-y-2">
-                <p className="text-white"><span className="text-gray-400">Server:</span> <span className="text-green-400">Online</span></p>
-                <p className="text-white"><span className="text-gray-400">Cấp độ:</span> {dashboardData?.character.level}</p>
-                <p className="text-white"><span className="text-gray-400">Class:</span> {getClassName(dashboardData?.character.class || 0)}</p>
-                <p className="text-white"><span className="text-gray-400">Kinh nghiệm:</span> {formatMoney(dashboardData?.character.experience || 0)}/{formatMoney(dashboardData?.character.nextLevelExp || 0)}</p>
-                <div className="w-full bg-gray-700 rounded-full h-2 mt-2">
-                  <div 
-                    className="bg-gradient-to-r from-blue-500 to-purple-500 h-2 rounded-full transition-all duration-300" 
-                    style={{ width: `${dashboardData?.character.expProgress || 0}%` }}
-                  ></div>
+                    {[
+                      { label: 'Server:', value: 'Online', isOnline: true },
+                      { label: 'Cấp độ:', value: dashboardData?.character.level || 0 },
+                      { label: 'Class:', value: getClassName(dashboardData?.character.class || 0) },
+                      { label: 'Kinh nghiệm:', value: `${formatMoney(dashboardData?.character.experience || 0)}/${formatMoney(dashboardData?.character.nextLevelExp || 0)}` }
+                    ].map((item, idx) => (
+                      <motion.p 
+                        key={idx}
+                        className="text-white flex items-center gap-2"
+                        initial={{ opacity: 0, x: -10 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ delay: 0.15 + idx * 0.05 }}
+                        style={{ fontFamily: 'Arial, sans-serif' }}
+                      >
+                        <span className="text-yellow-400">{item.label}</span>
+                        <span className={`font-semibold ${item.isOnline ? 'text-green-400' : ''}`}>{item.value}</span>
+                      </motion.p>
+                    ))}
+                    <div className="w-full bg-black/40 rounded-full h-2 mt-2 border border-yellow-500/30">
+                      <motion.div 
+                        className="bg-gradient-to-r from-yellow-500 to-orange-500 h-2 rounded-full transition-all duration-300"
+                        initial={{ width: 0 }}
+                        animate={{ width: `${dashboardData?.character.expProgress || 0}%` }}
+                        transition={{ duration: 1, delay: 0.3 }}
+                      ></motion.div>
                 </div>
               </div>
             </div>
+              </div>
+            </AnimatedSection>
 
             {/* Thống kê */}
-            <div className="bg-black bg-opacity-70 rounded-lg p-6">
-              <h3 className="text-xl font-bold text-yellow-400 mb-4">Thống kê</h3>
+            <AnimatedSection direction="up" delay={0.2}>
+              <div className="relative">
+                <div className="absolute inset-0 mu-modal-border-glow rounded-lg"></div>
+                <div className="relative bg-gradient-to-b from-gray-900 via-black to-gray-900 border-2 border-yellow-500/60 mu-modal-container rounded-lg p-6">
+                  {/* Corner decorations */}
+                  <div className="absolute top-0 left-0 w-6 h-6 border-t-2 border-l-2 border-yellow-500/60"></div>
+                  <div className="absolute top-0 right-0 w-6 h-6 border-t-2 border-r-2 border-yellow-500/60"></div>
+                  <div className="absolute bottom-0 left-0 w-6 h-6 border-b-2 border-l-2 border-yellow-500/60"></div>
+                  <div className="absolute bottom-0 right-0 w-6 h-6 border-b-2 border-r-2 border-yellow-500/60"></div>
+                  
+                  <h3 className="text-xl font-bold text-yellow-400 mb-4 mu-text-glow" style={{ fontFamily: 'Arial, sans-serif' }}>Thống kê</h3>
               <div className="space-y-2">
-                <p className="text-white"><span className="text-gray-400">Thời gian chơi:</span> {formatTime(dashboardData?.character.playTimeHours || 0, dashboardData?.character.playTimeMinutes || 0)}</p>
-                <p className="text-white"><span className="text-gray-400">PK Count:</span> {dashboardData?.character.pkCount}</p>
-                <p className="text-white"><span className="text-gray-400">PK Level:</span> {dashboardData?.character.pkLevel}</p>
-                <p className="text-white"><span className="text-gray-400">Vị trí:</span> Map {dashboardData?.character.mapNumber} ({dashboardData?.character.mapPosX}, {dashboardData?.character.mapPosY})</p>
+                    {[
+                      { label: 'Thời gian chơi:', value: formatTime(dashboardData?.character.playTimeHours || 0, dashboardData?.character.playTimeMinutes || 0) },
+                      { label: 'PK Count:', value: dashboardData?.character.pkCount || 0 },
+                      { label: 'PK Level:', value: dashboardData?.character.pkLevel || 0 },
+                      { label: 'Vị trí:', value: `Map ${dashboardData?.character.mapNumber} (${dashboardData?.character.mapPosX}, ${dashboardData?.character.mapPosY})` }
+                    ].map((item, idx) => (
+                      <motion.p 
+                        key={idx}
+                        className="text-white flex items-center gap-2"
+                        initial={{ opacity: 0, x: -10 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ delay: 0.2 + idx * 0.05 }}
+                        style={{ fontFamily: 'Arial, sans-serif' }}
+                      >
+                        <span className="text-yellow-400">{item.label}</span>
+                        <span className="font-semibold">{item.value}</span>
+                      </motion.p>
+                    ))}
               </div>
             </div>
+              </div>
+            </AnimatedSection>
           </div>
 
           {/* Character Stats */}
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
             {/* Stats */}
-            <div className="bg-black bg-opacity-70 rounded-lg p-6 min-h-[400px]">
-              <h3 className="text-xl font-bold text-yellow-400 mb-4">Chỉ số nhân vật</h3>
+            <AnimatedSection direction="up" delay={0.25}>
+              <div className="relative min-h-[400px]">
+                <div className="absolute inset-0 mu-modal-border-glow rounded-lg"></div>
+                <div className="relative bg-gradient-to-b from-gray-900 via-black to-gray-900 border-2 border-yellow-500/60 mu-modal-container rounded-lg p-6 min-h-[400px]">
+                  {/* Corner decorations */}
+                  <div className="absolute top-0 left-0 w-6 h-6 border-t-2 border-l-2 border-yellow-500/60"></div>
+                  <div className="absolute top-0 right-0 w-6 h-6 border-t-2 border-r-2 border-yellow-500/60"></div>
+                  <div className="absolute bottom-0 left-0 w-6 h-6 border-b-2 border-l-2 border-yellow-500/60"></div>
+                  <div className="absolute bottom-0 right-0 w-6 h-6 border-b-2 border-r-2 border-yellow-500/60"></div>
+                  
+                  <h3 className="text-xl font-bold text-yellow-400 mb-4 mu-text-glow" style={{ fontFamily: 'Arial, sans-serif' }}>Chỉ số nhân vật</h3>
               <div className="space-y-2">
                 {/* Basic Stats */}
                 <div className="space-y-2">
-                  <p className="text-white flex justify-between items-center">
-                    <span className="text-gray-400">Strength:</span> 
-                    <span className="font-bold text-orange-400">{selectedCharacter?.stats.strength || dashboardData?.character.strength}</span>
-                  </p>
-                  <p className="text-white flex justify-between items-center">
-                    <span className="text-gray-400">Dexterity:</span> 
-                    <span className="font-bold text-blue-400">{selectedCharacter?.stats.dexterity || dashboardData?.character.dexterity}</span>
-                  </p>
-                  <p className="text-white flex justify-between items-center">
-                    <span className="text-gray-400">Vitality:</span> 
-                    <span className="font-bold text-red-400">{selectedCharacter?.stats.vitality || dashboardData?.character.vitality}</span>
-                  </p>
-                  <p className="text-white flex justify-between items-center">
-                    <span className="text-gray-400">Energy:</span> 
-                    <span className="font-bold text-purple-400">{selectedCharacter?.stats.energy || dashboardData?.character.energy}</span>
-                  </p>
-                  <p className="text-white flex justify-between items-center">
-                    <span className="text-gray-400">Leadership:</span> 
-                    <span className="font-bold text-yellow-400">{selectedCharacter?.stats.leadership || dashboardData?.character.leadership}</span>
-                  </p>
+                      {[
+                        { label: 'Strength:', value: selectedCharacter?.stats.strength || dashboardData?.character.strength, color: 'text-orange-400' },
+                        { label: 'Dexterity:', value: selectedCharacter?.stats.dexterity || dashboardData?.character.dexterity, color: 'text-blue-400' },
+                        { label: 'Vitality:', value: selectedCharacter?.stats.vitality || dashboardData?.character.vitality, color: 'text-red-400' },
+                        { label: 'Energy:', value: selectedCharacter?.stats.energy || dashboardData?.character.energy, color: 'text-purple-400' },
+                        { label: 'Leadership:', value: selectedCharacter?.stats.leadership || dashboardData?.character.leadership, color: 'text-yellow-400' }
+                      ].map((stat, idx) => (
+                        <motion.p 
+                          key={idx}
+                          className="text-white flex justify-between items-center"
+                          initial={{ opacity: 0, x: -10 }}
+                          animate={{ opacity: 1, x: 0 }}
+                          transition={{ delay: 0.25 + idx * 0.05 }}
+                          style={{ fontFamily: 'Arial, sans-serif' }}
+                        >
+                          <span className="text-yellow-400">{stat.label}</span> 
+                          <span className={`font-bold ${stat.color}`}>{stat.value}</span>
+                        </motion.p>
+                      ))}
                 </div>
                 
                 {/* Additional Stats */}
-                <div className="pt-3 border-t border-gray-600 mt-3 space-y-2">
-                  <p className="text-white flex justify-between items-center">
-                    <span className="text-gray-400">Level:</span> 
-                    <span className="font-bold text-green-400">{selectedCharacter?.level || dashboardData?.character.level}</span>
-                  </p>
-                  <p className="text-white flex justify-between items-center">
-                    <span className="text-gray-400">Class:</span> 
-                    <span className="font-bold text-cyan-400">{selectedCharacter?.className || getClassName(dashboardData?.character.class || 0)}</span>
-                  </p>
-                  <p className="text-white flex justify-between items-center">
-                    <span className="text-gray-400">PK Count:</span> 
-                    <span className="font-bold text-red-300">{selectedCharacter?.pkCount || dashboardData?.character.pkCount}</span>
-                  </p>
-                  <p className="text-white flex justify-between items-center">
-                    <span className="text-gray-400">PK Level:</span> 
-                    <span className="font-bold text-red-300">{selectedCharacter?.pkLevel || dashboardData?.character.pkLevel}</span>
-                  </p>
-                  <p className="text-white flex justify-between items-center">
-                    <span className="text-gray-400">Reset Count:</span> 
-                    <span className="font-bold text-blue-300">{selectedCharacter?.resetCount || dashboardData?.character.resetCount}</span>
-                  </p>
-                  <p className="text-white flex justify-between items-center">
-                    <span className="text-gray-400">Master Reset:</span> 
-                    <span className="font-bold text-purple-300">{selectedCharacter?.masterResetCount || dashboardData?.character.masterResetCount}</span>
-                  </p>
+                    <div className="pt-3 border-t border-yellow-500/30 mt-3 space-y-2">
+                      {[
+                        { label: 'Level:', value: selectedCharacter?.level || dashboardData?.character.level, color: 'text-green-400' },
+                        { label: 'Class:', value: selectedCharacter?.className || getClassName(dashboardData?.character.class || 0), color: 'text-cyan-400' },
+                        { label: 'PK Count:', value: selectedCharacter?.pkCount || dashboardData?.character.pkCount, color: 'text-red-300' },
+                        { label: 'PK Level:', value: selectedCharacter?.pkLevel || dashboardData?.character.pkLevel, color: 'text-red-300' },
+                        { label: 'Reset Count:', value: selectedCharacter?.resetCount || dashboardData?.character.resetCount, color: 'text-blue-300' },
+                        { label: 'Master Reset:', value: selectedCharacter?.masterResetCount || dashboardData?.character.masterResetCount, color: 'text-purple-300' }
+                      ].map((stat, idx) => (
+                        <motion.p 
+                          key={idx}
+                          className="text-white flex justify-between items-center"
+                          initial={{ opacity: 0, x: -10 }}
+                          animate={{ opacity: 1, x: 0 }}
+                          transition={{ delay: 0.5 + idx * 0.05 }}
+                          style={{ fontFamily: 'Arial, sans-serif' }}
+                        >
+                          <span className="text-yellow-400">{stat.label}</span> 
+                          <span className={`font-bold ${stat.color}`}>{stat.value}</span>
+                        </motion.p>
+                      ))}
                 </div>
               </div>
             </div>
+              </div>
+            </AnimatedSection>
 
             {/* Life & Mana */}
-            <div className="bg-black bg-opacity-70 rounded-lg p-6">
-              <h3 className="text-xl font-bold text-yellow-400 mb-4">HP & MP</h3>
-              <div className="space-y-2">
-                <p className="text-white"><span className="text-gray-400">Life:</span> {Math.floor(selectedCharacter?.life || dashboardData?.character.life || 0)}/{Math.floor(selectedCharacter?.maxLife || dashboardData?.character.maxLife || 0)}</p>
-                <div className="w-full bg-gray-700 rounded-full h-2">
-                  <div 
-                    className="bg-red-500 h-2 rounded-full" 
-                    style={{ width: `${Math.min(100, ((selectedCharacter?.life || dashboardData?.character.life || 0) / (selectedCharacter?.maxLife || dashboardData?.character.maxLife || 1)) * 100)}%` }}
-                  ></div>
+            <AnimatedSection direction="up" delay={0.3}>
+              <div className="relative">
+                <div className="absolute inset-0 mu-modal-border-glow rounded-lg"></div>
+                <div className="relative bg-gradient-to-b from-gray-900 via-black to-gray-900 border-2 border-yellow-500/60 mu-modal-container rounded-lg p-6">
+                  {/* Corner decorations */}
+                  <div className="absolute top-0 left-0 w-6 h-6 border-t-2 border-l-2 border-yellow-500/60"></div>
+                  <div className="absolute top-0 right-0 w-6 h-6 border-t-2 border-r-2 border-yellow-500/60"></div>
+                  <div className="absolute bottom-0 left-0 w-6 h-6 border-b-2 border-l-2 border-yellow-500/60"></div>
+                  <div className="absolute bottom-0 right-0 w-6 h-6 border-b-2 border-r-2 border-yellow-500/60"></div>
+                  
+                  <h3 className="text-xl font-bold text-yellow-400 mb-4 mu-text-glow" style={{ fontFamily: 'Arial, sans-serif' }}>HP & MP</h3>
+                  <div className="space-y-4">
+                    <div>
+                      <p className="text-white mb-2" style={{ fontFamily: 'Arial, sans-serif' }}>
+                        <span className="text-yellow-400">Life:</span> <span className="font-semibold">{Math.floor(selectedCharacter?.life || dashboardData?.character.life || 0)}/{Math.floor(selectedCharacter?.maxLife || dashboardData?.character.maxLife || 0)}</span>
+                      </p>
+                      <div className="w-full bg-black/40 rounded-full h-3 border border-yellow-500/30">
+                        <motion.div 
+                          className="bg-gradient-to-r from-red-500 to-red-600 h-3 rounded-full"
+                          initial={{ width: 0 }}
+                          animate={{ width: `${Math.min(100, ((selectedCharacter?.life || dashboardData?.character.life || 0) / (selectedCharacter?.maxLife || dashboardData?.character.maxLife || 1)) * 100)}%` }}
+                          transition={{ duration: 1, delay: 0.3 }}
+                        ></motion.div>
                 </div>
-                <p className="text-white"><span className="text-gray-400">Mana:</span> {Math.floor(selectedCharacter?.mana || dashboardData?.character.mana || 0)}/{Math.floor(selectedCharacter?.maxMana || dashboardData?.character.maxMana || 0)}</p>
-                <div className="w-full bg-gray-700 rounded-full h-2">
-                  <div 
-                    className="bg-blue-500 h-2 rounded-full" 
-                    style={{ width: `${Math.min(100, ((selectedCharacter?.mana || dashboardData?.character.mana || 0) / (selectedCharacter?.maxMana || dashboardData?.character.maxMana || 1)) * 100)}%` }}
-                  ></div>
                 </div>
+                    <div>
+                      <p className="text-white mb-2" style={{ fontFamily: 'Arial, sans-serif' }}>
+                        <span className="text-yellow-400">Mana:</span> <span className="font-semibold">{Math.floor(selectedCharacter?.mana || dashboardData?.character.mana || 0)}/{Math.floor(selectedCharacter?.maxMana || dashboardData?.character.maxMana || 0)}</span>
+                      </p>
+                      <div className="w-full bg-black/40 rounded-full h-3 border border-yellow-500/30">
+                        <motion.div 
+                          className="bg-gradient-to-r from-blue-500 to-blue-600 h-3 rounded-full"
+                          initial={{ width: 0 }}
+                          animate={{ width: `${Math.min(100, ((selectedCharacter?.mana || dashboardData?.character.mana || 0) / (selectedCharacter?.maxMana || dashboardData?.character.maxMana || 1)) * 100)}%` }}
+                          transition={{ duration: 1, delay: 0.4 }}
+                        ></motion.div>
               </div>
             </div>
+                  </div>
+                </div>
+              </div>
+            </AnimatedSection>
 
             {/* Money */}
-            <div className="bg-black bg-opacity-70 rounded-lg p-6">
-              <h3 className="text-xl font-bold text-yellow-400 mb-4">Tiền tệ</h3>
-              <div className="space-y-2">
-                <p className="text-white"><span className="text-gray-400">Tiền nhân vật:</span></p>
-                <p className="text-green-400 font-bold">{formatMoney(selectedCharacter?.money || dashboardData?.character.money || 0)} Zen</p>
-                <p className="text-white"><span className="text-gray-400">Tiền kho:</span></p>
-                <p className="text-green-400 font-bold">{formatMoney(dashboardData?.warehouse.money || 0)} Zen</p>
+            <AnimatedSection direction="up" delay={0.35}>
+              <div className="relative">
+                <div className="absolute inset-0 mu-modal-border-glow rounded-lg"></div>
+                <div className="relative bg-gradient-to-b from-gray-900 via-black to-gray-900 border-2 border-yellow-500/60 mu-modal-container rounded-lg p-6">
+                  {/* Corner decorations */}
+                  <div className="absolute top-0 left-0 w-6 h-6 border-t-2 border-l-2 border-yellow-500/60"></div>
+                  <div className="absolute top-0 right-0 w-6 h-6 border-t-2 border-r-2 border-yellow-500/60"></div>
+                  <div className="absolute bottom-0 left-0 w-6 h-6 border-b-2 border-l-2 border-yellow-500/60"></div>
+                  <div className="absolute bottom-0 right-0 w-6 h-6 border-b-2 border-r-2 border-yellow-500/60"></div>
+                  
+                  <h3 className="text-xl font-bold text-yellow-400 mb-4 mu-text-glow" style={{ fontFamily: 'Arial, sans-serif' }}>Tiền tệ</h3>
+                  <div className="space-y-3">
+                    <div>
+                      <p className="text-yellow-400 mb-1" style={{ fontFamily: 'Arial, sans-serif' }}>Tiền nhân vật:</p>
+                      <p className="text-green-400 font-bold text-lg" style={{ fontFamily: 'Arial, sans-serif' }}>{formatMoney(selectedCharacter?.money || dashboardData?.character.money || 0)} Zen</p>
               </div>
+                    <div>
+                      <p className="text-yellow-400 mb-1" style={{ fontFamily: 'Arial, sans-serif' }}>Tiền kho:</p>
+                      <p className="text-green-400 font-bold text-lg" style={{ fontFamily: 'Arial, sans-serif' }}>{formatMoney(dashboardData?.warehouse?.money || 0)} Zen</p>
             </div>
+                  </div>
+                </div>
+              </div>
+            </AnimatedSection>
 
           </div>
 
           {/* Reset Info - Full Width Layout */}
-          <div className="bg-black bg-opacity-70 rounded-lg p-6 mb-8 hover:bg-opacity-80 transition-all duration-300">
-            <h3 className="text-xl font-bold text-yellow-400 mb-4 flex items-center">
+          <AnimatedSection direction="up" delay={0.4}>
+            <div className="relative mb-8">
+              <div className="absolute inset-0 mu-modal-border-glow rounded-lg"></div>
+              <div className="relative bg-gradient-to-b from-gray-900 via-black to-gray-900 border-2 border-yellow-500/60 mu-modal-container rounded-lg p-6">
+                {/* Corner decorations */}
+                <div className="absolute top-0 left-0 w-6 h-6 border-t-2 border-l-2 border-yellow-500/60"></div>
+                <div className="absolute top-0 right-0 w-6 h-6 border-t-2 border-r-2 border-yellow-500/60"></div>
+                <div className="absolute bottom-0 left-0 w-6 h-6 border-b-2 border-l-2 border-yellow-500/60"></div>
+                <div className="absolute bottom-0 right-0 w-6 h-6 border-b-2 border-r-2 border-yellow-500/60"></div>
+                
+                <h3 className="text-xl font-bold text-yellow-400 mb-4 flex items-center mu-text-glow" style={{ fontFamily: 'Arial, sans-serif' }}>
               Reset
             </h3>
             
@@ -708,48 +993,91 @@ export default function Dashboard() {
                 </div>
               </div>
             </div>
-          </div>
+                </div>
+              </div>
+            </AnimatedSection>
 
           {/* Guild Info */}
           {dashboardData?.guild && (
-            <div className="bg-black bg-opacity-70 rounded-lg p-6 mb-8">
-              <h3 className="text-xl font-bold text-yellow-400 mb-4">Thông tin Guild</h3>
-              <div className="grid md:grid-cols-2 gap-4">
-                <div>
-                  <p className="text-white"><span className="text-gray-400">Tên Guild:</span> {dashboardData.guild.name}</p>
-                  <p className="text-white"><span className="text-gray-400">Guild Master:</span> {dashboardData.guild.master}</p>
-                </div>
-                <div>
-                  <p className="text-white"><span className="text-gray-400">Điểm số:</span> {formatMoney(dashboardData.guild.score)}</p>
-                  <p className="text-white"><span className="text-gray-400">Số thành viên:</span> {dashboardData.guild.memberCount}</p>
+            <AnimatedSection direction="up" delay={0.45}>
+              <div className="relative mb-8">
+                <div className="absolute inset-0 mu-modal-border-glow rounded-lg"></div>
+                <div className="relative bg-gradient-to-b from-gray-900 via-black to-gray-900 border-2 border-yellow-500/60 mu-modal-container rounded-lg p-6">
+                  {/* Corner decorations */}
+                  <div className="absolute top-0 left-0 w-6 h-6 border-t-2 border-l-2 border-yellow-500/60"></div>
+                  <div className="absolute top-0 right-0 w-6 h-6 border-t-2 border-r-2 border-yellow-500/60"></div>
+                  <div className="absolute bottom-0 left-0 w-6 h-6 border-b-2 border-l-2 border-yellow-500/60"></div>
+                  <div className="absolute bottom-0 right-0 w-6 h-6 border-b-2 border-r-2 border-yellow-500/60"></div>
+                  
+                  <h3 className="text-xl font-bold text-yellow-400 mb-4 mu-text-glow" style={{ fontFamily: 'Arial, sans-serif' }}>Thông tin Guild</h3>
+                  <div className="grid md:grid-cols-2 gap-4">
+                    <div>
+                      <p className="text-white" style={{ fontFamily: 'Arial, sans-serif' }}><span className="text-yellow-400">Tên Guild:</span> <span className="font-semibold">{dashboardData.guild.name}</span></p>
+                      <p className="text-white" style={{ fontFamily: 'Arial, sans-serif' }}><span className="text-yellow-400">Guild Master:</span> <span className="font-semibold">{dashboardData.guild.master}</span></p>
+                    </div>
+                    <div>
+                      <p className="text-white" style={{ fontFamily: 'Arial, sans-serif' }}><span className="text-yellow-400">Điểm số:</span> <span className="font-semibold">{formatMoney(dashboardData.guild.score)}</span></p>
+                      <p className="text-white" style={{ fontFamily: 'Arial, sans-serif' }}><span className="text-yellow-400">Số thành viên:</span> <span className="font-semibold">{dashboardData.guild.memberCount}</span></p>
+                    </div>
+                  </div>
                 </div>
               </div>
-            </div>
+            </AnimatedSection>
           )}
 
           {/* Action Buttons */}
-          <div className="grid md:grid-cols-2 gap-6">
-            <div className="bg-black bg-opacity-70 rounded-lg p-8 text-center">
-              <h3 className="text-2xl font-bold text-yellow-400 mb-4">Bắt đầu chơi</h3>
-              <p className="text-gray-300 mb-6">Tải game và bắt đầu hành trình Mu Online</p>
-              <a 
-                href="/download" 
-                className="bg-gradient-to-r from-yellow-500 to-red-500 text-white font-bold py-3 px-6 rounded-lg hover:from-yellow-600 hover:to-red-600 transition-all inline-block"
+          <div className="grid md:grid-cols-2 gap-6 mb-8">
+            <AnimatedSection direction="up" delay={0.5}>
+              <div className="relative">
+                <div className="absolute inset-0 mu-modal-border-glow rounded-lg"></div>
+                <div className="relative bg-gradient-to-b from-gray-900 via-black to-gray-900 border-2 border-yellow-500/60 mu-modal-container rounded-lg p-8 text-center">
+                  {/* Corner decorations */}
+                  <div className="absolute top-0 left-0 w-6 h-6 border-t-2 border-l-2 border-yellow-500/60"></div>
+                  <div className="absolute top-0 right-0 w-6 h-6 border-t-2 border-r-2 border-yellow-500/60"></div>
+                  <div className="absolute bottom-0 left-0 w-6 h-6 border-b-2 border-l-2 border-yellow-500/60"></div>
+                  <div className="absolute bottom-0 right-0 w-6 h-6 border-b-2 border-r-2 border-yellow-500/60"></div>
+                  
+                  <h3 className="text-2xl font-bold text-yellow-400 mb-4 mu-text-glow" style={{ fontFamily: 'Arial, sans-serif' }}>Bắt đầu chơi</h3>
+                  <p className="text-gray-300 mb-6" style={{ fontFamily: 'Arial, sans-serif' }}>Tải game và bắt đầu hành trình Mu Online</p>
+                  <Link href="/download">
+                    <motion.div
+                      className="bg-gradient-to-r from-yellow-600/30 to-orange-600/30 border border-yellow-500/60 text-yellow-300 font-bold py-3 px-6 rounded-lg mu-button-glow inline-block"
+                      style={{ fontFamily: 'Arial, sans-serif' }}
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
               >
                 TẢI GAME NGAY
-              </a>
+                    </motion.div>
+                  </Link>
             </div>
+              </div>
+            </AnimatedSection>
 
-            <div className="bg-black bg-opacity-70 rounded-lg p-8 text-center">
-              <h3 className="text-2xl font-bold text-yellow-400 mb-4">Thông tin server</h3>
-              <p className="text-gray-300 mb-6">Xem thông tin chi tiết về server và cài đặt</p>
-              <a 
-                href="/info" 
-                className="bg-gradient-to-r from-blue-500 to-purple-500 text-white font-bold py-3 px-6 rounded-lg hover:from-blue-600 hover:to-purple-600 transition-all inline-block"
+            <AnimatedSection direction="up" delay={0.55}>
+              <div className="relative">
+                <div className="absolute inset-0 mu-modal-border-glow rounded-lg"></div>
+                <div className="relative bg-gradient-to-b from-gray-900 via-black to-gray-900 border-2 border-yellow-500/60 mu-modal-container rounded-lg p-8 text-center">
+                  {/* Corner decorations */}
+                  <div className="absolute top-0 left-0 w-6 h-6 border-t-2 border-l-2 border-yellow-500/60"></div>
+                  <div className="absolute top-0 right-0 w-6 h-6 border-t-2 border-r-2 border-yellow-500/60"></div>
+                  <div className="absolute bottom-0 left-0 w-6 h-6 border-b-2 border-l-2 border-yellow-500/60"></div>
+                  <div className="absolute bottom-0 right-0 w-6 h-6 border-b-2 border-r-2 border-yellow-500/60"></div>
+                  
+                  <h3 className="text-2xl font-bold text-yellow-400 mb-4 mu-text-glow" style={{ fontFamily: 'Arial, sans-serif' }}>Thông tin server</h3>
+                  <p className="text-gray-300 mb-6" style={{ fontFamily: 'Arial, sans-serif' }}>Xem thông tin chi tiết về server và cài đặt</p>
+                  <Link href="/info">
+                    <motion.div
+                      className="bg-gradient-to-r from-blue-600/30 to-purple-600/30 border border-blue-500/60 text-blue-300 font-bold py-3 px-6 rounded-lg mu-button-glow inline-block"
+                      style={{ fontFamily: 'Arial, sans-serif' }}
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
               >
                 XEM THÔNG TIN
-              </a>
+                    </motion.div>
+                  </Link>
             </div>
+              </div>
+            </AnimatedSection>
           </div>
         </div>
       </main>
@@ -757,140 +1085,150 @@ export default function Dashboard() {
 
 
       {/* Account Management Modal */}
-      {showAccountModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-gray-900 rounded-lg p-6 w-full max-w-md mx-4">
-            <h3 className="text-xl font-bold text-yellow-400 mb-4">Quản lý tài khoản</h3>
+      <MuClassicModal
+        isOpen={showAccountModal}
+        onClose={() => setShowAccountModal(false)}
+        title="Quản lý tài khoản"
+      >
+        <div className="space-y-4">
+          <div>
+            <label className="block text-yellow-400 text-sm mb-1 font-semibold" style={{ fontFamily: 'Arial, sans-serif' }}>Tên hiển thị:</label>
+            <input
+              type="text"
+              defaultValue={user?.memb_name || ''}
+              id="memb_name"
+              className="w-full bg-black/40 text-white px-3 py-2 rounded border border-yellow-500/30 focus:border-yellow-400/60 focus:outline-none"
+              style={{ fontFamily: 'Arial, sans-serif' }}
+            />
+          </div>
+          
+          <div>
+            <label className="block text-yellow-400 text-sm mb-1 font-semibold" style={{ fontFamily: 'Arial, sans-serif' }}>Email:</label>
+            <input
+              type="email"
+              id="mail_addr"
+              className="w-full bg-black/40 text-white px-3 py-2 rounded border border-yellow-500/30 focus:border-yellow-400/60 focus:outline-none"
+              style={{ fontFamily: 'Arial, sans-serif' }}
+            />
+          </div>
+          
+          <div>
+            <label className="block text-yellow-400 text-sm mb-1 font-semibold" style={{ fontFamily: 'Arial, sans-serif' }}>Số điện thoại:</label>
+            <input
+              type="tel"
+              id="phon_numb"
+              className="w-full bg-black/40 text-white px-3 py-2 rounded border border-yellow-500/30 focus:border-yellow-400/60 focus:outline-none"
+              style={{ fontFamily: 'Arial, sans-serif' }}
+            />
+          </div>
+          
+          <div className="flex space-x-3 pt-4">
+            <motion.button
+              onClick={() => {
+                const updateData = {
+                  memb_name: (document.getElementById('memb_name') as HTMLInputElement)?.value,
+                  mail_addr: (document.getElementById('mail_addr') as HTMLInputElement)?.value,
+                  phon_numb: (document.getElementById('phon_numb') as HTMLInputElement)?.value,
+                };
+                handleUpdateAccount(updateData);
+              }}
+              disabled={updateLoading}
+              className="flex-1 bg-gradient-to-r from-yellow-600/30 to-orange-600/30 border border-yellow-500/60 text-yellow-300 px-4 py-2 rounded mu-button-glow disabled:opacity-50"
+              style={{ fontFamily: 'Arial, sans-serif' }}
+              whileHover={!updateLoading ? { scale: 1.05 } : {}}
+              whileTap={!updateLoading ? { scale: 0.95 } : {}}
+            >
+              {updateLoading ? 'Đang cập nhật...' : 'Cập nhật'}
+            </motion.button>
             
-            <div className="space-y-4">
-              <div>
-                <label className="block text-gray-300 text-sm mb-1">Tên hiển thị:</label>
-                <input
-                  type="text"
-                  defaultValue={user?.memb_name || ''}
-                  id="memb_name"
-                  className="w-full bg-gray-800 text-white px-3 py-2 rounded border border-gray-600 focus:border-blue-500 focus:outline-none"
-                />
-              </div>
-              
-              <div>
-                <label className="block text-gray-300 text-sm mb-1">Email:</label>
-                <input
-                  type="email"
-                  id="mail_addr"
-                  className="w-full bg-gray-800 text-white px-3 py-2 rounded border border-gray-600 focus:border-blue-500 focus:outline-none"
-                />
-              </div>
-              
-              <div>
-                <label className="block text-gray-300 text-sm mb-1">Số điện thoại:</label>
-                <input
-                  type="tel"
-                  id="phon_numb"
-                  className="w-full bg-gray-800 text-white px-3 py-2 rounded border border-gray-600 focus:border-blue-500 focus:outline-none"
-                />
-              </div>
-              
-              <div className="flex space-x-3 pt-4">
-                <button
-                  onClick={() => {
-                    const updateData = {
-                      memb_name: (document.getElementById('memb_name') as HTMLInputElement)?.value,
-                      mail_addr: (document.getElementById('mail_addr') as HTMLInputElement)?.value,
-                      phon_numb: (document.getElementById('phon_numb') as HTMLInputElement)?.value,
-                    };
-                    handleUpdateAccount(updateData);
-                  }}
-                  disabled={updateLoading}
-                  className="flex-1 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded transition-colors disabled:opacity-50"
-                >
-                  {updateLoading ? 'Đang cập nhật...' : 'Cập nhật'}
-                </button>
-                
-                <button
-                  onClick={() => setShowPasswordModal(true)}
-                  className="flex-1 bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded transition-colors"
-                >
-                  Đổi mật khẩu
-                </button>
-              </div>
-              
-              <button
-                onClick={() => setShowAccountModal(false)}
-                className="w-full bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded transition-colors"
-              >
-                Đóng
-              </button>
-            </div>
+            <motion.button
+              onClick={() => {
+                setShowAccountModal(false);
+                setShowPasswordModal(true);
+              }}
+              className="flex-1 bg-gradient-to-r from-green-600/30 to-emerald-600/30 border border-green-500/60 text-green-300 px-4 py-2 rounded mu-button-glow"
+              style={{ fontFamily: 'Arial, sans-serif' }}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              Đổi mật khẩu
+            </motion.button>
           </div>
         </div>
-      )}
+      </MuClassicModal>
 
       {/* Password Change Modal */}
-      {showPasswordModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-gray-900 rounded-lg p-6 w-full max-w-md mx-4">
-            <h3 className="text-xl font-bold text-yellow-400 mb-4">Đổi mật khẩu</h3>
-            
-            <div className="space-y-4">
-              <div>
-                <label className="block text-gray-300 text-sm mb-1">Mật khẩu hiện tại:</label>
-                <input
-                  type="password"
-                  id="currentPassword"
-                  className="w-full bg-gray-800 text-white px-3 py-2 rounded border border-gray-600 focus:border-blue-500 focus:outline-none"
-                />
-              </div>
-              
-              <div>
-                <label className="block text-gray-300 text-sm mb-1">Mật khẩu mới:</label>
-                <input
-                  type="password"
-                  id="newPassword"
-                  className="w-full bg-gray-800 text-white px-3 py-2 rounded border border-gray-600 focus:border-blue-500 focus:outline-none"
-                />
-              </div>
-              
-              <div>
-                <label className="block text-gray-300 text-sm mb-1">Xác nhận mật khẩu mới:</label>
-                <input
-                  type="password"
-                  id="confirmPassword"
-                  className="w-full bg-gray-800 text-white px-3 py-2 rounded border border-gray-600 focus:border-blue-500 focus:outline-none"
-                />
-              </div>
-              
-              <div className="flex space-x-3 pt-4">
-                <button
-                  onClick={() => {
-                    const currentPassword = (document.getElementById('currentPassword') as HTMLInputElement)?.value;
-                    const newPassword = (document.getElementById('newPassword') as HTMLInputElement)?.value;
-                    const confirmPassword = (document.getElementById('confirmPassword') as HTMLInputElement)?.value;
-                    
-                    if (newPassword !== confirmPassword) {
-                      alert('Mật khẩu xác nhận không khớp!');
-                      return;
-                    }
-                    
-                    handleChangePassword({ currentPassword, newPassword });
-                  }}
-                  disabled={updateLoading}
-                  className="flex-1 bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded transition-colors disabled:opacity-50"
-                >
-                  {updateLoading ? 'Đang đổi...' : 'Đổi mật khẩu'}
-                </button>
+      <MuClassicModal
+        isOpen={showPasswordModal}
+        onClose={() => setShowPasswordModal(false)}
+        title="Đổi mật khẩu"
+      >
+        <div className="space-y-4">
+          <div>
+            <label className="block text-yellow-400 text-sm mb-1 font-semibold" style={{ fontFamily: 'Arial, sans-serif' }}>Mật khẩu hiện tại:</label>
+            <input
+              type="password"
+              id="currentPassword"
+              className="w-full bg-black/40 text-white px-3 py-2 rounded border border-yellow-500/30 focus:border-yellow-400/60 focus:outline-none"
+              style={{ fontFamily: 'Arial, sans-serif' }}
+            />
+          </div>
+          
+          <div>
+            <label className="block text-yellow-400 text-sm mb-1 font-semibold" style={{ fontFamily: 'Arial, sans-serif' }}>Mật khẩu mới:</label>
+            <input
+              type="password"
+              id="newPassword"
+              className="w-full bg-black/40 text-white px-3 py-2 rounded border border-yellow-500/30 focus:border-yellow-400/60 focus:outline-none"
+              style={{ fontFamily: 'Arial, sans-serif' }}
+            />
+          </div>
+          
+          <div>
+            <label className="block text-yellow-400 text-sm mb-1 font-semibold" style={{ fontFamily: 'Arial, sans-serif' }}>Xác nhận mật khẩu mới:</label>
+            <input
+              type="password"
+              id="confirmPassword"
+              className="w-full bg-black/40 text-white px-3 py-2 rounded border border-yellow-500/30 focus:border-yellow-400/60 focus:outline-none"
+              style={{ fontFamily: 'Arial, sans-serif' }}
+            />
+          </div>
+          
+          <div className="flex space-x-3 pt-4">
+            <motion.button
+              onClick={() => {
+                const currentPassword = (document.getElementById('currentPassword') as HTMLInputElement)?.value;
+                const newPassword = (document.getElementById('newPassword') as HTMLInputElement)?.value;
+                const confirmPassword = (document.getElementById('confirmPassword') as HTMLInputElement)?.value;
                 
-                <button
-                  onClick={() => setShowPasswordModal(false)}
-                  className="flex-1 bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded transition-colors"
-                >
-                  Hủy
-                </button>
-              </div>
-            </div>
+                if (newPassword !== confirmPassword) {
+                  alert('Mật khẩu xác nhận không khớp!');
+                  return;
+                }
+                
+                handleChangePassword({ currentPassword, newPassword });
+              }}
+              disabled={updateLoading}
+              className="flex-1 bg-gradient-to-r from-green-600/30 to-emerald-600/30 border border-green-500/60 text-green-300 px-4 py-2 rounded mu-button-glow disabled:opacity-50"
+              style={{ fontFamily: 'Arial, sans-serif' }}
+              whileHover={!updateLoading ? { scale: 1.05 } : {}}
+              whileTap={!updateLoading ? { scale: 0.95 } : {}}
+            >
+              {updateLoading ? 'Đang đổi...' : 'Đổi mật khẩu'}
+            </motion.button>
+            
+            <motion.button
+              onClick={() => setShowPasswordModal(false)}
+              className="flex-1 bg-gradient-to-r from-gray-600/30 to-gray-700/30 border border-gray-500/60 text-gray-300 px-4 py-2 rounded mu-button-glow"
+              style={{ fontFamily: 'Arial, sans-serif' }}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              Hủy
+            </motion.button>
           </div>
         </div>
-      )}
+      </MuClassicModal>
       </div>
     </div>
   );

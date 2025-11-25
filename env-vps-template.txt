@@ -1,0 +1,14 @@
+# Backend C# API URL - VPS Configuration
+# Copy this to .env.local and use
+
+# Backend chạy trên VPS: 103.110.85.229:55777
+NEXT_PUBLIC_API_URL=http://103.110.85.229:55777
+
+# Next.js Configuration
+NEXT_TELEMETRY_DISABLED=1
+
+# Lưu ý:
+# - File này chỉ là template
+# - Tạo file .env.local trong thư mục gốc của Next.js
+# - Restart Next.js dev server sau khi tạo/sửa .env.local
+

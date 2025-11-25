@@ -22,10 +22,20 @@ export const siteConfig = {
   email: "support@mudautruongss1.net",
   phone: "0123456789",
   address: "Việt Nam",
+  adminZalo: "03377.14.654",
+  
+  // Thông tin chuyển khoản
+  payment: {
+    bankAccount: "0356673016",
+    accountHolder: "NGUYEN CANH QUYEN",
+    bankName: "MB-BANK",
+    // Có thể dùng đường dẫn local (ví dụ: "/qrcode.jpeg") hoặc URL (ví dụ: "https://example.com/qrcode.jpg")
+    qrCodeImage: "/qrcode.jpeg"
+  },
   
   // Thông tin website
-  websiteUrl: "https://mudautruongss1.net",
-  websiteName: "MuDauTruongSS1.net",
+  websiteUrl: "https://MuOnline.com",
+  websiteName: "MuOnline.com",
   
   // Thông tin game settings
   expRate: "100x",
@@ -42,14 +52,14 @@ export const siteConfig = {
   metaKeywords: [
     "Mu Online",
     "Mu Online Season 1",
-    "MuDauTruongSS1.net",
+    "MuOnline.com",
     "Server Mu Online",
     "Game Mu Online Việt Nam"
   ],
   
   // Images
-  logoImage: "/MU-DAUTRUONG.PNG",
-  bannerImage: "/panael-mu.jpg",
+  logoImage: "/MuOnline.com.png",
+  bannerImage: "/Panael-mu.JPEG",
   favicon: "/favicon.ico",
   
   // Colors theme

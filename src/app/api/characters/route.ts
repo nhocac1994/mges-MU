@@ -1,10 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { connectToDatabase } from '@/lib/database';
-import sql from 'mssql';
 
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:55777';
+
+/**
+ * Proxy characters request to C# backend
+ */
 export async function GET(request: NextRequest) {
   try {
-    const accountId = request.nextUrl.searchParams.get('accountId');
+    let accountId = request.nextUrl.searchParams.get('accountId');
     
     if (!accountId) {
       return NextResponse.json({ 
@@ -13,109 +16,38 @@ export async function GET(request: NextRequest) {
       }, { status: 400 });
     }
 
+    accountId = accountId.trim();
 
-    const pool = await connectToDatabase();
-    
-    // Lấy danh sách characters của account
-    const charactersQuery = `
-      SELECT 
-        Name,
-        cLevel,
-        Class,
-        ResetCount,
-        MasterResetCount,
-        Strength,
-        Dexterity,
-        Vitality,
-        Energy,
-        Leadership,
-        Life,
-        MaxLife,
-        Mana,
-        MaxMana,
-        Money,
-        MapNumber,
-        MapPosX,
-        MapPosY,
-        PKCount,
-        PKLevel
-      FROM Character
-      WHERE AccountID = @accountId
-      ORDER BY cLevel DESC, ResetCount DESC, MasterResetCount DESC
-    `;
-
-    const charactersResult = await pool.request()
-      .input('accountId', sql.VarChar(10), accountId)
-      .query(charactersQuery);
-    
-    const characters = charactersResult.recordset;
-
-    // Map class names
-    const getClassName = (classId: number) => {
-      const classMap: { [key: number]: string } = {
-        0: 'Dark Wizard',
-        1: 'Soul Master',
-        2: 'Grand Master',
-        3: 'Dark Knight',
-        4: 'Blade Knight',
-        5: 'Blade Master',
-        6: 'Fairy Elf',
-        7: 'Muse Elf',
-        8: 'High Elf',
-        16: 'Magic Gladiator',
-        17: 'Dark Lord',
-        32: 'Summoner',
-        33: 'Bloody Summoner',
-        34: 'Dimension Master',
-        48: 'Rage Fighter',
-        50: 'Fist Master',
-        64: 'Grow Lancer',
-        65: 'Mirage Lancer',
-        66: 'Shining Lancer'
-      };
-      return classMap[classId] || `Unknown (${classId})`;
-    };
-
-    // Format characters data
-    const formattedCharacters = characters.map(char => ({
-      name: char.Name,
-      level: char.cLevel,
-      class: char.Class,
-      className: getClassName(char.Class),
-      resetCount: char.ResetCount,
-      masterResetCount: char.MasterResetCount,
-      stats: {
-        strength: char.Strength,
-        dexterity: char.Dexterity,
-        vitality: char.Vitality,
-        energy: char.Energy,
-        leadership: char.Leadership
+    const response = await fetch(`${API_URL}/api/character?accountId=${encodeURIComponent(accountId)}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
       },
-      life: char.Life,
-      maxLife: char.MaxLife,
-      mana: char.Mana,
-      maxMana: char.MaxMana,
-      money: char.Money,
-      mapNumber: char.MapNumber,
-      mapPosX: char.MapPosX,
-      mapPosY: char.MapPosY,
-      pkCount: char.PKCount,
-      pkLevel: char.PKLevel
-    }));
-
-    return NextResponse.json({
-      success: true,
-      data: {
-        characters: formattedCharacters,
-        totalCharacters: formattedCharacters.length
-      }
     });
 
+    if (!response.ok) {
+      console.error('Backend response error:', response.status, response.statusText);
+      const errorText = await response.text();
+      console.error('Backend error response:', errorText);
+      return NextResponse.json(
+        { 
+          success: false, 
+          message: `Backend error: ${response.status} ${response.statusText}` 
+        }, 
+        { status: response.status }
+      );
+    }
+
+    const data = await response.json();
+    return NextResponse.json(data, { status: response.status });
   } catch (error) {
-    console.error('Error fetching characters:', error);
-    return NextResponse.json({ 
-      success: false, 
-      message: 'Lỗi khi lấy danh sách characters' 
-    }, { status: 500 });
+    console.error('Characters proxy error:', error);
+    return NextResponse.json(
+      { 
+        success: false, 
+        message: `Lỗi kết nối đến server: ${error instanceof Error ? error.message : 'Unknown error'}` 
+      },
+      { status: 500 }
+    );
   }
 }

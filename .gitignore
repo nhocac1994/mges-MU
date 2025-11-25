@@ -53,3 +53,7 @@ next-env.d.ts
 
 # OS
 Thumbs.db.env.local
+
+# Large files
+*.zip
+MuOnlineAPI.zip

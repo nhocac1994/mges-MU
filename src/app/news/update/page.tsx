@@ -249,13 +249,13 @@ export default function NewsUpdate() {
                 </p>
                 <div className="flex space-x-4">
                   <a href="#" className="social-link">
-                    <Image src="/facebook-logo.webp" alt="Facebook" width={20} height={20} />
+                    <Image src="/facebook.webp" alt="Facebook" width={20} height={20} />
                   </a>
                   <a href="#" className="social-link">
-                    <Image src="/tiktok-logo.webp" alt="TikTok" width={20} height={20} />
+                    <Image src="/tiktok.webp" alt="TikTok" width={20} height={20} />
                   </a>
                   <a href="#" className="social-link">
-                    <Image src="/Zalo-icon.webp" alt="Zalo" width={20} height={20} />
+                    <Image src="/zalo.webp" alt="Zalo" width={20} height={20} />
                   </a>
                 </div>
               </div>

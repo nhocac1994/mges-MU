@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
+import { useConfig } from '@/contexts/ConfigContext';
 
 interface BeforeInstallPromptEvent extends Event {
   readonly platforms: string[];
@@ -13,6 +14,7 @@ interface BeforeInstallPromptEvent extends Event {
 }
 
 export default function PWAInstallPrompt() {
+  const { config } = useConfig();
   const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null);
   const [showInstallPrompt, setShowInstallPrompt] = useState(false);
   const [isInstalled, setIsInstalled] = useState(false);
@@ -69,8 +71,8 @@ export default function PWAInstallPrompt() {
     sessionStorage.setItem('pwa-install-dismissed', 'true');
   };
 
-  // Don't show if already installed or dismissed
-  if (isInstalled || !showInstallPrompt || sessionStorage.getItem('pwa-install-dismissed')) {
+  // Don't show if already installed or dismissed or config not ready
+  if (!config || isInstalled || !showInstallPrompt || sessionStorage.getItem('pwa-install-dismissed')) {
     return null;
   }
 
@@ -81,7 +83,7 @@ export default function PWAInstallPrompt() {
           <div className="flex-shrink-0">
             <Image 
               src="/icon.jpg" 
-              alt="MuDauTruongSS1.net Logo" 
+              alt={`${config.nameGame} Logo`} 
               width={40} 
               height={40}
               className="w-10 h-10 rounded-lg"
@@ -89,7 +91,7 @@ export default function PWAInstallPrompt() {
           </div>
           <div className="flex-1">
             <h3 className="text-white font-semibold text-sm mb-1">
-              Cài đặt MuDauTruongSS1.net
+              Cài đặt {config.nameGame}
             </h3>
             <p className="text-gray-300 text-xs mb-3">
               Thêm vào màn hình chính để nhận thông báo sự kiện ngay cả khi đóng app!

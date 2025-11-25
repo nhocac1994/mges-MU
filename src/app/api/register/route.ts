@@ -1,53 +1,29 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { createAccount } from '@/lib/database';
 
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:55777';
+
+/**
+ * Proxy register request to C# backend
+ */
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { username, password, characterName, email, phone, securityQuestion, securityAnswer } = body;
-
-    // Validate input
-    if (!username || !password || !characterName || !email || !phone || !securityQuestion || !securityAnswer) {
-      return NextResponse.json({ 
-        success: false, 
-        message: 'Vui lòng điền đầy đủ thông tin' 
-      }, { status: 400 });
-    }
-
-    // Use the createAccount function from database.ts
-    const result = await createAccount({
-      username,
-      password,
-      characterName,
-      email,
-      phone,
-      securityQuestion,
-      securityAnswer
+    
+    const response = await fetch(`${API_URL}/api/auth/register`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(body),
     });
 
-    if (result.success) {
-      return NextResponse.json({ 
-        success: true, 
-        message: result.message,
-        data: {
-          username,
-          characterName,
-          email,
-          phone
-        }
-      });
-    } else {
-      return NextResponse.json({ 
-        success: false, 
-        message: result.message 
-      }, { status: 400 });
-    }
-
-  } catch {
-    console.error('Registration error: [Hidden for security]');
-    return NextResponse.json({ 
-      success: false, 
-      message: 'Lỗi hệ thống. Vui lòng thử lại sau.' 
-    }, { status: 500 });
+    const data = await response.json();
+    return NextResponse.json(data, { status: response.status });
+  } catch (error) {
+    console.error('Register proxy error:', error);
+    return NextResponse.json(
+      { success: false, message: 'Lỗi kết nối đến server. Vui lòng thử lại sau.' },
+      { status: 500 }
+    );
   }
 }

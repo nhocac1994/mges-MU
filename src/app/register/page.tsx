@@ -3,8 +3,12 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
+import { motion } from 'framer-motion';
 import SimpleCaptcha from '@/components/SimpleCaptcha';
 import NetworkOverlay from '@/components/NetworkOverlay';
+import FloatingParticles from '@/components/FloatingParticles';
+import AnimatedSection from '@/components/AnimatedSection';
+import { useConfig } from '@/contexts/ConfigContext';
 
 export default function Register() {
   const [formData, setFormData] = useState({
@@ -22,10 +26,6 @@ export default function Register() {
   const [isSuccess, setIsSuccess] = useState(false);
   const [captchaValid, setCaptchaValid] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [isScrolled, setIsScrolled] = useState(false);
-  const [scrollY, setScrollY] = useState(0);
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [isClient, setIsClient] = useState(false);
   const [successData, setSuccessData] = useState<{
     username: string;
     characterName: string;
@@ -34,21 +34,12 @@ export default function Register() {
     securityQuestion: string;
     securityAnswer: string;
   } | null>(null);
+  const { config } = useConfig();
 
-  useEffect(() => {
-    setIsClient(true);
-  }, []);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      const scrollTop = window.scrollY;
-      setScrollY(scrollTop);
-      setIsScrolled(scrollTop > 100);
-    };
-
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+  // Đảm bảo config có giá trị
+  if (!config) {
+    return null;
+  }
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
@@ -140,21 +131,20 @@ export default function Register() {
       {/* Network Overlay - Luôn chạy trên background */}
       <NetworkOverlay />
       
+      {/* Floating Particles Background */}
+      <FloatingParticles count={25} />
+      
       {/* Background Image - Desktop Only */}
-      {isClient && (
-        <>
-          <div 
-            className="hidden md:block fixed inset-0 bg-cover bg-center bg-no-repeat"
-            // style={{
-            //   backgroundImage: 'url(/logoweb.jpg)',
-            //   backgroundAttachment: 'fixed'
-            // }}
-          ></div>
-          
-          {/* Mobile Background - Simple gradient */}
-          <div className="md:hidden fixed inset-0 bg-gradient-to-br from-gray-900 via-blue-900 to-purple-900"></div>
-        </>
-      )}
+      <div 
+        className="hidden md:block fixed inset-0 bg-cover bg-center bg-no-repeat"
+        // style={{
+        //   backgroundImage: 'url(/logoweb.jpg)',
+        //   backgroundAttachment: 'fixed'
+        // }}
+      ></div>
+      
+      {/* Mobile Background - Simple gradient */}
+      <div className="md:hidden fixed inset-0 bg-gradient-to-br from-gray-900 via-blue-900 to-purple-900"></div>
       
       {/* Background Overlay */}
       <div className="fixed inset-0 bg-black/60"></div>
@@ -163,299 +153,441 @@ export default function Register() {
       <div className="relative z-10 pt-28">
         {/* Main Content */}
         <main className="relative z-10 py-8">
-        <div className="max-w-4xl mx-auto">
-          <div className="text-center text-white mb-12">
-            <h1 className="text-5xl font-bold mb-4 bg-gradient-to-r from-yellow-400 to-red-500 bg-clip-text text-transparent">
-              ĐĂNG KÝ TÀI KHOẢN
-            </h1>
-            <p className="text-xl text-gray-300">
-              Tạo tài khoản mới để bắt đầu hành trình Mu Online
-            </p>
-          </div>
-
-          {/* Success Message */}
-          {isSuccess && successData && (
-            <div className="mb-8 bg-green-900/20 border border-green-500/30 rounded-lg p-8">
-              <div className="text-center mb-6">
-                <div className="w-16 h-16 bg-gradient-to-r from-green-500 to-emerald-500 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <span className="text-white text-2xl">✅</span>
-                </div>
-                <h2 className="text-3xl font-bold text-green-400 mb-2">ĐĂNG KÝ THÀNH CÔNG!</h2>
-                <p className="text-green-300">Tài khoản của bạn đã được tạo thành công</p>
-              </div>
-
-              <div className="bg-black/50 rounded-lg p-6">
-                <h3 className="text-xl font-bold text-white mb-4 text-center">📋 THÔNG TIN TÀI KHOẢN</h3>
-                <div className="grid md:grid-cols-2 gap-6">
-                  <div className="space-y-4">
-                    <div className="bg-gray-800/50 rounded-lg p-4">
-                      <div className="text-sm text-gray-400 mb-1">Tên đăng nhập:</div>
-                      <div className="text-lg font-bold text-white">{successData.username}</div>
-                    </div>
-                    <div className="bg-gray-800/50 rounded-lg p-4">
-                      <div className="text-sm text-gray-400 mb-1">Tên nhân vật:</div>
-                      <div className="text-lg font-bold text-white">{successData.characterName}</div>
-                    </div>
-                    <div className="bg-gray-800/50 rounded-lg p-4">
-                      <div className="text-sm text-gray-400 mb-1">Email:</div>
-                      <div className="text-lg font-bold text-white">{successData.email}</div>
-                    </div>
+          {/* Page Header - Classic MU Style */}
+          <section className="py-20 bg-gradient-to-b from-black/40 to-black/60 relative overflow-hidden mb-8">
+            {/* Background Effects */}
+            <div className="absolute inset-0">
+              <motion.div 
+                className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-yellow-500/20 rounded-full blur-3xl"
+                animate={{
+                  scale: [1, 1.2, 1],
+                  opacity: [0.3, 0.5, 0.3]
+                }}
+                transition={{
+                  duration: 4,
+                  repeat: Infinity,
+                  ease: "easeInOut"
+                }}
+              />
+            </div>
+            
+            <div className="container mx-auto px-4 text-center relative z-10">
+              <motion.div 
+                initial={{ opacity: 0, y: 50 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+              >
+                <motion.h1 
+                  className="text-6xl font-black text-white mb-4 relative"
+                  style={{ fontFamily: 'Arial, sans-serif', textShadow: '0 0 20px rgba(234, 179, 8, 0.5)' }}
+                >
+                  <span 
+                    className="bg-gradient-to-r from-yellow-400 via-orange-400 to-yellow-400 bg-clip-text text-transparent mu-text-glow"
+                    style={{ backgroundSize: '200% 200%' }}
+                  >
+                    ĐĂNG KÝ TÀI KHOẢN
+                  </span>
+                  {/* Glow Effect */}
+                  <motion.div 
+                    className="absolute inset-0 text-6xl font-black bg-gradient-to-r from-yellow-400 via-orange-400 to-yellow-400 bg-clip-text text-transparent blur-sm opacity-50"
+                    animate={{
+                      opacity: [0.3, 0.6, 0.3],
+                      scale: [1, 1.02, 1]
+                    }}
+                    transition={{
+                      duration: 2,
+                      repeat: Infinity,
+                      ease: "easeInOut"
+                    }}
+                  >
+                    ĐĂNG KÝ TÀI KHOẢN
+                  </motion.div>
+                </motion.h1>
+                <AnimatedSection direction="up" delay={0.2}>
+                  <div className="text-2xl font-semibold text-blue-300 mb-4">
+                    <span className="bg-gradient-to-r from-blue-300 to-cyan-300 bg-clip-text text-transparent">
+                      Tạo tài khoản mới để bắt đầu hành trình {config.nameGame}
+                    </span>
                   </div>
-                  <div className="space-y-4">
-                    <div className="bg-gray-800/50 rounded-lg p-4">
-                      <div className="text-sm text-gray-400 mb-1">Số điện thoại:</div>
-                      <div className="text-lg font-bold text-white">{successData.phone}</div>
-                    </div>
-                    <div className="bg-gray-800/50 rounded-lg p-4">
-                      <div className="text-sm text-gray-400 mb-1">Câu hỏi bảo mật:</div>
-                      <div className="text-lg font-bold text-white">
-                        {successData.securityQuestion === 'pet' && 'Tên thú cưng đầu tiên của bạn?'}
-                        {successData.securityQuestion === 'school' && 'Tên trường tiểu học của bạn?'}
-                        {successData.securityQuestion === 'city' && 'Thành phố bạn sinh ra?'}
-                        {successData.securityQuestion === 'food' && 'Món ăn yêu thích của bạn?'}
+                </AnimatedSection>
+              </motion.div>
+            </div>
+          </section>
+
+        <div className="max-w-4xl mx-auto px-4">
+
+          {/* Success Message - Classic MU Style */}
+          {isSuccess && successData && (
+            <AnimatedSection direction="up" delay={0.1}>
+              <div className="relative mb-8">
+                <div className="absolute inset-0 mu-modal-border-glow rounded-lg"></div>
+                <div className="relative bg-gradient-to-b from-gray-900 via-black to-gray-900 border-2 border-green-500/60 mu-modal-container rounded-lg p-8">
+                  {/* Corner decorations */}
+                  <div className="absolute top-0 left-0 w-6 h-6 border-t-2 border-l-2 border-green-500/60"></div>
+                  <div className="absolute top-0 right-0 w-6 h-6 border-t-2 border-r-2 border-green-500/60"></div>
+                  <div className="absolute bottom-0 left-0 w-6 h-6 border-b-2 border-l-2 border-green-500/60"></div>
+                  <div className="absolute bottom-0 right-0 w-6 h-6 border-b-2 border-r-2 border-green-500/60"></div>
+                  <div className="text-center mb-6">
+                    <motion.div 
+                      className="w-16 h-16 bg-gradient-to-r from-green-500 to-emerald-500 rounded-lg flex items-center justify-center mx-auto mb-4 border-2 border-yellow-500/30"
+                      initial={{ scale: 0 }}
+                      animate={{ scale: 1 }}
+                      transition={{ type: 'spring', damping: 15, stiffness: 300 }}
+                    >
+                      <span className="text-white text-2xl">✅</span>
+                    </motion.div>
+                    <h2 className="text-3xl font-bold text-green-400 mb-2 mu-text-glow" style={{ fontFamily: 'Arial, sans-serif' }}>ĐĂNG KÝ THÀNH CÔNG!</h2>
+                    <p className="text-green-300" style={{ fontFamily: 'Arial, sans-serif' }}>Tài khoản của bạn đã được tạo thành công</p>
+                  </div>
+
+                  <div className="bg-black/50 rounded-lg p-6 border border-yellow-500/30">
+                    <h3 className="text-xl font-bold text-yellow-400 mb-4 text-center mu-text-glow" style={{ fontFamily: 'Arial, sans-serif' }}>📋 THÔNG TIN TÀI KHOẢN</h3>
+                    <div className="grid md:grid-cols-2 gap-6">
+                      <div className="space-y-4">
+                        {[
+                          { label: 'Tên đăng nhập:', value: successData.username },
+                          { label: 'Tên nhân vật:', value: successData.characterName },
+                          { label: 'Email:', value: successData.email }
+                        ].map((item, idx) => (
+                          <motion.div
+                            key={idx}
+                            className="relative bg-black/40 rounded-lg p-4 border border-yellow-500/30 mu-command-card"
+                            initial={{ opacity: 0, x: -20 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            transition={{ delay: 0.1 + idx * 0.05 }}
+                          >
+                            {/* Corner decorations */}
+                            <div className="absolute top-0 left-0 w-3 h-3 border-t border-l border-yellow-500/50"></div>
+                            <div className="absolute top-0 right-0 w-3 h-3 border-t border-r border-yellow-500/50"></div>
+                            <div className="absolute bottom-0 left-0 w-3 h-3 border-b border-l border-yellow-500/50"></div>
+                            <div className="absolute bottom-0 right-0 w-3 h-3 border-b border-r border-yellow-500/50"></div>
+                            
+                            <div className="text-sm text-yellow-400 mb-1" style={{ fontFamily: 'Arial, sans-serif' }}>{item.label}</div>
+                            <div className="text-lg font-bold text-white" style={{ fontFamily: 'Arial, sans-serif' }}>{item.value}</div>
+                          </motion.div>
+                        ))}
+                      </div>
+                      <div className="space-y-4">
+                        {[
+                          { label: 'Số điện thoại:', value: successData.phone },
+                          { 
+                            label: 'Câu hỏi bảo mật:', 
+                            value: successData.securityQuestion === 'pet' ? 'Tên thú cưng đầu tiên của bạn?' :
+                                   successData.securityQuestion === 'school' ? 'Tên trường tiểu học của bạn?' :
+                                   successData.securityQuestion === 'city' ? 'Thành phố bạn sinh ra?' :
+                                   'Món ăn yêu thích của bạn?'
+                          },
+                          { label: 'Trạng thái:', value: '✅ Tài khoản đã kích hoạt', isStatus: true }
+                        ].map((item, idx) => (
+                          <motion.div
+                            key={idx}
+                            className="relative bg-black/40 rounded-lg p-4 border border-yellow-500/30 mu-command-card"
+                            initial={{ opacity: 0, x: 20 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            transition={{ delay: 0.1 + idx * 0.05 }}
+                          >
+                            {/* Corner decorations */}
+                            <div className="absolute top-0 left-0 w-3 h-3 border-t border-l border-yellow-500/50"></div>
+                            <div className="absolute top-0 right-0 w-3 h-3 border-t border-r border-yellow-500/50"></div>
+                            <div className="absolute bottom-0 left-0 w-3 h-3 border-b border-l border-yellow-500/50"></div>
+                            <div className="absolute bottom-0 right-0 w-3 h-3 border-b border-r border-yellow-500/50"></div>
+                            
+                            <div className="text-sm text-yellow-400 mb-1" style={{ fontFamily: 'Arial, sans-serif' }}>{item.label}</div>
+                            <div className={`text-lg font-bold ${item.isStatus ? 'text-green-400' : 'text-white'}`} style={{ fontFamily: 'Arial, sans-serif' }}>{item.value}</div>
+                          </motion.div>
+                        ))}
                       </div>
                     </div>
-                    <div className="bg-gray-800/50 rounded-lg p-4">
-                      <div className="text-sm text-gray-400 mb-1">Trạng thái:</div>
-                      <div className="text-lg font-bold text-green-400">✅ Tài khoản đã kích hoạt</div>
+
+                    <motion.div 
+                      className="mt-6 p-4 bg-black/40 rounded-lg border border-yellow-500/30"
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: 0.3 }}
+                    >
+                      <h4 className="text-lg font-bold text-yellow-400 mb-2" style={{ fontFamily: 'Arial, sans-serif' }}>🎮 BƯỚC TIẾP THEO</h4>
+                      <ul className="text-gray-300 space-y-2">
+                        {[
+                          `Tải game client từ trang TẢI GAME`,
+                          'Đăng nhập với thông tin tài khoản trên',
+                          'Bắt đầu hành trình Mu Online Season 1',
+                          'Tham gia cộng đồng game thủ Việt Nam'
+                        ].map((item, idx) => (
+                          <li key={idx} className="flex items-start gap-2">
+                            <span className="w-2 h-2 bg-yellow-400 rounded-full mt-2 animate-pulse mu-dot-glow" style={{animationDelay: `${idx * 0.2}s`}}></span>
+                            <span>{item.includes('TẢI GAME') ? (
+                              <>
+                                Tải game client từ trang <Link href="/download" className="text-yellow-400 hover:text-yellow-300 font-semibold">TẢI GAME</Link>
+                              </>
+                            ) : item}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </motion.div>
+
+                    <div className="text-center mt-6">
+                      <motion.button
+                        onClick={() => setIsSuccess(false)}
+                        className="bg-gradient-to-r from-yellow-600/30 to-orange-600/30 border border-yellow-500/60 text-yellow-300 font-bold py-3 px-6 rounded-lg mu-button-glow mr-4"
+                        style={{ fontFamily: 'Arial, sans-serif' }}
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                      >
+                        ĐĂNG KÝ TÀI KHOẢN KHÁC
+                      </motion.button>
+                      <Link href="/login">
+                        <motion.div
+                          className="inline-block bg-gradient-to-r from-green-600/30 to-emerald-600/30 border border-green-500/60 text-green-300 font-bold py-3 px-6 rounded-lg mu-button-glow"
+                          style={{ fontFamily: 'Arial, sans-serif' }}
+                          whileHover={{ scale: 1.05 }}
+                          whileTap={{ scale: 0.95 }}
+                        >
+                          ĐĂNG NHẬP NGAY
+                        </motion.div>
+                      </Link>
                     </div>
                   </div>
                 </div>
-
-                <div className="mt-6 p-4 bg-blue-900/20 border border-blue-500/30 rounded-lg">
-                  <h4 className="text-lg font-bold text-blue-400 mb-2">🎮 BƯỚC TIẾP THEO</h4>
-                  <ul className="text-gray-300 space-y-1">
-                    <li>• Tải game client từ trang <Link href="/download" className="text-blue-400 hover:text-blue-300">TẢI GAME</Link></li>
-                    <li>• Đăng nhập với thông tin tài khoản trên</li>
-                    <li>• Bắt đầu hành trình Mu Online Season 1</li>
-                    <li>• Tham gia cộng đồng game thủ Việt Nam</li>
-                  </ul>
-                </div>
-
-                <div className="text-center mt-6">
-                  <button
-                    onClick={() => setIsSuccess(false)}
-                    className="bg-gradient-to-r from-blue-500 to-purple-500 text-white font-bold py-3 px-6 rounded-lg hover:from-blue-600 hover:to-purple-600 transition-all mr-4"
-                  >
-                    ĐĂNG KÝ TÀI KHOẢN KHÁC
-                  </button>
-                  <Link
-                    href="/login"
-                    className="inline-block bg-gradient-to-r from-green-500 to-emerald-500 text-white font-bold py-3 px-6 rounded-lg hover:from-green-600 hover:to-emerald-600 transition-all"
-                  >
-                    ĐĂNG NHẬP NGAY
-                  </Link>
-                </div>
               </div>
-            </div>
+            </AnimatedSection>
           )}
 
           {!isSuccess && (
-            <div className="bg-black bg-opacity-70 rounded-lg p-8">
-              <form onSubmit={handleSubmit} className="space-y-6">
-              {/* Thông tin tài khoản */}
-              <div>
-                <h3 className="text-2xl font-bold text-yellow-400 mb-6">Thông tin tài khoản</h3>
-                <div className="grid md:grid-cols-2 gap-6">
-                  <div>
-                    <label className="block text-white font-semibold mb-2">
-                      Tên đăng nhập *
-                    </label>
-                    <input
-                      type="text"
-                      name="username"
-                      value={formData.username}
-                      onChange={handleInputChange}
-                      className={`w-full p-3 bg-gray-800 text-white border rounded-lg focus:outline-none ${
-                        errors.username ? 'border-red-500' : 'border-gray-600 focus:border-yellow-400'
-                      }`}
-                      placeholder="Nhập tên đăng nhập"
-                    />
-                    {errors.username && <p className="text-red-400 text-sm mt-1">{errors.username}</p>}
-                  </div>
-
-                  <div>
-                    <label className="block text-white font-semibold mb-2">
-                      Mật khẩu *
-                    </label>
-                    <input
-                      type="password"
-                      name="password"
-                      value={formData.password}
-                      onChange={handleInputChange}
-                      className={`w-full p-3 bg-gray-800 text-white border rounded-lg focus:outline-none ${
-                        errors.password ? 'border-red-500' : 'border-gray-600 focus:border-yellow-400'
-                      }`}
-                      placeholder="Nhập mật khẩu"
-                    />
-                    {errors.password && <p className="text-red-400 text-sm mt-1">{errors.password}</p>}
-                  </div>
-
-                  <div>
-                    <label className="block text-white font-semibold mb-2">
-                      Xác nhận mật khẩu *
-                    </label>
-                    <input
-                      type="password"
-                      name="confirmPassword"
-                      value={formData.confirmPassword}
-                      onChange={handleInputChange}
-                      className={`w-full p-3 bg-gray-800 text-white border rounded-lg focus:outline-none ${
-                        errors.confirmPassword ? 'border-red-500' : 'border-gray-600 focus:border-yellow-400'
-                      }`}
-                      placeholder="Nhập lại mật khẩu"
-                    />
-                    {errors.confirmPassword && <p className="text-red-400 text-sm mt-1">{errors.confirmPassword}</p>}
-                  </div>
-
-                  <div>
-                    <label className="block text-white font-semibold mb-2">
-                      Tên nhân vật *
-                    </label>
-                    <input
-                      type="text"
-                      name="characterName"
-                      value={formData.characterName}
-                      onChange={handleInputChange}
-                      className={`w-full p-3 bg-gray-800 text-white border rounded-lg focus:outline-none ${
-                        errors.characterName ? 'border-red-500' : 'border-gray-600 focus:border-yellow-400'
-                      }`}
-                      placeholder="Nhập tên nhân vật"
-                    />
-                    {errors.characterName && <p className="text-red-400 text-sm mt-1">{errors.characterName}</p>}
-                  </div>
-                </div>
-              </div>
-
-              {/* Thông tin cá nhân */}
-              <div>
-                <h3 className="text-2xl font-bold text-yellow-400 mb-6">Thông tin cá nhân</h3>
-                <div className="grid md:grid-cols-2 gap-6">
-                  <div>
-                    <label className="block text-white font-semibold mb-2">
-                      Email *
-                    </label>
-                    <input
-                      type="email"
-                      name="email"
-                      value={formData.email}
-                      onChange={handleInputChange}
-                      className={`w-full p-3 bg-gray-800 text-white border rounded-lg focus:outline-none ${
-                        errors.email ? 'border-red-500' : 'border-gray-600 focus:border-yellow-400'
-                      }`}
-                      placeholder="Nhập email"
-                    />
-                    {errors.email && <p className="text-red-400 text-sm mt-1">{errors.email}</p>}
-                  </div>
-
-                  <div>
-                    <label className="block text-white font-semibold mb-2">
-                      Số điện thoại *
-                    </label>
-                    <input
-                      type="tel"
-                      name="phone"
-                      value={formData.phone}
-                      onChange={handleInputChange}
-                      className={`w-full p-3 bg-gray-800 text-white border rounded-lg focus:outline-none ${
-                        errors.phone ? 'border-red-500' : 'border-gray-600 focus:border-yellow-400'
-                      }`}
-                      placeholder="Nhập số điện thoại"
-                    />
-                    {errors.phone && <p className="text-red-400 text-sm mt-1">{errors.phone}</p>}
-                  </div>
-                </div>
-              </div>
-
-              {/* Bảo mật */}
-              <div>
-                <h3 className="text-2xl font-bold text-yellow-400 mb-6">Bảo mật</h3>
-                <div className="grid md:grid-cols-2 gap-6">
-                  <div>
-                    <label className="block text-white font-semibold mb-2">
-                      Câu hỏi bảo mật *
-                    </label>
-                    <select
-                      name="securityQuestion"
-                      value={formData.securityQuestion}
-                      onChange={handleInputChange}
-                      className={`w-full p-3 bg-gray-800 text-white border rounded-lg focus:outline-none ${
-                        errors.securityQuestion ? 'border-red-500' : 'border-gray-600 focus:border-yellow-400'
-                      }`}
-                    >
-                      <option value="">Chọn câu hỏi bảo mật</option>
-                      <option value="pet">Tên thú cưng đầu tiên của bạn?</option>
-                      <option value="school">Tên trường tiểu học của bạn?</option>
-                      <option value="city">Thành phố bạn sinh ra?</option>
-                      <option value="food">Món ăn yêu thích của bạn?</option>
-                    </select>
-                    {errors.securityQuestion && <p className="text-red-400 text-sm mt-1">{errors.securityQuestion}</p>}
-                  </div>
-
-                  <div>
-                    <label className="block text-white font-semibold mb-2">
-                      Câu trả lời *
-                    </label>
-                    <input
-                      type="text"
-                      name="securityAnswer"
-                      value={formData.securityAnswer}
-                      onChange={handleInputChange}
-                      className={`w-full p-3 bg-gray-800 text-white border rounded-lg focus:outline-none ${
-                        errors.securityAnswer ? 'border-red-500' : 'border-gray-600 focus:border-yellow-400'
-                      }`}
-                      placeholder="Nhập câu trả lời"
-                    />
-                    {errors.securityAnswer && <p className="text-red-400 text-sm mt-1">{errors.securityAnswer}</p>}
-                  </div>
-                </div>
-              </div>
-
-              {/* CAPTCHA */}
-              <div>
-                <h3 className="text-2xl font-bold text-yellow-400 mb-6">Xác thực bảo mật</h3>
-                <SimpleCaptcha onVerify={setCaptchaValid} />
-              </div>
-
-              {/* Submit Button */}
-              <div className="text-center">
-                <button
-                  type="submit"
-                  disabled={!captchaValid || isLoading}
-                  className={`font-bold py-4 px-8 rounded-lg transition-all text-lg flex items-center justify-center gap-3 ${
-                    captchaValid && !isLoading
-                      ? 'bg-gradient-to-r from-yellow-500 to-red-500 text-white hover:from-yellow-600 hover:to-red-600' 
-                      : 'bg-gray-500 text-gray-300 cursor-not-allowed'
-                  }`}
-                >
-                  {isLoading ? (
-                    <>
-                      <div className="loading-dots">
-                        <span></span>
-                        <span></span>
-                        <span></span>
+            <AnimatedSection direction="up" delay={0.1}>
+              <div className="relative">
+                <div className="absolute inset-0 mu-modal-border-glow rounded-lg"></div>
+                <div className="relative bg-gradient-to-b from-gray-900 via-black to-gray-900 border-2 border-yellow-500/60 mu-modal-container rounded-lg p-8">
+                  {/* Corner decorations */}
+                  <div className="absolute top-0 left-0 w-6 h-6 border-t-2 border-l-2 border-yellow-500/60"></div>
+                  <div className="absolute top-0 right-0 w-6 h-6 border-t-2 border-r-2 border-yellow-500/60"></div>
+                  <div className="absolute bottom-0 left-0 w-6 h-6 border-b-2 border-l-2 border-yellow-500/60"></div>
+                  <div className="absolute bottom-0 right-0 w-6 h-6 border-b-2 border-r-2 border-yellow-500/60"></div>
+                  
+                  <form onSubmit={handleSubmit} className="space-y-6">
+                  {/* Thông tin tài khoản */}
+                  <AnimatedSection direction="up" delay={0.2}>
+                    <div>
+                      <h3 className="text-2xl font-bold text-yellow-400 mb-6 mu-text-glow" style={{ fontFamily: 'Arial, sans-serif' }}>Thông tin tài khoản</h3>
+                      <div className="grid md:grid-cols-2 gap-6">
+                        {[
+                          { name: 'username', label: 'Tên đăng nhập *', type: 'text', placeholder: 'Nhập tên đăng nhập' },
+                          { name: 'password', label: 'Mật khẩu *', type: 'password', placeholder: 'Nhập mật khẩu' },
+                          { name: 'confirmPassword', label: 'Xác nhận mật khẩu *', type: 'password', placeholder: 'Nhập lại mật khẩu' },
+                          { name: 'characterName', label: 'Tên nhân vật *', type: 'text', placeholder: 'Nhập tên nhân vật' }
+                        ].map((field, idx) => (
+                          <motion.div
+                            key={field.name}
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: 0.2 + idx * 0.05 }}
+                          >
+                            <label className="block text-yellow-400 font-semibold mb-2" style={{ fontFamily: 'Arial, sans-serif' }}>
+                              {field.label}
+                            </label>
+                            <div className="relative">
+                              <input
+                                type={field.type}
+                                name={field.name}
+                                value={formData[field.name as keyof typeof formData]}
+                                onChange={handleInputChange}
+                                className={`w-full p-3 bg-black/40 text-white border rounded-lg focus:outline-none transition-all ${
+                                  errors[field.name] ? 'border-red-500/60' : 'border-yellow-500/30 focus:border-yellow-400/60'
+                                }`}
+                                placeholder={field.placeholder}
+                                style={{ fontFamily: 'Arial, sans-serif' }}
+                              />
+                              {errors[field.name] && (
+                                <motion.p 
+                                  className="text-red-400 text-sm mt-1"
+                                  initial={{ opacity: 0 }}
+                                  animate={{ opacity: 1 }}
+                                  style={{ fontFamily: 'Arial, sans-serif' }}
+                                >
+                                  {errors[field.name]}
+                                </motion.p>
+                              )}
+                            </div>
+                          </motion.div>
+                        ))}
                       </div>
-                      ĐANG XỬ LÝ...
-                    </>
-                  ) : captchaValid ? (
-                    'TẠO TÀI KHOẢN'
-                  ) : (
-                    'VUI LÒNG XÁC THỰC CAPTCHA'
-                  )}
-                </button>
-              </div>
+                    </div>
+                  </AnimatedSection>
 
-              {/* Login Link */}
-              <div className="text-center text-white">
-                <p>
-                  Đã có tài khoản?{' '}
-                  <Link href="/login" className="text-yellow-400 hover:text-yellow-300">
-                    Đăng nhập ngay
-                  </Link>
-                </p>
+                  {/* Thông tin cá nhân */}
+                  <AnimatedSection direction="up" delay={0.3}>
+                    <div>
+                      <h3 className="text-2xl font-bold text-yellow-400 mb-6 mu-text-glow" style={{ fontFamily: 'Arial, sans-serif' }}>Thông tin cá nhân</h3>
+                      <div className="grid md:grid-cols-2 gap-6">
+                        {[
+                          { name: 'email', label: 'Email *', type: 'email', placeholder: 'Nhập email' },
+                          { name: 'phone', label: 'Số điện thoại *', type: 'tel', placeholder: 'Nhập số điện thoại' }
+                        ].map((field, idx) => (
+                          <motion.div
+                            key={field.name}
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: 0.3 + idx * 0.05 }}
+                          >
+                            <label className="block text-yellow-400 font-semibold mb-2" style={{ fontFamily: 'Arial, sans-serif' }}>
+                              {field.label}
+                            </label>
+                            <input
+                              type={field.type}
+                              name={field.name}
+                              value={formData[field.name as keyof typeof formData]}
+                              onChange={handleInputChange}
+                              className={`w-full p-3 bg-black/40 text-white border rounded-lg focus:outline-none transition-all ${
+                                errors[field.name] ? 'border-red-500/60' : 'border-yellow-500/30 focus:border-yellow-400/60'
+                              }`}
+                              placeholder={field.placeholder}
+                              style={{ fontFamily: 'Arial, sans-serif' }}
+                            />
+                            {errors[field.name] && (
+                              <motion.p 
+                                className="text-red-400 text-sm mt-1"
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1 }}
+                                style={{ fontFamily: 'Arial, sans-serif' }}
+                              >
+                                {errors[field.name]}
+                              </motion.p>
+                            )}
+                          </motion.div>
+                        ))}
+                      </div>
+                    </div>
+                  </AnimatedSection>
+
+                  {/* Bảo mật */}
+                  <AnimatedSection direction="up" delay={0.4}>
+                    <div>
+                      <h3 className="text-2xl font-bold text-yellow-400 mb-6 mu-text-glow" style={{ fontFamily: 'Arial, sans-serif' }}>Bảo mật</h3>
+                      <div className="grid md:grid-cols-2 gap-6">
+                        <motion.div
+                          initial={{ opacity: 0, y: 20 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ delay: 0.4 }}
+                        >
+                          <label className="block text-yellow-400 font-semibold mb-2" style={{ fontFamily: 'Arial, sans-serif' }}>
+                            Câu hỏi bảo mật *
+                          </label>
+                          <select
+                            name="securityQuestion"
+                            value={formData.securityQuestion}
+                            onChange={handleInputChange}
+                            className={`w-full p-3 bg-black/40 text-white border rounded-lg focus:outline-none transition-all ${
+                              errors.securityQuestion ? 'border-red-500/60' : 'border-yellow-500/30 focus:border-yellow-400/60'
+                            }`}
+                            style={{ fontFamily: 'Arial, sans-serif' }}
+                          >
+                            <option value="">Chọn câu hỏi bảo mật</option>
+                            <option value="pet">Tên thú cưng đầu tiên của bạn?</option>
+                            <option value="school">Tên trường tiểu học của bạn?</option>
+                            <option value="city">Thành phố bạn sinh ra?</option>
+                            <option value="food">Món ăn yêu thích của bạn?</option>
+                          </select>
+                          {errors.securityQuestion && (
+                            <motion.p 
+                              className="text-red-400 text-sm mt-1"
+                              initial={{ opacity: 0 }}
+                              animate={{ opacity: 1 }}
+                              style={{ fontFamily: 'Arial, sans-serif' }}
+                            >
+                              {errors.securityQuestion}
+                            </motion.p>
+                          )}
+                        </motion.div>
+
+                        <motion.div
+                          initial={{ opacity: 0, y: 20 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ delay: 0.45 }}
+                        >
+                          <label className="block text-yellow-400 font-semibold mb-2" style={{ fontFamily: 'Arial, sans-serif' }}>
+                            Câu trả lời *
+                          </label>
+                          <input
+                            type="text"
+                            name="securityAnswer"
+                            value={formData.securityAnswer}
+                            onChange={handleInputChange}
+                            className={`w-full p-3 bg-black/40 text-white border rounded-lg focus:outline-none transition-all ${
+                              errors.securityAnswer ? 'border-red-500/60' : 'border-yellow-500/30 focus:border-yellow-400/60'
+                            }`}
+                            placeholder="Nhập câu trả lời"
+                            style={{ fontFamily: 'Arial, sans-serif' }}
+                          />
+                          {errors.securityAnswer && (
+                            <motion.p 
+                              className="text-red-400 text-sm mt-1"
+                              initial={{ opacity: 0 }}
+                              animate={{ opacity: 1 }}
+                              style={{ fontFamily: 'Arial, sans-serif' }}
+                            >
+                              {errors.securityAnswer}
+                            </motion.p>
+                          )}
+                        </motion.div>
+                      </div>
+                    </div>
+                  </AnimatedSection>
+
+                  {/* CAPTCHA */}
+                  <AnimatedSection direction="up" delay={0.5}>
+                    <div>
+                      <h3 className="text-2xl font-bold text-yellow-400 mb-6 mu-text-glow" style={{ fontFamily: 'Arial, sans-serif' }}>Xác thực bảo mật</h3>
+                      <SimpleCaptcha onVerify={setCaptchaValid} />
+                    </div>
+                  </AnimatedSection>
+
+                  {/* Submit Button */}
+                  <AnimatedSection direction="up" delay={0.6}>
+                    <div className="text-center">
+                      <motion.button
+                        type="submit"
+                        disabled={!captchaValid || isLoading}
+                        className={`font-bold py-4 px-8 rounded-lg transition-all text-lg flex items-center justify-center gap-3 mx-auto ${
+                          captchaValid && !isLoading
+                            ? 'bg-gradient-to-r from-yellow-600/30 to-orange-600/30 border border-yellow-500/60 text-yellow-300 mu-button-glow' 
+                            : 'bg-gray-500/30 text-gray-300 cursor-not-allowed border border-gray-500/30'
+                        }`}
+                        style={{ fontFamily: 'Arial, sans-serif' }}
+                        whileHover={captchaValid && !isLoading ? { scale: 1.05 } : {}}
+                        whileTap={captchaValid && !isLoading ? { scale: 0.95 } : {}}
+                      >
+                        {isLoading ? (
+                          <>
+                            <div className="loading-dots">
+                              <span></span>
+                              <span></span>
+                              <span></span>
+                            </div>
+                            ĐANG XỬ LÝ...
+                          </>
+                        ) : captchaValid ? (
+                          'TẠO TÀI KHOẢN'
+                        ) : (
+                          'VUI LÒNG XÁC THỰC CAPTCHA'
+                        )}
+                      </motion.button>
+                    </div>
+                  </AnimatedSection>
+
+                  {/* Login Link */}
+                  <AnimatedSection direction="up" delay={0.7}>
+                    <div className="text-center text-white">
+                      <p style={{ fontFamily: 'Arial, sans-serif' }}>
+                        Đã có tài khoản?{' '}
+                        <Link href="/login" className="text-yellow-400 hover:text-yellow-300 font-semibold transition-colors">
+                          Đăng nhập ngay
+                        </Link>
+                      </p>
+                    </div>
+                  </AnimatedSection>
+                  </form>
+                </div>
               </div>
-              </form>
-            </div>
+            </AnimatedSection>
           )}
         </div>
       </main>

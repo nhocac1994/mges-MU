@@ -25,14 +25,22 @@ export function useNotifications() {
 
   useEffect(() => {
     // Kiểm tra xem browser có hỗ trợ notifications không
-    if ('Notification' in window) {
+    if (typeof window !== 'undefined' && 'Notification' in window) {
       setIsSupported(true);
-      updatePermissionStatus();
+      // Cập nhật permission status ngay lập tức
+      const currentPermission = Notification.permission;
+      setPermission({
+        granted: currentPermission === 'granted',
+        denied: currentPermission === 'denied',
+        default: currentPermission === 'default'
+      });
     }
   }, []);
 
   const updatePermissionStatus = useCallback(() => {
-    if (!isSupported) return;
+    if (typeof window === 'undefined' || !('Notification' in window)) {
+      return;
+    }
 
     const currentPermission = Notification.permission;
     setPermission({
@@ -40,7 +48,7 @@ export function useNotifications() {
       denied: currentPermission === 'denied',
       default: currentPermission === 'default'
     });
-  }, [isSupported]);
+  }, []);
 
   const requestPermission = useCallback(async (): Promise<boolean> => {
     if (!isSupported) {
@@ -89,7 +97,7 @@ export function useNotifications() {
     let title, body;
     
     if (eventName === 'Chào mừng!') {
-      title = '🎉 Chào mừng đến với MuDauTruongSS1.net!';
+      title = '🎉 Chào mừng đến với Mu Season 1!';
       body = 'Bạn sẽ nhận thông báo về các sự kiện quan trọng trong game!';
     } else if (isStarting) {
       title = '🎮 Sự kiện đã bắt đầu!';

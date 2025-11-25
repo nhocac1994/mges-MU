@@ -1,37 +1,26 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { connectToDatabase } from '@/lib/database';
 
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:55777';
+
+/**
+ * Proxy guild ranking request to C# backend
+ */
 export async function GET(request: NextRequest) {
   try {
-    const pool = await connectToDatabase();
-    
-    // Lấy top 50 guilds với xử lý dữ liệu null/0
-    const result = await pool.request().query(`
-      SELECT TOP 50 
-        G_Name as guildName,
-        ISNULL(G_Score, 0) as score,
-        ISNULL(G_Master, 'Unknown') as guildMaster,
-        ISNULL(G_Count, 0) as memberCount,
-        G_Mark as guildMark
-      FROM Guild 
-      WHERE G_Name IS NOT NULL 
-      AND G_Name != ''
-      ORDER BY ISNULL(G_Score, 0) DESC, G_Name ASC
-    `);
-    
-    await pool.close();
-    
-    return NextResponse.json({
-      success: true,
-      data: result.recordset,
-      message: 'Lấy danh sách guild ranking thành công!'
+    const response = await fetch(`${API_URL}/api/rankings/guild`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
     });
-    
+
+    const data = await response.json();
+    return NextResponse.json(data, { status: response.status });
   } catch (error) {
-    console.error('Guild ranking error:', error);
-    return NextResponse.json({
-      success: false,
-      message: 'Lỗi khi lấy danh sách guild ranking'
-    }, { status: 500 });
+    console.error('Guild ranking proxy error:', error);
+    return NextResponse.json(
+      { success: false, message: 'Lỗi kết nối đến server. Vui lòng thử lại sau.' },
+      { status: 500 }
+    );
   }
 }

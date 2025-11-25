@@ -1,7 +1,7 @@
 // Service Worker for Background Notifications
 // This file will handle notifications even when the app is closed
 
-const CACHE_NAME = 'mu-online-v1';
+const CACHE_NAME = 'mu-online-v2';
 const urlsToCache = [
   '/',
   '/rankings',
@@ -9,7 +9,7 @@ const urlsToCache = [
   '/login',
   '/register',
   '/icon.jpg',
-  '/Mu.PNG'
+  '/Panael-mu.JPEG'
 ];
 
 // Install event
@@ -64,67 +64,167 @@ self.addEventListener('sync', (event) => {
   }
 });
 
-// Push event for notifications
+// Push event for notifications - Nhận push messages từ server C#
 self.addEventListener('push', (event) => {
-  if (event.data) {
-    const data = event.data.json();
-    
-    const options = {
-      body: data.body,
-      icon: '/icon.jpg',
-      badge: '/icon.jpg',
-      tag: data.tag || 'mu-event',
-      requireInteraction: true,
-      actions: [
-        {
-          action: 'open',
-          title: 'Mở Game',
-          icon: '/icon.jpg'
-        },
-        {
-          action: 'close',
-          title: 'Đóng',
-          icon: '/icon.jpg'
-        }
-      ]
-    };
+  console.log('Push event received:', event);
+  
+  let notificationData = {
+    title: '🎮 Thông báo từ server',
+    body: 'Bạn có thông báo mới',
+    icon: '/icon.jpg',
+    badge: '/icon.jpg',
+    tag: 'server-notification',
+    url: '/',
+    requireInteraction: true,
+  };
 
-    event.waitUntil(
-      self.registration.showNotification(data.title, options)
-    );
+  if (event.data) {
+    try {
+      const data = event.data.json();
+      notificationData = {
+        title: data.title || notificationData.title,
+        body: data.body || data.message || notificationData.body,
+        icon: data.icon || notificationData.icon,
+        badge: data.badge || notificationData.badge,
+        tag: data.tag || notificationData.tag,
+        url: data.url || notificationData.url,
+        requireInteraction: data.requireInteraction !== false,
+      };
+    } catch (error) {
+      // Nếu không phải JSON, thử parse text
+      const text = event.data.text();
+      if (text) {
+        notificationData.body = text;
+      }
+    }
   }
+  
+  const options = {
+    body: notificationData.body,
+    icon: notificationData.icon,
+    badge: notificationData.badge,
+    tag: notificationData.tag,
+    requireInteraction: notificationData.requireInteraction,
+    data: {
+      url: notificationData.url,
+    },
+    actions: [
+      {
+        action: 'open',
+        title: 'Mở Game',
+        icon: '/icon.jpg'
+      }
+    ]
+  };
+
+  event.waitUntil(
+    self.registration.showNotification(notificationData.title, options)
+  );
 });
 
 // Notification click event
 self.addEventListener('notificationclick', (event) => {
   event.notification.close();
 
-  if (event.action === 'open') {
+  const urlToOpen = event.notification.data?.url || '/';
+
+  if (event.action === 'open' || !event.action) {
     event.waitUntil(
-      clients.openWindow('/')
+      clients.matchAll({ type: 'window', includeUncontrolled: true }).then((clientList) => {
+        // Tìm tab đã mở
+        for (let i = 0; i < clientList.length; i++) {
+          const client = clientList[i];
+          if (client.url === urlToOpen && 'focus' in client) {
+            return client.focus();
+          }
+        }
+        // Mở tab mới nếu chưa có
+        if (clients.openWindow) {
+          return clients.openWindow(urlToOpen);
+        }
+      })
     );
   }
 });
 
-// Background sync function
+// Background sync function - Check events và notifications
 async function doBackgroundSync() {
   try {
     // Check for upcoming events
-    const response = await fetch('/api/events/check');
-    const events = await response.json();
+    const eventResponse = await fetch('/api/events/check');
+    const eventResult = await eventResponse.json();
     
-    if (events.length > 0) {
-      // Send notification for upcoming events
-      self.registration.showNotification('🎮 Sự kiện sắp diễn ra!', {
-        body: `Có ${events.length} sự kiện sắp bắt đầu`,
-        icon: '/icon.jpg',
-        tag: 'upcoming-events',
-        requireInteraction: true
-      });
+    if (eventResult.success && eventResult.events) {
+      const events = eventResult.events;
+      
+      // Gửi thông báo cho từng sự kiện
+      for (const event of events) {
+        if (event.shouldNotify) {
+          await self.registration.showNotification(event.title || '🎮 Sự kiện sắp diễn ra!', {
+            body: event.message || event.description || 'Sự kiện game sắp bắt đầu!',
+            icon: '/icon.jpg',
+            badge: '/icon.jpg',
+            tag: `event-${event.id || Date.now()}`,
+            requireInteraction: event.requireInteraction !== false,
+            data: {
+              url: event.url || '/',
+              eventId: event.id
+            },
+            actions: [
+              {
+                action: 'open',
+                title: 'Xem chi tiết',
+                icon: '/icon.jpg'
+              }
+            ]
+          });
+        }
+      }
+    }
+
+    // Check for notifications từ notification.txt
+    const notifResponse = await fetch('/api/notifications/list');
+    const notifResult = await notifResponse.json();
+    
+    if (notifResult.success && notifResult.notifications) {
+      for (const notification of notifResult.notifications) {
+        if (notification.shouldSend) {
+          await self.registration.showNotification(notification.title, {
+            body: notification.message,
+            icon: '/icon.jpg',
+            badge: '/icon.jpg',
+            tag: `notification-${notification.id || Date.now()}`,
+            requireInteraction: true,
+            data: {
+              url: '/',
+              notificationId: notification.id
+            },
+            actions: [
+              {
+                action: 'open',
+                title: 'Xem',
+                icon: '/icon.jpg'
+              }
+            ]
+          });
+        }
+      }
     }
   } catch (error) {
     console.log('Background sync failed:', error);
   }
+}
+
+// Check events và notifications định kỳ (mỗi phút)
+// Chỉ chạy khi service worker active
+if (self.registration) {
+  // Check ngay khi service worker activate
+  doBackgroundSync();
+  
+  // Check định kỳ mỗi phút
+  setInterval(() => {
+    doBackgroundSync();
+  }, 60000); // 60 giây = 1 phút
 }
 
 // Periodic background sync (if supported)

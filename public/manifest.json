@@ -1,6 +1,6 @@
 {
-  "name": "MuDauTruongSS1.net - Mu Online Season 1",
-  "short_name": "MuTruyenKySS1",
+  "name": "MuTruyenKy.com - Mu Online Season 1",
+  "short_name": "MuTruyenKy",
   "description": "Server Mu Online Season 1 với tỷ lệ exp cao, drop rate tốt. Cộng đồng game thủ Việt Nam hàng đầu.",
   "start_url": "/",
   "display": "standalone",
@@ -36,9 +36,9 @@
   ],
   "screenshots": [
     {
-      "src": "/Mu.PNG",
+      "src": "/Panael-mu.JPEG",
       "sizes": "1280x720",
-      "type": "image/png",
+      "type": "image/jpeg",
       "form_factor": "wide"
     }
   ],
