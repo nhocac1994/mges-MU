@@ -4,11 +4,12 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:55777';
 
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { accountId: string } }
+  { params }: { params: Promise<{ accountId: string }> }
 ) {
   try {
     const adminAccountId = request.nextUrl.searchParams.get('accountId');
-    const targetAccountId = params.accountId;
+    const resolvedParams = await params;
+    const targetAccountId = resolvedParams.accountId;
     const body = await request.json();
     
     if (!adminAccountId) {

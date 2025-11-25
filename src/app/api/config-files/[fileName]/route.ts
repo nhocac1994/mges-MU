@@ -4,10 +4,11 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:55777';
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { fileName: string } }
+  { params }: { params: Promise<{ fileName: string }> }
 ) {
   try {
-    const fileName = params.fileName;
+    const resolvedParams = await params;
+    const fileName = resolvedParams.fileName;
     const accountId = request.nextUrl.searchParams.get('accountId');
 
     const url = new URL(`${API_URL}/api/config-files/${fileName}`);
@@ -35,10 +36,11 @@ export async function GET(
 
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { fileName: string } }
+  { params }: { params: Promise<{ fileName: string }> }
 ) {
   try {
-    const fileName = params.fileName;
+    const resolvedParams = await params;
+    const fileName = resolvedParams.fileName;
     const accountId = request.nextUrl.searchParams.get('accountId');
     const body = await request.json();
 
