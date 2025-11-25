@@ -63,7 +63,7 @@ export default function EventTimer({ events }: EventTimerProps) {
   }, [currentTime, events]);
 
   // Tính thời gian còn lại đến event tiếp theo
-  const getNextEventTime = () => {
+  const getNextEventTime = (): { hour: number; minute: number; diff: number } | null => {
     const now = currentTime;
     const currentHour = now.getHours();
     const currentMinute = now.getMinutes();
@@ -93,7 +93,7 @@ export default function EventTimer({ events }: EventTimerProps) {
     return nextTime;
   };
 
-  const nextEvent = getNextEventTime();
+  const nextEvent: { hour: number; minute: number; diff: number } | null = getNextEventTime();
   const hoursUntilNext = nextEvent ? Math.floor(nextEvent.diff / 60) : 0;
   const minutesUntilNext = nextEvent ? nextEvent.diff % 60 : 0;
 
