@@ -1,0 +1,1167 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Banner Sự Kiện - MU ĐẦU TRƯỜNG TÁI SINH MỘT HUYỀN THOẠI</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body, html {
+            width: 100%;
+            height: 100vh;
+            overflow: hidden;
+            background: #000;
+            font-family: 'Arial', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .banner-container {
+            position: relative;
+            width: 100%;
+            max-width: 1920px;
+            height: 100vh;
+            max-height: 600px;
+            background: #000;
+            overflow: hidden;
+            transform: translateZ(0);
+            will-change: contents;
+        }
+        
+        /* Background image với hiệu ứng lá cờ bay nhẹ */
+        .banner-background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 105%;
+            height: 105%;
+            background-image: url('./public/MU-PANAEL1.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            animation: flagWave 16s ease-in-out infinite;
+            transform-origin: center center;
+            z-index: 0;
+            will-change: transform, filter;
+        }
+        
+        @keyframes flagWave {
+            0%, 100% {
+                transform: translate(-2.5%, -2.5%) scale(1.01) 
+                    perspective(1500px) rotateY(0deg) 
+                    rotateX(0deg)
+                    skewY(0deg) translateZ(0);
+                filter: brightness(1) contrast(1);
+            }
+            25% {
+                transform: translate(-2.2%, -2.5%) scale(1.015) 
+                    perspective(1500px) rotateY(0.4deg) 
+                    rotateX(0.15deg)
+                    skewY(0.25deg) translateZ(0);
+                filter: brightness(1.02) contrast(1.01);
+            }
+            50% {
+                transform: translate(-2.5%, -2.5%) scale(1.01) 
+                    perspective(1500px) rotateY(0deg) 
+                    rotateX(0deg)
+                    skewY(0deg) translateZ(0);
+                filter: brightness(1) contrast(1);
+            }
+            75% {
+                transform: translate(-2.8%, -2.5%) scale(1.015) 
+                    perspective(1500px) rotateY(-0.4deg) 
+                    rotateX(-0.15deg)
+                    skewY(-0.25deg) translateZ(0);
+                filter: brightness(1.02) contrast(1.01);
+            }
+        }
+        
+        /* Wave effect overlay cho hiệu ứng sóng nhẹ */
+        .banner-background::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                90deg,
+                transparent 0%,
+                rgba(255, 255, 255, 0.015) 30%,
+                transparent 60%,
+                rgba(255, 255, 255, 0.015) 90%,
+                transparent 100%
+            );
+            animation: waveShine 12s linear infinite;
+            pointer-events: none;
+            opacity: 0.6;
+            will-change: transform;
+            backface-visibility: hidden;
+        }
+        
+        @keyframes waveShine {
+            0% {
+                transform: translateX(-100%) translateZ(0);
+            }
+            100% {
+                transform: translateX(100%) translateZ(0);
+            }
+        }
+        
+        /* Hiệu ứng shimmer nhẹ */
+        .banner-background::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                45deg,
+                transparent 30%,
+                rgba(255, 255, 255, 0.02) 50%,
+                transparent 70%
+            );
+            animation: shimmer 10s ease-in-out infinite;
+            pointer-events: none;
+            will-change: transform, opacity;
+            backface-visibility: hidden;
+        }
+        
+        @keyframes shimmer {
+            0%, 100% {
+                transform: translate(-100%, -100%) rotate(45deg) translateZ(0);
+                opacity: 0;
+            }
+            50% {
+                transform: translate(100%, 100%) rotate(45deg) translateZ(0);
+                opacity: 1;
+            }
+        }
+        
+        /* Canvas cho hiệu ứng nền */
+        #backgroundCanvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            opacity: 0.25; /* Giảm opacity để hiển thị background image rõ hơn */
+        }
+        
+        /* Container chính */
+        .banner-content {
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 20px 40px;
+        }
+        
+        /* Logo MU ĐẦU TRƯỜNG - Top Left */
+        .logo-section {
+            position: absolute;
+            top: 25px;
+            left: 40px;
+            z-index: 20;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .logo-text-wrapper {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .logo-text {
+            font-size: 42px;
+            font-weight: 900;
+            color: #fff;
+            text-shadow: 
+                2px 2px 4px rgba(0, 0, 0, 0.8),
+                0 0 20px rgba(255, 255, 255, 0.6);
+            margin-bottom: 2px;
+            line-height: 1;
+            letter-spacing: 2px;
+        }
+        
+        .logo-subtext {
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.9);
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+            font-weight: 600;
+            letter-spacing: 1px;
+        }
+        
+        .mu-icon {
+            width: 150px;
+            height: 150px;
+            object-fit: contain;
+            filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.4));
+            animation: iconFloat 4s ease-in-out infinite;
+            will-change: transform;
+            backface-visibility: hidden;
+            transform: translateZ(0);
+        }
+        
+        @keyframes iconFloat {
+            0%, 100% {
+                transform: translateY(0) translateZ(0);
+            }
+            50% {
+                transform: translateY(-10px) translateZ(0);
+            }
+        }
+        
+        /* Main Title Section - MuDauTruongSS1.net ở bên trái-center */
+        .main-title-section {
+            position: absolute;
+            left: 40px;
+            top: 50%;
+            transform: translateY(-50%) translateZ(0);
+            z-index: 15;
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+            max-width: 100%;
+            width: auto;
+            will-change: transform;
+            backface-visibility: hidden;
+        }
+        
+        .main-title {
+            font-size: 64px;
+            font-weight: 800;
+            color: #E8E8E8;
+            text-shadow: 
+                4px 4px 8px rgba(0, 0, 0, 0.9),
+                0 0 20px rgba(232, 232, 232, 0.6),
+                0 0 40px rgba(232, 232, 232, 0.4),
+                0 0 60px rgba(232, 232, 232, 0.3);
+            position: relative;
+            display: block;
+            line-height: 1.1;
+            letter-spacing: 3px;
+            white-space: nowrap;
+        }
+        
+        .title-char {
+            display: inline-block;
+            text-shadow: 
+                2px 2px 4px rgba(0, 0, 0, 0.9),
+                0 0 15px rgba(255, 255, 255, 0.5),
+                0 0 30px rgba(255, 255, 255, 0.3);
+            transition: transform 0.1s ease-out, filter 0.1s ease-out;
+            will-change: transform, filter;
+            backface-visibility: hidden;
+            transform: translateZ(0);
+        }
+        
+        @keyframes charZoom {
+            0%, 100% {
+                transform: scale(1) translateZ(0);
+            }
+            50% {
+                transform: scale(1.3) translateZ(0);
+            }
+        }
+        
+        @keyframes titleGlow {
+            0%, 100% {
+                text-shadow: 
+                    0 0 30px rgba(255, 215, 0, 0.8),
+                    0 0 60px rgba(255, 215, 0, 0.6),
+                    0 0 90px rgba(255, 215, 0, 0.4);
+            }
+            50% {
+                text-shadow: 
+                    0 0 50px rgba(255, 215, 0, 1),
+                    0 0 100px rgba(255, 215, 0, 0.8),
+                    0 0 150px rgba(255, 215, 0, 0.6);
+            }
+        }
+        
+        .subtitle {
+            font-size: 24px;
+            font-weight: 700;
+            color: #FFD700;
+            background: linear-gradient(135deg, rgba(0, 0, 0, 0.95), rgba(30, 20, 0, 0.95));
+            padding: 18px 32px;
+            border-radius: 8px;
+            text-shadow: 
+                2px 2px 4px rgba(0, 0, 0, 0.9),
+                0 0 15px rgba(255, 215, 0, 0.8),
+                0 0 30px rgba(255, 215, 0, 0.6),
+                0 0 45px rgba(255, 215, 0, 0.4);
+            display: block;
+            line-height: 1.5;
+            margin-top: 0;
+            border-left: 6px solid #FFD700;
+            border-top: 2px solid rgba(255, 215, 0, 0.6);
+            border-bottom: 2px solid rgba(255, 215, 0, 0.6);
+            border-right: 2px solid rgba(255, 215, 0, 0.3);
+            box-shadow: 
+                0 6px 25px rgba(0, 0, 0, 0.7),
+                0 0 20px rgba(255, 215, 0, 0.4),
+                inset 0 0 20px rgba(255, 215, 0, 0.1);
+            letter-spacing: 1.5px;
+            animation: subtitleGlow 4s ease-in-out infinite;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+            will-change: text-shadow, box-shadow;
+            backface-visibility: hidden;
+            transform: translateZ(0);
+        }
+        
+        .subtitle::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 215, 0, 0.3), transparent);
+            animation: shimmer 4s ease-in-out infinite;
+            will-change: transform;
+            backface-visibility: hidden;
+            transform: translateZ(0);
+            z-index: 0;
+            pointer-events: none;
+        }
+        
+        @keyframes subtitleGlow {
+            0%, 100% {
+                text-shadow: 
+                    2px 2px 4px rgba(0, 0, 0, 0.9),
+                    0 0 15px rgba(255, 215, 0, 0.8),
+                    0 0 30px rgba(255, 215, 0, 0.6),
+                    0 0 45px rgba(255, 215, 0, 0.4);
+                box-shadow: 
+                    0 6px 25px rgba(0, 0, 0, 0.7),
+                    0 0 20px rgba(255, 215, 0, 0.4),
+                    inset 0 0 20px rgba(255, 215, 0, 0.1);
+            }
+            50% {
+                text-shadow: 
+                    2px 2px 4px rgba(0, 0, 0, 0.9),
+                    0 0 25px rgba(255, 215, 0, 1),
+                    0 0 50px rgba(255, 215, 0, 0.8),
+                    0 0 75px rgba(255, 215, 0, 0.6);
+                box-shadow: 
+                    0 6px 25px rgba(0, 0, 0, 0.7),
+                    0 0 35px rgba(255, 215, 0, 0.7),
+                    inset 0 0 30px rgba(255, 215, 0, 0.2);
+            }
+        }
+        
+        @keyframes shimmer {
+            0% {
+                transform: translateX(-100%) translateZ(0);
+            }
+            100% {
+                transform: translateX(100%) translateZ(0);
+            }
+        }
+        
+        /* Event Info - Bottom Left */
+        .event-info {
+            position: absolute;
+            bottom: 50px;
+            left: 50px;
+            z-index: 15;
+        }
+        
+        .event-date {
+            background: linear-gradient(135deg, rgba(0, 0, 0, 0.9), rgba(20, 20, 20, 0.9));
+            padding: 14px 22px;
+            margin-bottom: 0;
+            border-left: 4px solid #FFD700;
+            color: #fff;
+            font-size: 16px;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.8);
+            font-weight: 600;
+            border-radius: 0 6px 6px 0;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+            letter-spacing: 0.5px;
+        }
+        
+        /* Prize Section - Center Right */
+        .prize-section {
+            position: absolute;
+            right: 60px;
+            top: 10%;
+            transform: translateY(-50%);
+            z-index: 15;
+            text-align: right;
+            max-width: 350px;
+        }
+        
+        .prize-title {
+            font-size: 34px;
+            font-weight: 800;
+            color: #FFD700;
+            text-shadow: 
+                2px 2px 4px rgba(0, 0, 0, 0.9),
+                0 0 20px rgba(255, 215, 0, 0.8),
+                0 0 35px rgba(255, 215, 0, 0.6);
+            margin-bottom: 18px;
+            line-height: 1.25;
+            letter-spacing: 1.5px;
+        }
+        
+        .phone-icon {
+            width: 80px;
+            height: 140px;
+            background: linear-gradient(135deg, #666, #333);
+            border-radius: 12px;
+            margin: 15px auto;
+            box-shadow: 
+                0 0 20px rgba(255, 215, 0, 0.5),
+                inset 0 0 15px rgba(0, 0, 0, 0.5);
+            position: relative;
+        }
+        
+        .phone-icon::before {
+            content: '';
+            position: absolute;
+            top: 8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80%;
+            height: 85%;
+            background: linear-gradient(135deg, #1a1a1a, #000);
+            border-radius: 8px;
+            border: 2px solid #333;
+        }
+        
+        /* Status - Far Right Vertical - CHÍNH THỨC KHAI MỞ */
+        .status-section {
+            position: absolute;
+            top: 2;
+            right: 30px;
+            transform: translateY(0);
+            z-index: 20;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 18px;
+        }
+        
+        .status-text {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .status-word {
+            font-size: 62px;
+            font-weight: 900;
+            color: #FF8C00;
+            text-shadow: 
+                4px 4px 8px rgba(0, 0, 0, 0.9),
+                0 0 20px rgba(255, 140, 0, 0.9),
+                0 0 40px rgba(255, 140, 0, 0.7),
+                0 0 60px rgba(255, 140, 0, 0.5),
+                0 0 100px rgba(255, 140, 0, 0.3);
+            line-height: 1.2;
+            letter-spacing: 4px;
+            animation: statusGlow 4s ease-in-out infinite;
+            filter: drop-shadow(0 0 20px rgba(255, 140, 0, 0.8));
+            display: block;
+            will-change: transform, text-shadow;
+            backface-visibility: hidden;
+            transform: translateZ(0);
+        }
+        
+        .status-word:nth-child(1) { animation-delay: 0s; }
+        .status-word:nth-child(2) { animation-delay: 0.2s; }
+        .status-word:nth-child(3) { animation-delay: 0.4s; }
+        .status-word:nth-child(4) { animation-delay: 0.6s; }
+        
+        @keyframes statusGlow {
+            0%, 100% {
+                text-shadow: 
+                    4px 4px 8px rgba(0, 0, 0, 0.9),
+                    0 0 20px rgba(255, 140, 0, 0.9),
+                    0 0 40px rgba(255, 140, 0, 0.7),
+                    0 0 60px rgba(255, 140, 0, 0.5),
+                    0 0 100px rgba(255, 140, 0, 0.3);
+                transform: scale(1) translateX(0) translateZ(0);
+            }
+            50% {
+                text-shadow: 
+                    4px 4px 8px rgba(0, 0, 0, 0.9),
+                    0 0 30px rgba(255, 140, 0, 1),
+                    0 0 60px rgba(255, 140, 0, 0.9),
+                    0 0 100px rgba(255, 140, 0, 0.7),
+                    0 0 150px rgba(255, 140, 0, 0.5);
+                transform: scale(1.08) translateX(-4px) translateZ(0);
+            }
+        }
+        
+        /* Mid-Center Prominent Text - HỖ TRỢ TÂN THỦ SET ĐỒ EX CỘNG 11 */
+        .mid-center-text-section {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 25;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        
+        .mid-center-text {
+            font-size: 42px;
+            font-weight: 900;
+            color: #FFD700;
+            text-shadow:
+                3px 3px 6px rgba(0, 0, 0, 0.9),
+                0 0 15px rgba(255, 215, 0, 0.8),
+                0 0 30px rgba(255, 215, 0, 0.6),
+                0 0 45px rgba(255, 215, 0, 0.4),
+                0 0 60px rgba(255, 215, 0, 0.3);
+            filter: drop-shadow(0 0 12px rgba(255, 215, 0, 0.8));
+            letter-spacing: 2px;
+            line-height: 1.2;
+            animation: midCenterGlow 4s ease-in-out infinite;
+            white-space: nowrap;
+            background: linear-gradient(135deg, rgba(0, 0, 0, 0.3), rgba(30, 20, 0, 0.3));
+            padding: 8px 20px;
+            border-radius: 6px;
+            border: 2px solid rgba(255, 215, 0, 0.5);
+            box-shadow: 
+                0 0 25px rgba(255, 215, 0, 0.4),
+                inset 0 0 15px rgba(255, 215, 0, 0.1);
+            transition: transform 0.3s ease;
+            will-change: text-shadow, box-shadow;
+            backface-visibility: hidden;
+            transform: translateZ(0);
+        }
+        
+        .mid-center-text:hover {
+            transform: scale(1.05);
+        }
+        
+        @keyframes midCenterGlow {
+            0%, 100% {
+                text-shadow:
+                    3px 3px 6px rgba(0, 0, 0, 0.9),
+                    0 0 15px rgba(255, 215, 0, 0.8),
+                    0 0 30px rgba(255, 215, 0, 0.6),
+                    0 0 45px rgba(255, 215, 0, 0.4),
+                    0 0 60px rgba(255, 215, 0, 0.3);
+                box-shadow: 
+                    0 0 25px rgba(255, 215, 0, 0.4),
+                    inset 0 0 15px rgba(255, 215, 0, 0.1);
+            }
+            50% {
+                text-shadow:
+                    3px 3px 6px rgba(0, 0, 0, 0.9),
+                    0 0 25px rgba(255, 215, 0, 1),
+                    0 0 50px rgba(255, 215, 0, 0.9),
+                    0 0 75px rgba(255, 215, 0, 0.7),
+                    0 0 100px rgba(255, 215, 0, 0.5);
+                box-shadow: 
+                    0 0 40px rgba(255, 215, 0, 0.7),
+                    inset 0 0 25px rgba(255, 215, 0, 0.2);
+            }
+        }
+        
+        /* Download Section - Bottom Right */
+        .download-section {
+            position: absolute;
+            bottom: 50px;
+            right: 50px;
+            z-index: 15;
+            text-align: right;
+        }
+        
+        .download-logo {
+            font-size: 18px;
+            font-weight: bold;
+            color: #fff;
+            margin-bottom: 6px;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.6);
+        }
+        
+        .website-url {
+            font-size: 22px;
+            color: rgba(255, 255, 255, 0.9);
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.6);
+        }
+        
+        /* Character Placeholders - Left and Right */
+        /* Character backgrounds - Ẩn đi vì đã có background image panael-mu1.jpg */
+        .character-left, .character-right {
+            display: none;
+        }
+        
+        /* Particles overlay */
+        #particlesCanvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 8;
+            pointer-events: none;
+            opacity: 0.4; /* Giảm opacity để không che quá nhiều background */
+        }
+        
+        /* Glow effects */
+        .glow-effect {
+            position: absolute;
+            width: 600px;
+            height: 600px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(255, 215, 0, 0.3), transparent);
+            filter: blur(60px);
+            animation: glowPulse 4s ease-in-out infinite;
+            z-index: 2;
+            will-change: transform, opacity;
+            backface-visibility: hidden;
+            transform: translateZ(0);
+        }
+        
+        .glow-effect-1 {
+            top: 20%;
+            left: 20%;
+        }
+        
+        .glow-effect-2 {
+            bottom: 20%;
+            right: 20%;
+        }
+        
+        @keyframes glowPulse {
+            0%, 100% {
+                transform: scale(1) translateZ(0);
+                opacity: 0.5;
+            }
+            50% {
+                transform: scale(1.2) translateZ(0);
+                opacity: 0.8;
+            }
+        }
+        
+        /* Download GIF Button */
+        .download-gif-btn {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            padding: 12px 24px;
+            background: linear-gradient(135deg, #FFD700, #FFA500);
+            color: #000;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 
+                0 4px 15px rgba(255, 215, 0, 0.4),
+                0 0 20px rgba(255, 215, 0, 0.3);
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .download-gif-btn:hover {
+            transform: scale(1.05) translateZ(0);
+            box-shadow: 
+                0 6px 20px rgba(255, 215, 0, 0.6),
+                0 0 30px rgba(255, 215, 0, 0.5);
+        }
+        
+        .download-gif-btn:active {
+            transform: scale(0.98) translateZ(0);
+        }
+        
+        .download-gif-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: scale(1) translateZ(0);
+        }
+    </style>
+</head>
+<body>
+    <div class="banner-container">
+        <!-- Background image với hiệu ứng lá cờ bay -->
+        <div class="banner-background"></div>
+        
+        <!-- Canvas cho hiệu ứng nền -->
+        <canvas id="backgroundCanvas"></canvas>
+        
+        <!-- Glow effects -->
+        <div class="glow-effect glow-effect-1"></div>
+        <div class="glow-effect glow-effect-2"></div>
+        
+        <!-- Particles -->
+        <canvas id="particlesCanvas"></canvas>
+        
+        <!-- Character backgrounds -->
+        <div class="character-left"></div>
+        <div class="character-right"></div>
+        
+        <!-- Banner Content -->
+        <div class="banner-content">
+            <!-- Logo MU ĐẦU TRƯỜNG - Top Left -->
+            <div class="logo-section">
+                <img src="./public/Mu.PNG" alt="Mu Icon" class="mu-icon" onerror="this.style.display='none'">
+            </div>
+            
+            <!-- Main Title - MuDauTruongSS1.net ở bên trái-center -->
+            <div class="main-title-section">
+                <div class="main-title" id="mainTitle"></div>
+                <div class="subtitle">SEASON 1 - HÀNH TRÌNH HUYỀN THOẠI BẮT ĐẦU</div>
+            </div>
+            
+            <!-- Event Info - Bottom Left -->
+            <div class="event-info">
+                <div class="event-date">MỞ 13:00 - 10.10.2025</div>
+            </div>
+            
+            <!-- Status - Far Right Vertical - CHÍNH THỨC KHAI MỞ -->
+            <div class="status-section">
+                <div class="status-text">
+                    <span class="status-word">CHÍNH</span>
+                    <span class="status-word">THỨC</span>
+                    <span class="status-word">KHAI</span>
+                    <span class="status-word">MỞ</span>
+                </div>
+            </div>
+            
+            <!-- Mid-Center Prominent Text - HỖ TRỢ TÂN THỦ SET ĐỒ EX CỘNG 11 -->
+            <div class="mid-center-text-section">
+                <div class="mid-center-text">HỖ TRỢ TÂN THỦ</div>
+                <div class="mid-center-text">SET ĐỒ EX CỘNG 11</div>
+            </div>
+            
+            <!-- Download Section - Bottom Right -->
+            <div class="download-section">
+                <div class="download-logo">ĐẦU TRƯỜNG</div>
+                <div class="website-url">MuDauTruongSS1.net</div>
+            </div>
+            
+            <!-- Download GIF Button -->
+           
+        </div>
+    </div>
+    
+    <!-- Load GIF.js Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gif.js/0.2.0/gif.js"></script>
+    
+    <script>
+        // GIF.js Loading và Worker Script
+        let gifJsLoaded = false;
+        let workerScriptUrl = null;
+        let isRecording = false;
+        
+        // Kiểm tra và load GIF.js
+        function checkGifJsLoaded() {
+            if (typeof GIF !== 'undefined') {
+                gifJsLoaded = true;
+                console.log('GIF.js đã được tải thành công');
+                
+                // Thử load worker script
+                fetch('https://cdnjs.cloudflare.com/ajax/libs/gif.js/0.2.0/gif.worker.js')
+                    .then(response => response.text())
+                    .then(workerCode => {
+                        const blob = new Blob([workerCode], { type: 'application/javascript' });
+                        workerScriptUrl = URL.createObjectURL(blob);
+                        console.log('Worker script đã được tải thành công');
+                    })
+                    .catch(error => {
+                        console.warn('Không thể tải worker script, sẽ dùng chế độ không workers:', error);
+                    });
+            } else {
+                setTimeout(checkGifJsLoaded, 100);
+            }
+        }
+        
+        // Bắt đầu kiểm tra sau khi DOM load
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', checkGifJsLoaded);
+        } else {
+            checkGifJsLoaded();
+        }
+        
+        // Tối ưu Animation System - Hỗ trợ FPS cao
+        let lastFrameTime = performance.now();
+        let animationTime = 0;
+        const targetFPS = 120;
+        const frameInterval = 1000 / targetFPS;
+        let lastUpdateTime = 0;
+        
+        // Unified animation loop
+        function animationLoop(currentTime) {
+            const deltaTime = currentTime - lastFrameTime;
+            lastFrameTime = currentTime;
+            
+            // Chỉ update khi đủ thời gian cho target FPS
+            if (currentTime - lastUpdateTime >= frameInterval) {
+                animationTime += deltaTime;
+                lastUpdateTime = currentTime;
+                
+                // Update all animations
+                updateBackgroundAnimation(animationTime);
+                updateParticlesAnimation(animationTime);
+                updateTitleAnimation(animationTime);
+            }
+            
+            requestAnimationFrame(animationLoop);
+        }
+        
+        // Background Canvas - Hiệu ứng lửa và glow
+        const bgCanvas = document.getElementById('backgroundCanvas');
+        const bgCtx = bgCanvas.getContext('2d', { alpha: false, desynchronized: true });
+        
+        function resizeCanvas() {
+            bgCanvas.width = bgCanvas.offsetWidth;
+            bgCanvas.height = bgCanvas.offsetHeight;
+        }
+        resizeCanvas();
+        window.addEventListener('resize', resizeCanvas);
+        
+        let bgTime = 0;
+        let centerX = bgCanvas.width / 2;
+        let centerY = bgCanvas.height / 2;
+        
+        function updateBackgroundAnimation(time) {
+            bgTime = time;
+            centerX = bgCanvas.width / 2;
+            centerY = bgCanvas.height / 2;
+            
+            bgCtx.clearRect(0, 0, bgCanvas.width, bgCanvas.height);
+            
+            // Vẽ gradient nền lửa - tối ưu hơn
+            const sinTime = Math.sin(time * 0.001);
+            const cosTime = Math.cos(time * 0.001);
+            const gradient1 = bgCtx.createRadialGradient(
+                centerX + sinTime * 100,
+                centerY + cosTime * 100,
+                0,
+                centerX,
+                centerY,
+                bgCanvas.width * 0.8
+            );
+            
+            gradient1.addColorStop(0, 'rgba(255, 100, 0, 0.3)');
+            gradient1.addColorStop(0.3, 'rgba(255, 50, 0, 0.2)');
+            gradient1.addColorStop(0.6, 'rgba(139, 0, 0, 0.1)');
+            gradient1.addColorStop(1, 'rgba(0, 0, 0, 0)');
+            
+            bgCtx.fillStyle = gradient1;
+            bgCtx.fillRect(0, 0, bgCanvas.width, bgCanvas.height);
+            
+            // Vẽ các tia sáng - tối ưu
+            const angleBase = time * 0.002;
+            bgCtx.lineWidth = 3;
+            for (let i = 0; i < 8; i++) {
+                const angle = angleBase + (i * Math.PI / 4);
+                const cosA = Math.cos(angle);
+                const sinA = Math.sin(angle);
+                const x2 = centerX + cosA * bgCanvas.width;
+                const y2 = centerY + sinA * bgCanvas.height;
+                
+                const gradient2 = bgCtx.createLinearGradient(centerX, centerY, x2, y2);
+                gradient2.addColorStop(0, 'rgba(255, 215, 0, 0.3)');
+                gradient2.addColorStop(0.5, 'rgba(255, 100, 0, 0.2)');
+                gradient2.addColorStop(1, 'rgba(0, 0, 0, 0)');
+                
+                bgCtx.strokeStyle = gradient2;
+                bgCtx.beginPath();
+                bgCtx.moveTo(centerX, centerY);
+                bgCtx.lineTo(x2, y2);
+                bgCtx.stroke();
+            }
+            
+            // Vẽ các vòng tròn glow - tối ưu
+            for (let i = 0; i < 3; i++) {
+                const radius = 200 + Math.sin(time * 0.003 + i) * 50;
+                const x = centerX + Math.sin(time * 0.0008 + i * 2) * 200;
+                const y = centerY + Math.cos(time * 0.0008 + i * 2) * 200;
+                
+                const gradient3 = bgCtx.createRadialGradient(x, y, 0, x, y, radius);
+                const opacity = 0.4 + Math.sin(time * 0.005 + i) * 0.2;
+                gradient3.addColorStop(0, `rgba(255, 215, 0, ${opacity})`);
+                gradient3.addColorStop(1, 'rgba(255, 215, 0, 0)');
+                
+                bgCtx.fillStyle = gradient3;
+                bgCtx.beginPath();
+                bgCtx.arc(x, y, radius, 0, Math.PI * 2);
+                bgCtx.fill();
+            }
+        }
+        
+        // Particles Canvas - Tối ưu
+        const particlesCanvas = document.getElementById('particlesCanvas');
+        const particlesCtx = particlesCanvas.getContext('2d', { alpha: true });
+        
+        function resizeParticlesCanvas() {
+            particlesCanvas.width = particlesCanvas.offsetWidth;
+            particlesCanvas.height = particlesCanvas.offsetHeight;
+        }
+        resizeParticlesCanvas();
+        window.addEventListener('resize', resizeParticlesCanvas);
+        
+        const particles = [];
+        const particleCount = 60; // Giảm số lượng để tối ưu
+        
+        // Tạo particles
+        const colors = ['#FFD700', '#FF6600', '#FF0000', '#FFA500'];
+        for (let i = 0; i < particleCount; i++) {
+            particles.push({
+                x: Math.random() * particlesCanvas.width,
+                y: Math.random() * particlesCanvas.height,
+                vx: (Math.random() - 0.5) * 0.3,
+                vy: (Math.random() - 0.5) * 0.3,
+                size: Math.random() * 4 + 2,
+                opacity: Math.random() * 0.5 + 0.3,
+                color: colors[Math.floor(Math.random() * colors.length)]
+            });
+        }
+        
+        function updateParticlesAnimation(time) {
+            particlesCtx.clearRect(0, 0, particlesCanvas.width, particlesCanvas.height);
+            
+            // Batch rendering để tối ưu
+            particlesCtx.shadowBlur = 20;
+            particles.forEach((particle) => {
+                particle.x += particle.vx;
+                particle.y += particle.vy;
+                
+                if (particle.x < 0 || particle.x > particlesCanvas.width) particle.vx *= -1;
+                if (particle.y < 0 || particle.y > particlesCanvas.height) particle.vy *= -1;
+                
+                particlesCtx.beginPath();
+                particlesCtx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
+                particlesCtx.fillStyle = particle.color;
+                particlesCtx.globalAlpha = particle.opacity;
+                particlesCtx.shadowColor = particle.color;
+                particlesCtx.fill();
+            });
+            particlesCtx.shadowBlur = 0;
+            particlesCtx.globalAlpha = 1;
+        }
+        
+        // Hiệu ứng phóng to từng chữ cho MuDauTruongSS1.net - Tối ưu
+        const mainTitle = document.getElementById('mainTitle');
+        const titleText = 'MuDauTruongSS1.net';
+        const cycleDuration = 3000; // 3 giây
+        const waveSpeed = 0.1;
+        const waveLength = 2.2;
+        const maxPhase = (titleText.length + waveLength) / waveSpeed;
+        
+        // Pre-create character elements để tối ưu
+        const charElements = [];
+        for (let i = 0; i < titleText.length; i++) {
+            const span = document.createElement('span');
+            span.className = 'title-char';
+            span.textContent = titleText[i];
+            charElements.push(span);
+        }
+        mainTitle.append(...charElements);
+        
+        function updateTitleAnimation(time) {
+            const progress = (time % cycleDuration) / cycleDuration;
+            const phase = progress * maxPhase;
+            
+            for (let i = 0; i < titleText.length; i++) {
+                const wavePosition = (phase * waveSpeed) - i;
+                let scale = 1.0;
+                
+                if (wavePosition >= 0 && wavePosition < waveLength) {
+                    const waveProgress = wavePosition / waveLength;
+                    scale = 1.0 + (Math.sin(waveProgress * Math.PI) * 0.6);
+                }
+                
+                const glowIntensity = scale > 1.0 ? scale : 1.0;
+                const charEl = charElements[i];
+                charEl.style.transform = `scale(${scale})`;
+                charEl.style.filter = `drop-shadow(0 0 ${8 * glowIntensity}px rgba(255, 255, 255, ${0.6 * glowIntensity}))`;
+            }
+        }
+        
+        // Khởi động unified animation loop
+        requestAnimationFrame(animationLoop);
+        
+        // Chức năng tải xuống GIF
+        document.getElementById('downloadGifBtn').addEventListener('click', async () => {
+            const btn = document.getElementById('downloadGifBtn');
+            
+            if (!gifJsLoaded || typeof GIF === 'undefined') {
+                alert('Thư viện GIF.js đang được tải. Vui lòng đợi và thử lại sau vài giây.');
+                return;
+            }
+            
+            if (isRecording) {
+                alert('Đang tạo GIF, vui lòng đợi...');
+                return;
+            }
+            
+            isRecording = true;
+            btn.disabled = true;
+            btn.textContent = 'Đang tạo GIF...';
+            
+            try {
+                // Load html2canvas nếu chưa có
+                if (!window.html2canvas) {
+                    const script = document.createElement('script');
+                    script.src = 'https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js';
+                    document.head.appendChild(script);
+                    await new Promise((resolve) => {
+                        script.onload = resolve;
+                        setTimeout(resolve, 2000); // Timeout sau 2 giây
+                    });
+                }
+                
+                if (!window.html2canvas) {
+                    throw new Error('Không thể tải html2canvas');
+                }
+                
+                const bannerContainer = document.querySelector('.banner-container');
+                const frames = [];
+                
+                // Cài đặt để GIF mượt và hiển thị đầy đủ hiệu ứng
+                const recordDuration = 8000; // 8 giây để capture đủ animation cycles
+                const fps = 15; // Giảm FPS xuống 15 để mượt hơn
+                const frameCount = Math.floor((recordDuration / 1000) * fps);
+                const frameDelay = 1000 / fps; // ~66ms delay giữa các frame
+                const gifFrameDelay = 66; // Delay cho GIF (ms) - mượt hơn
+                
+                // Đợi một chút để animations khởi động
+                await new Promise(resolve => setTimeout(resolve, 500));
+                
+                btn.textContent = 'Đang capture frames... 0%';
+                
+                // Capture frames với delay đủ để animations render
+                for (let i = 0; i < frameCount; i++) {
+                    // Tính toán thời gian animation để capture đúng thời điểm
+                    const currentTime = performance.now();
+                    const animationProgress = (i / frameCount) * recordDuration;
+                    
+                    // Đợi để animation render đúng frame
+                    await new Promise(resolve => setTimeout(resolve, frameDelay));
+                    
+                    // Đợi nhiều frame để đảm bảo CSS animations đã render
+                    for (let j = 0; j < 3; j++) {
+                        await new Promise(resolve => requestAnimationFrame(resolve));
+                    }
+                    
+                    // Tạo một snapshot của banner tại thời điểm này
+                    const canvas = await html2canvas(bannerContainer, {
+                        backgroundColor: '#000000',
+                        scale: 1,
+                        useCORS: true,
+                        logging: false,
+                        width: bannerContainer.offsetWidth,
+                        height: bannerContainer.offsetHeight,
+                        allowTaint: false,
+                        removeContainer: false,
+                        imageTimeout: 15000,
+                        foreignObjectRendering: false,
+                        // Sử dụng window để capture animations tốt hơn
+                        windowWidth: window.innerWidth,
+                        windowHeight: window.innerHeight,
+                        onclone: (clonedDoc, element) => {
+                            // Đảm bảo tất cả styles được giữ lại
+                            const clonedContainer = clonedDoc.querySelector('.banner-container');
+                            if (clonedContainer) {
+                                // Force reflow và repaint để trigger animations
+                                const styles = window.getComputedStyle(clonedContainer);
+                                clonedContainer.style.animationPlayState = 'running';
+                                
+                                // Trigger animation bằng cách force reflow
+                                void clonedContainer.offsetHeight;
+                                
+                                // Đảm bảo tất cả child elements có animations
+                                const animatedElements = clonedContainer.querySelectorAll('[class*="animation"], [style*="animation"]');
+                                animatedElements.forEach(el => {
+                                    el.style.animationPlayState = 'running';
+                                    void el.offsetHeight;
+                                });
+                            }
+                        }
+                    });
+                    
+                    frames.push(canvas);
+                    const progress = Math.round((i + 1) / frameCount * 100);
+                    btn.textContent = `Đang capture... ${progress}% (${i + 1}/${frameCount})`;
+                }
+                
+                // Tạo GIF với quality tốt hơn
+                const gifOptions = {
+                    quality: 20, // Tăng quality để hiển thị tốt hơn
+                    width: frames[0].width,
+                    height: frames[0].height,
+                    workers: 2,
+                    repeat: 0, // Lặp vô hạn
+                    background: '#000000',
+                    transparent: null
+                };
+                
+                if (workerScriptUrl) {
+                    gifOptions.workerScript = workerScriptUrl;
+                } else {
+                    gifOptions.workers = 0;
+                    console.warn('Sử dụng chế độ không workers');
+                }
+                
+                const gif = new GIF(gifOptions);
+                
+                // Thêm frames với delay phù hợp để mượt mà
+                frames.forEach((frame, index) => {
+                    // Delay 66ms cho mỗi frame (tương đương ~15fps - mượt mà)
+                    gif.addFrame(frame, { delay: gifFrameDelay });
+                });
+                
+                gif.on('finished', (blob) => {
+                    const url = URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = 'MuDauTruongSS1-Banner.gif';
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
+                    URL.revokeObjectURL(url);
+                    
+                    btn.disabled = false;
+                    //btn.textContent = '📥 Tải GIF';
+                    isRecording = false;
+                    alert('Đã tải về GIF thành công!');
+                });
+                
+                gif.on('progress', (p) => {
+                    btn.textContent = `Đang render GIF... ${Math.round(p * 100)}%`;
+                });
+                
+                gif.render();
+                
+            } catch (error) {
+                console.error('Lỗi tạo GIF:', error);
+                alert('Có lỗi xảy ra khi tạo GIF: ' + error.message);
+                btn.disabled = false;
+                //btn.textContent = '📥 Tải GIF';
+                isRecording = false;
+            }
+        });
+    </script>
+</body>
+</html>
+
