@@ -304,11 +304,6 @@ export default function Dashboard() {
     }
   };
 
-  // Đảm bảo config có giá trị
-  if (!config) {
-    return null;
-  }
-
   useEffect(() => {
     const checkAuth = async () => {
       try {
@@ -374,6 +369,11 @@ export default function Dashboard() {
     localStorage.removeItem('auth_token');
     router.push('/');
   };
+
+  // Đảm bảo config có giá trị (sau tất cả hooks)
+  if (!config) {
+    return null;
+  }
 
   if (loading) {
     return (
