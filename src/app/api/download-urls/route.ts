@@ -27,8 +27,8 @@ export async function GET() {
         
         content
           .split('\n')
-          .filter(line => line.trim() && !line.trim().startsWith('#'))
-          .forEach(line => {
+          .filter((line: string) => line.trim() && !line.trim().startsWith('#'))
+          .forEach((line: string) => {
             const parts = line.trim().split('|');
             if (parts.length >= 2) {
               const type = parts[0].trim().toLowerCase();
