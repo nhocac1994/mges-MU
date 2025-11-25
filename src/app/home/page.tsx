@@ -77,7 +77,7 @@ const LogoSection = () => {
           suppressHydrationWarning
         >
           <Image 
-            src="/logo-truyenky.png" 
+            src="/logo-truyenky.PNG" 
             alt="MuTruyenKy.com Logo Part 1" 
             fill
             className="object-contain"
@@ -105,7 +105,7 @@ const LogoSection = () => {
           suppressHydrationWarning
         >
           <Image 
-              src="/logo-truyenky.png" 
+              src="/logo-truyenky.PNG" 
             alt="MuTruyenKy.com Logo Part 2" 
             fill
             className="object-contain"
@@ -133,7 +133,7 @@ const LogoSection = () => {
           suppressHydrationWarning
         >
           <Image 
-            src="/logo-truyenky.png" 
+            src="/logo-truyenky.PNG" 
             alt="Mu Logo Part 3" 
             fill
             className="object-contain"
@@ -161,7 +161,7 @@ const LogoSection = () => {
           suppressHydrationWarning
         >
           <Image 
-            src="/logo-truyenky.png" 
+            src="/logo-truyenky.PNG" 
             alt="MuTruyenKy.com Logo Part 4" 
             fill
             className="object-contain"
