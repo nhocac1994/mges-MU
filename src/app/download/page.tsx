@@ -21,21 +21,6 @@ export default function Download() {
   const [selectedSection, setSelectedSection] = useState<'requirements' | 'guide' | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  // Đảm bảo config có giá trị
-  if (!config) {
-    return null;
-  }
-
-  const handleSectionClick = (section: 'requirements' | 'guide') => {
-    setSelectedSection(section);
-    setIsModalOpen(true);
-  };
-
-  const handleCloseModal = () => {
-    setIsModalOpen(false);
-    setSelectedSection(null);
-  };
-
   useEffect(() => {
     setIsClient(true);
   }, []);
@@ -70,6 +55,21 @@ export default function Download() {
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
+  // Đảm bảo config có giá trị
+  if (!config) {
+    return null;
+  }
+
+  const handleSectionClick = (section: 'requirements' | 'guide') => {
+    setSelectedSection(section);
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    setSelectedSection(null);
+  };
 
   return (
     <div className="min-h-screen relative overflow-hidden" style={{

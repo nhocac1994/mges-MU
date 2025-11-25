@@ -19,6 +19,21 @@ export default function Donate() {
   const [selectedPackage, setSelectedPackage] = useState<{ id: string; title: string; price: string; icon: string; color: string; benefits: string[]; details?: any } | null>(null);
   const [isPackageModalOpen, setIsPackageModalOpen] = useState(false);
 
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollTop = window.scrollY;
+      setScrollY(scrollTop);
+      setIsScrolled(scrollTop > 100);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
   // Đảm bảo config có giá trị
   if (!config) {
     return null;
@@ -111,21 +126,6 @@ export default function Donate() {
       }
     }
   ];
-
-  useEffect(() => {
-    setIsClient(true);
-  }, []);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      const scrollTop = window.scrollY;
-      setScrollY(scrollTop);
-      setIsScrolled(scrollTop > 100);
-    };
-
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
 
   return (
     <div className="min-h-screen relative overflow-hidden" style={{
@@ -502,13 +502,14 @@ export default function Donate() {
                   </div>
                   {config.payment?.qrCodeImage ? (
                     config.payment.qrCodeImage.startsWith('http://') || config.payment.qrCodeImage.startsWith('https://') ? (
-                      // External URL - use img tag
-                      <img 
+                      // External URL - use Next.js Image
+                      <Image 
                         src={config.payment.qrCodeImage} 
                         alt="QR Code" 
                         width={200} 
                         height={200}
                         className="mx-auto rounded-lg border-2 border-yellow-500/30"
+                        unoptimized
                       />
                     ) : (
                       // Local path - use Next.js Image

@@ -124,6 +124,66 @@ export default function Dashboard() {
   const router = useRouter();
   const { config } = useConfig();
 
+  useEffect(() => {
+    const checkAuth = async () => {
+      try {
+        const token = localStorage.getItem('auth_token');
+        const userData = localStorage.getItem('user_data');
+        
+        if (!token || !userData) {
+          router.push('/login');
+          return;
+        }
+        
+        // Parse user data để lấy account ID
+        const user = JSON.parse(userData);
+        // Backend trả về Username (chữ U hoa), nhưng có thể là username (chữ thường)
+        const accountId = user.Username || user.username || user.memb___id;
+        
+        if (!accountId) {
+          router.push('/login');
+          return;
+        }
+        
+        // Fetch characters first
+        await fetchCharacters(accountId);
+        
+        // Lấy thông tin dashboard từ API với account ID
+        const response = await fetch(`/api/dashboard?accountId=${accountId}`, {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json',
+            'x-user-account': accountId
+          }
+        });
+
+        if (response.ok) {
+          const result = await response.json();
+          if (result.success) {
+            setDashboardData(result.data);
+            // Lưu user data với format đúng
+            const accountId = result.data.account.id;
+            const updatedUserData = {
+              Username: accountId,
+              username: accountId,
+              memb___id: accountId,
+              CharacterName: result.data.character.name,
+              memb_name: result.data.character.name
+            };
+            localStorage.setItem('user_data', JSON.stringify(updatedUserData));
+            setUser(updatedUserData);
+          }
+        }
+        
+        setLoading(false);
+      } catch (error) {
+        router.push('/login');
+      }
+    };
+
+    checkAuth();
+  }, [router]);
+
   // Đảm bảo config có giá trị
   if (!config) {
     return null;
@@ -318,73 +378,6 @@ export default function Dashboard() {
       setUpdateLoading(false);
     }
   };
-
-  useEffect(() => {
-    const checkAuth = async () => {
-      try {
-        const token = localStorage.getItem('auth_token');
-        const userData = localStorage.getItem('user_data');
-        
-        if (!token || !userData) {
-          router.push('/login');
-          return;
-        }
-        
-        // Parse user data để lấy account ID
-        const user = JSON.parse(userData);
-        // Backend trả về Username (chữ U hoa), nhưng có thể là username (chữ thường)
-        const accountId = user.Username || user.username || user.memb___id;
-        
-        if (!accountId) {
-          console.error('Account ID not found in user data:', user);
-          router.push('/login');
-          return;
-        }
-        
-        
-        // Fetch characters first
-        await fetchCharacters(accountId);
-        
-        // Lấy thông tin dashboard từ API với account ID
-        const response = await fetch(`/api/dashboard?accountId=${accountId}`, {
-          headers: {
-            'Authorization': `Bearer ${token}`,
-            'Content-Type': 'application/json',
-            'x-user-account': accountId
-          }
-        });
-
-        if (response.ok) {
-          const result = await response.json();
-          if (result.success) {
-            setDashboardData(result.data);
-            // Lưu user data với format đúng
-            const accountId = result.data.account.id;
-            const updatedUserData = {
-              Username: accountId,
-              username: accountId,
-              memb___id: accountId,
-              CharacterName: result.data.character.name,
-              memb_name: result.data.character.name
-            };
-            localStorage.setItem('user_data', JSON.stringify(updatedUserData));
-            setUser(updatedUserData);
-          } else {
-            console.error('Failed to load dashboard data:', result.message);
-          }
-        } else {
-          console.error('Failed to fetch dashboard data');
-        }
-        
-        setLoading(false);
-      } catch (error) {
-        console.error('Auth check failed:', error);
-        router.push('/login');
-      }
-    };
-
-    checkAuth();
-  }, [router]);
 
   const handleLogout = () => {
     localStorage.removeItem('auth_token');

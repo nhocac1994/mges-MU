@@ -31,7 +31,7 @@ export async function GET() {
       const result = await response.json();
       
       if (result.success && result.data && result.data.content) {
-        let content = result.data.content;
+        const content = result.data.content;
         
         if (typeof content === 'string') {
           // Parse notifications từ text file

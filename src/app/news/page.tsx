@@ -20,11 +20,6 @@ export default function News() {
   const [isNewsModalOpen, setIsNewsModalOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
 
-  // Đảm bảo config có giá trị
-  if (!config) {
-    return null;
-  }
-
   useEffect(() => {
     setIsClient(true);
   }, []);
@@ -39,6 +34,11 @@ export default function News() {
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
+  // Đảm bảo config có giá trị
+  if (!config) {
+    return null;
+  }
 
   const handleNewsClick = (e: React.MouseEvent, news: any) => {
     e.preventDefault();

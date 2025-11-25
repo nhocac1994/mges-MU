@@ -25,9 +25,20 @@ export default function Info() {
     setIsClient(true);
   }, []);
 
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollTop = window.scrollY;
+      setScrollY(scrollTop);
+      setIsScrolled(scrollTop > 100);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
   // Đảm bảo config có giá trị trước khi render
   if (!config) {
-    return null; // Hoặc return loading state
+    return null;
   }
 
   const handleCommandClick = (command: string, description: string, details?: string) => {
@@ -194,17 +205,6 @@ export default function Info() {
     { command: '/addcmd [points]', description: 'Cộng điểm mệnh lệnh', details: 'Thêm điểm vào chỉ số Command (Mệnh lệnh). Ví dụ: /addcmd 100' },
     { command: '/thungdo [0-5]', description: 'Mở thùng đồ cá nhân từ 1 - 5', details: 'Mở thùng đồ cá nhân. Số từ 0-5 tương ứng với các thùng đồ khác nhau.' }
   ];
-
-  useEffect(() => {
-    const handleScroll = () => {
-      const scrollTop = window.scrollY;
-      setScrollY(scrollTop);
-      setIsScrolled(scrollTop > 100);
-    };
-
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
 
   return (
     <div className="min-h-screen relative overflow-hidden" style={{
