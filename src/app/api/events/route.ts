@@ -25,10 +25,10 @@ export async function GET() {
         // Format: EventName|Description|TimeSlots (0:00,2:00,4:00,...)
         const events = content
           .split('\n')
-          .filter(line => line.trim() && !line.trim().startsWith('#'))
-          .map(line => {
+          .filter((line: string) => line.trim() && !line.trim().startsWith('#'))
+          .map((line: string) => {
             const parts = line.trim().split('|');
-            const timeSlots = (parts[2] || '').split(',').map(t => t.trim()).filter(t => t);
+            const timeSlots = (parts[2] || '').split(',').map((t: string) => t.trim()).filter((t: string) => t);
             
             return {
               name: parts[0] || '',
