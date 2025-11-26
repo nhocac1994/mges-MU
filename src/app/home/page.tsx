@@ -328,8 +328,14 @@ export default function HomePage() {
     let ticking = false;
     let lastScrollTop = window.scrollY;
     let hasNavigated = false;
+    let lastCheckTime = 0;
+    const throttleDelay = isMobile ? 150 : 100; // Throttle dài hơn trên mobile
     
     const handleScroll = () => {
+      const now = Date.now();
+      if (now - lastCheckTime < throttleDelay) return; // Throttle
+      lastCheckTime = now;
+      
       if (!ticking) {
         window.requestAnimationFrame(() => {
           // Kiểm tra lại pathname trước khi navigate
