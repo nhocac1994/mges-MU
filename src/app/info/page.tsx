@@ -207,7 +207,7 @@ export default function Info() {
   }
 
   return (
-    <div className="min-h-screen relative overflow-hidden" style={{
+    <div className={`relative ${isClient && window.innerWidth <= 768 ? '' : 'min-h-screen overflow-hidden'}`} style={{
       fontFamily: 'Roboto, sans-serif'
     }}>
       {/* Network Overlay - Luôn chạy trên background */}
@@ -241,7 +241,7 @@ export default function Info() {
         <main className="relative z-10 py-8">
 
       {/* Page Header */}
-      <section className="py-20 bg-gradient-to-b from-black/40 to-black/60 relative overflow-hidden">
+      <section className="py-20 bg-gradient-to-b from-black/40 to-black/60 relative overflow-x-hidden md:overflow-hidden">
         {/* Background Effects */}
         <div className="absolute inset-0">
           <motion.div 
@@ -331,7 +331,7 @@ export default function Info() {
       
 
       {/* Server Info - Classic MU Season 1 Style */}
-      <section className="py-16 relative overflow-hidden">
+      <section className="py-16 relative overflow-x-hidden md:overflow-hidden">
         {/* Background Effects */}
         <div className="absolute inset-0">
           <div className="absolute top-1/2 left-1/4 w-64 h-64 bg-yellow-500/10 rounded-full blur-3xl animate-pulse"></div>
@@ -620,7 +620,7 @@ export default function Info() {
       </section>
 
       {/* Game Commands Section - Classic MU Season 1 Style */}
-      <section className="py-16 bg-black/30 relative overflow-hidden">
+      <section className="py-16 bg-black/30 relative overflow-x-hidden md:overflow-hidden">
         {/* Background Effects */}
         <div className="absolute inset-0">
           <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-yellow-500/10 rounded-full blur-3xl animate-pulse"></div>
@@ -743,7 +743,7 @@ export default function Info() {
       </section>
 
       {/* Features - Classic MU Season 1 Style */}
-      <section className="py-20 bg-gradient-to-b from-black/30 to-black/50 relative overflow-hidden">
+      <section className="py-20 bg-gradient-to-b from-black/30 to-black/50 relative overflow-x-hidden md:overflow-hidden">
         {/* Background Effects */}
         <div className="absolute inset-0">
           <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-yellow-500/10 rounded-full blur-3xl animate-pulse"></div>

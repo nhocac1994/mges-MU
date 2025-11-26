@@ -53,14 +53,8 @@ export default function HeroPage() {
     
     let ticking = false;
     let hasNavigated = false;
-    let lastCheckTime = 0;
-    const throttleDelay = isMobile ? 150 : 100; // Throttle dài hơn trên mobile
     
     const handleScroll = () => {
-      const now = Date.now();
-      if (now - lastCheckTime < throttleDelay) return; // Throttle
-      lastCheckTime = now;
-      
       if (!ticking && !hasNavigated) {
         window.requestAnimationFrame(() => {
           // Kiểm tra lại pathname trước khi navigate

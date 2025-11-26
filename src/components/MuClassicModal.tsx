@@ -55,34 +55,23 @@ const MuClassicModal: React.FC<MuClassicModalProps> = ({
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.2 }}
-            className="fixed inset-0 bg-black/80 z-[9998]"
-            style={{
-              // Tắt backdrop-blur trên mobile để tối ưu performance
-              backdropFilter: typeof window !== 'undefined' && window.innerWidth <= 768 ? 'none' : 'blur(4px)',
-              WebkitBackdropFilter: typeof window !== 'undefined' && window.innerWidth <= 768 ? 'none' : 'blur(4px)',
-              willChange: 'opacity',
-              transform: 'translateZ(0)'
-            }}
+            transition={{ duration: 0.3 }}
+            className="fixed inset-0 bg-black/80 backdrop-blur-sm z-[9998]"
             onClick={onClose}
           />
 
           {/* Modal */}
           <motion.div
-            initial={{ opacity: 0, scale: 0.9, y: 20 }}
+            initial={{ opacity: 0, scale: 0.8, y: 50 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.9, y: 20 }}
+            exit={{ opacity: 0, scale: 0.8, y: 50 }}
             transition={{ 
-              type: 'tween', // Dùng tween thay vì spring để nhẹ hơn
-              duration: typeof window !== 'undefined' && window.innerWidth <= 768 ? 0.2 : 0.3,
-              ease: [0.25, 0.46, 0.45, 0.94]
+              type: 'spring',
+              damping: 25,
+              stiffness: 300,
+              duration: 0.4
             }}
             className="fixed inset-0 z-[9999] flex items-center justify-center p-4 pointer-events-none"
-            style={{
-              willChange: 'transform, opacity',
-              transform: 'translateZ(0)',
-              backfaceVisibility: 'hidden'
-            }}
             onClick={(e) => e.stopPropagation()}
           >
             <div className="relative w-full max-w-2xl max-h-[90vh] overflow-hidden pointer-events-auto">

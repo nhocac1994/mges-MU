@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import SimpleCaptcha from '@/components/SimpleCaptcha';
@@ -17,7 +17,13 @@ export default function Login() {
 
   const [errors, setErrors] = useState<{[key: string]: string}>({});
   const [captchaValid, setCaptchaValid] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isClient, setIsClient] = useState(false);
   const { config } = useConfig();
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
 
   // Đảm bảo config có giá trị
   if (!config) {
@@ -55,6 +61,8 @@ export default function Login() {
     
     if (!validateForm()) return;
 
+    setIsLoading(true);
+
     try {
       const response = await fetch('/api/login', {
         method: 'POST',
@@ -74,16 +82,17 @@ export default function Login() {
         // Redirect to dashboard
         window.location.href = '/dashboard';
       } else {
-        alert(result.message);
+        alert(result.message || 'Đăng nhập thất bại. Vui lòng kiểm tra lại thông tin.');
       }
     } catch (error) {
-
       alert('Có lỗi xảy ra khi đăng nhập. Vui lòng thử lại.');
+    } finally {
+      setIsLoading(false);
     }
   };
 
   return (
-    <div className="min-h-screen relative overflow-hidden" style={{
+    <div className={`relative ${isClient && window.innerWidth <= 768 ? '' : 'min-h-screen overflow-hidden'}`} style={{
       fontFamily: 'Roboto, sans-serif'
     }}>
       {/* Network Overlay - Luôn chạy trên background */}
@@ -95,10 +104,6 @@ export default function Login() {
       {/* Background Image - Desktop Only */}
       <div 
         className="hidden md:block fixed inset-0 bg-cover bg-center bg-no-repeat"
-        // style={{
-        //   backgroundImage: 'url(/logoweb.jpg)',
-        //   backgroundAttachment: 'fixed'
-        // }}
       ></div>
       
       {/* Mobile Background - Simple gradient */}
@@ -112,7 +117,7 @@ export default function Login() {
         {/* Main Content */}
         <main className="relative z-10 py-8">
           {/* Page Header - Classic MU Style */}
-          <section className="py-20 bg-gradient-to-b from-black/40 to-black/60 relative overflow-hidden mb-8">
+          <section className="py-20 bg-gradient-to-b from-black/40 to-black/60 relative overflow-x-hidden md:overflow-hidden mb-8">
             {/* Background Effects */}
             <div className="absolute inset-0">
               <motion.div 
@@ -234,17 +239,17 @@ export default function Login() {
                   <AnimatedSection direction="up" delay={0.6}>
                     <motion.button
                       type="submit"
-                      disabled={!captchaValid}
+                      disabled={!captchaValid || isLoading}
                       className={`w-full font-bold py-3 px-6 rounded-lg transition-all ${
-                        captchaValid 
+                        captchaValid && !isLoading
                           ? 'bg-gradient-to-r from-yellow-600/30 to-orange-600/30 border border-yellow-500/60 text-yellow-300 mu-button-glow' 
                           : 'bg-gray-500/30 text-gray-300 cursor-not-allowed border border-gray-500/30'
                       }`}
                       style={{ fontFamily: 'Arial, sans-serif' }}
-                      whileHover={captchaValid ? { scale: 1.02 } : {}}
-                      whileTap={captchaValid ? { scale: 0.98 } : {}}
+                      whileHover={captchaValid && !isLoading ? { scale: 1.02 } : {}}
+                      whileTap={captchaValid && !isLoading ? { scale: 0.98 } : {}}
                     >
-                      {captchaValid ? 'ĐĂNG NHẬP' : 'VUI LÒNG XÁC THỰC CAPTCHA'}
+                      {isLoading ? 'ĐANG ĐĂNG NHẬP...' : (captchaValid ? 'ĐĂNG NHẬP' : 'VUI LÒNG XÁC THỰC CAPTCHA')}
                     </motion.button>
                   </AnimatedSection>
 
@@ -268,3 +273,4 @@ export default function Login() {
     </div>
   );
 }
+

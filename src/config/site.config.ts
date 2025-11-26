@@ -1,33 +1,33 @@
 // Site Configuration - Thay đổi thông tin tại đây mà không cần sửa mã nguồn
 export const siteConfig = {
   // Thông tin game
-  nameGame: "MuDauTruongSS1.net",
+  nameGame: "MuOnline.com",
   gameTitle: "Mu Online Season 1",
   gameSubtitle: "Hành trình huyền thoại bắt đầu",
   
   // Thông tin server
-  serverName: "MuDauTruongSS1.net",
+  serverName: "MuOnline.com",
   serverVersion: "Season 1",
   serverIP: "127.0.0.1",
   serverPort: "55900",
   
   // Links mạng xã hội
-  linkFacebook: "https://facebook.com/MuDauTruongSS1",
-  linkDiscord: "https://discord.gg/mudautruongss1",
-  linkYoutube: "https://youtube.com/@MuDauTruongSS1",
-  linkZalo: "https://zalo.me/mudautruongss1",
-  linkTikTok: "https://www.tiktok.com/@mudautruongss1",
+  linkFacebook: "https://facebook.com/MuOnline.com",
+  linkDiscord: "https://discord.gg/MuOnline.com",
+  linkYoutube: "https://youtube.com/@MuOnline.com",
+  linkZalo: "https://zalo.me/MuOnline.com",
+  linkTikTok: "https://www.tiktok.com/@MuOnline.com",
   
   // Thông tin liên hệ
-  email: "support@mudautruongss1.net",
+  email: "support@MuOnline.com",
   phone: "0123456789",
   address: "Việt Nam",
-  adminZalo: "03377.14.654",
+  adminZalo: "0123456789",
   
   // Thông tin chuyển khoản
   payment: {
-    bankAccount: "0356673016",
-    accountHolder: "NGUYEN CANH QUYEN",
+    bankAccount: "0123456789",
+    accountHolder: "NGUYEN a",
     bankName: "MB-BANK",
     // Có thể dùng đường dẫn local (ví dụ: "/qrcode.jpeg") hoặc URL (ví dụ: "https://example.com/qrcode.jpg")
     qrCodeImage: "/qrcode.jpeg"
@@ -48,7 +48,7 @@ export const siteConfig = {
   eventStartTime: "13:00",
   
   // SEO & Meta
-  metaDescription: "MuDauTruongSS1.net - Server Mu Online Season 1 với tỷ lệ exp cao, drop rate tốt. Game MMORPG miễn phí, PvP, Guild System, Events đặc biệt.",
+  metaDescription: "MuOnline.com - Server Mu Online Season 1 với tỷ lệ exp cao, drop rate tốt. Game MMORPG miễn phí, PvP, Guild System, Events đặc biệt.",
   metaKeywords: [
     "Mu Online",
     "Mu Online Season 1",

@@ -14,10 +14,10 @@
   "email": "support@MuOnline.com",
   "phone": "0123456789",
   "address": "Việt Nam",
-  "adminZalo": "03377.14.654",
+  "adminZalo": "0123456789",
   "payment": {
-    "bankAccount": "0356673016",
-    "accountHolder": "NGUYEN CANH QUYEN",
+    "bankAccount": "0123456789",
+    "accountHolder": "NGUYEN a",
     "bankName": "MB-BANK",
     "qrCodeImage": "/qrcode.jpeg"
   },
@@ -29,7 +29,7 @@
   "maxReset": 999,
   "eventStartDate": "2025-10-10",
   "eventStartTime": "13:00",
-  "metaDescription": "MuDauTruongSS1.net - Server Mu Online Season 1 với tỷ lệ exp cao, drop rate tốt. Game MMORPG miễn phí, PvP, Guild System, Events đặc biệt.",
+  "metaDescription": "MuOnline.com - Server Mu Online Season 1 với tỷ lệ exp cao, drop rate tốt. Game MMORPG miễn phí, PvP, Guild System, Events đặc biệt.",
   "metaKeywords": [
     "Mu Online",
     "Mu Online Season 1",

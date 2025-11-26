@@ -1,8 +1,9 @@
 # Backend C# API URL - VPS Configuration
 # Copy this to .env.local and use
 
-# Backend chạy trên VPS: 103.110.85.229:55777
-NEXT_PUBLIC_API_URL=http://103.110.85.229:55777
+# Backend chạy trên VPS: YOUR_VPS_IP:55777
+# Thay YOUR_VPS_IP bằng địa chỉ IP thực tế của VPS
+NEXT_PUBLIC_API_URL=http://YOUR_VPS_IP:55777
 
 # Next.js Configuration
 NEXT_TELEMETRY_DISABLED=1

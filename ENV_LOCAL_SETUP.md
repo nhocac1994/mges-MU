@@ -6,8 +6,9 @@ Tạo file `.env.local` trong thư mục gốc của dự án Next.js với nộ
 
 ```bash
 # Backend C# API URL
-# Backend chạy trên VPS: 103.110.85.229:55777
-NEXT_PUBLIC_API_URL=http://103.110.85.229:55777
+# Backend chạy trên VPS: YOUR_VPS_IP:55777
+# Thay YOUR_VPS_IP bằng địa chỉ IP thực tế của VPS
+NEXT_PUBLIC_API_URL=http://YOUR_VPS_IP:55777
 
 # Next.js Configuration
 NEXT_TELEMETRY_DISABLED=1
@@ -33,14 +34,14 @@ mu-online-react/
 
 2. **Kiểm tra**:
    - File `src/lib/api-client.ts` sẽ tự động sử dụng URL từ `.env.local`
-   - API calls sẽ đi tới: `http://103.110.85.229:55777`
+   - API calls sẽ đi tới: `http://YOUR_VPS_IP:55777`
 
 ## 🧪 Test
 
 Mở browser console và chạy:
 
 ```javascript
-fetch('http://103.110.85.229:55777/health')
+fetch('http://YOUR_VPS_IP:55777/health')
   .then(r => r.json())
   .then(console.log);
 ```

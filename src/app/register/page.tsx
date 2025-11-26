@@ -26,6 +26,7 @@ export default function Register() {
   const [isSuccess, setIsSuccess] = useState(false);
   const [captchaValid, setCaptchaValid] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [isClient, setIsClient] = useState(false);
   const [successData, setSuccessData] = useState<{
     username: string;
     characterName: string;
@@ -35,6 +36,10 @@ export default function Register() {
     securityAnswer: string;
   } | null>(null);
   const { config } = useConfig();
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
 
   // Đảm bảo config có giá trị
   if (!config) {
@@ -125,7 +130,7 @@ export default function Register() {
   };
 
   return (
-    <div className="min-h-screen relative overflow-hidden" style={{
+    <div className={`relative ${isClient && window.innerWidth <= 768 ? '' : 'min-h-screen overflow-hidden'}`} style={{
       fontFamily: 'Roboto, sans-serif'
     }}>
       {/* Network Overlay - Luôn chạy trên background */}
@@ -154,7 +159,7 @@ export default function Register() {
         {/* Main Content */}
         <main className="relative z-10 py-8">
           {/* Page Header - Classic MU Style */}
-          <section className="py-20 bg-gradient-to-b from-black/40 to-black/60 relative overflow-hidden mb-8">
+          <section className="py-20 bg-gradient-to-b from-black/40 to-black/60 relative overflow-x-hidden md:overflow-hidden mb-8">
             {/* Background Effects */}
             <div className="absolute inset-0">
               <motion.div 

@@ -140,7 +140,7 @@ export default function News() {
   );
 
   return (
-    <div className="min-h-screen relative overflow-hidden" style={{
+    <div className={`relative ${isClient && window.innerWidth <= 768 ? '' : 'min-h-screen overflow-hidden'}`} style={{
       fontFamily: 'Roboto, sans-serif'
     }}>
       {/* Network Overlay - Luôn chạy trên background */}
@@ -173,7 +173,7 @@ export default function News() {
         {/* Main Content */}
         <main className="relative z-10 py-8">
           {/* Page Header - Classic MU Style */}
-      <section className="py-20 bg-gradient-to-b from-black/40 to-black/60 relative overflow-hidden">
+      <section className="py-20 bg-gradient-to-b from-black/40 to-black/60 relative overflow-x-hidden md:overflow-hidden">
         {/* Background Effects */}
         <div className="absolute inset-0">
           <motion.div 
@@ -273,7 +273,7 @@ export default function News() {
       </section>
 
       {/* News List - Classic MU Style */}
-      <section className="py-16 relative overflow-hidden">
+      <section className="py-16 relative overflow-x-hidden md:overflow-hidden">
         {/* Background Effects */}
         <div className="absolute inset-0">
           <div className="absolute top-1/2 left-1/4 w-64 h-64 bg-yellow-500/10 rounded-full blur-3xl animate-pulse"></div>

@@ -249,10 +249,19 @@ const VideoSection = () => {
     };
   }, []);
 
+  const [isMobile, setIsMobile] = useState(false);
+  
+  useEffect(() => {
+    setIsMobile(window.innerWidth <= 768);
+    const handleResize = () => setIsMobile(window.innerWidth <= 768);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
   return (
     <section
       ref={videoRef}
-      className="flex flex-col items-center justify-center relative bg-black/40 backdrop-blur-sm min-h-screen"
+      className={`flex flex-col items-center justify-center relative bg-black/40 backdrop-blur-sm ${isMobile ? 'min-h-[100vh]' : 'min-h-screen'}`}
     >
       <div className="absolute inset-0 bg-gradient-to-b from-black/60 md:from-black via-black/40 md:via-black/80 to-black/60 md:to-black z-10 pointer-events-none"></div>
       
@@ -328,14 +337,8 @@ export default function HomePage() {
     let ticking = false;
     let lastScrollTop = window.scrollY;
     let hasNavigated = false;
-    let lastCheckTime = 0;
-    const throttleDelay = isMobile ? 150 : 100; // Throttle dài hơn trên mobile
     
     const handleScroll = () => {
-      const now = Date.now();
-      if (now - lastCheckTime < throttleDelay) return; // Throttle
-      lastCheckTime = now;
-      
       if (!ticking) {
         window.requestAnimationFrame(() => {
           // Kiểm tra lại pathname trước khi navigate
@@ -606,8 +609,9 @@ export default function HomePage() {
   };
 
   return (
-    <div className="min-h-screen relative" style={{
-      fontFamily: 'Roboto, sans-serif'
+    <div className="relative" style={{
+      fontFamily: 'Roboto, sans-serif',
+      minHeight: isMobile ? 'auto' : '100vh'
     }}>
       <NetworkOverlay />
       
@@ -632,7 +636,7 @@ export default function HomePage() {
 
       <main className="relative z-10">
         {/* Logo Section */}
-        <section className="flex items-center justify-center relative min-h-screen w-full">
+        <section className={`flex items-center justify-center relative w-full ${isMobile ? 'min-h-[100vh]' : 'min-h-screen'}`}>
           <div className="relative z-10">
             <div className="absolute inset-0 -z-10">
               <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-blue-500/20 rounded-full blur-3xl animate-pulse"></div>

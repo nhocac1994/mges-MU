@@ -19,7 +19,7 @@ export default function RankingsPage() {
   }
 
   return (
-    <div className="min-h-screen relative" style={{
+    <div className="relative" style={{
       fontFamily: 'Roboto, sans-serif'
     }}>
       {/* Network Overlay - Luôn chạy trên background */}
@@ -48,7 +48,7 @@ export default function RankingsPage() {
       {/* Main Content */}
       <main className="relative z-10 py-8">
         {/* Page Header - Classic MU Style */}
-        <section className="py-20 bg-gradient-to-b from-black/40 to-black/60 relative overflow-hidden">
+        <section className="py-20 bg-gradient-to-b from-black/40 to-black/60 relative overflow-x-hidden md:overflow-hidden">
           {/* Background Effects */}
           <div className="absolute inset-0">
             <motion.div 
