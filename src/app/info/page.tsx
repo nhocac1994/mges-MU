@@ -191,13 +191,21 @@ export default function Info() {
   ];
 
   useEffect(() => {
+    let ticking = false;
+    
     const handleScroll = () => {
-      const scrollTop = window.scrollY;
-      setScrollY(scrollTop);
-      setIsScrolled(scrollTop > 100);
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          const scrollTop = window.scrollY;
+          setScrollY(scrollTop);
+          setIsScrolled(scrollTop > 100);
+          ticking = false;
+        });
+        ticking = true;
+      }
     };
 
-    window.addEventListener('scroll', handleScroll);
+    window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
@@ -207,7 +215,7 @@ export default function Info() {
   }
 
   return (
-    <div className={`relative ${isClient && window.innerWidth <= 768 ? '' : 'min-h-screen overflow-hidden'}`} style={{
+    <div className="relative" style={{
       fontFamily: 'Roboto, sans-serif'
     }}>
       {/* Network Overlay - Luôn chạy trên background */}
@@ -241,7 +249,7 @@ export default function Info() {
         <main className="relative z-10 py-8">
 
       {/* Page Header */}
-      <section className="py-20 bg-gradient-to-b from-black/40 to-black/60 relative overflow-x-hidden md:overflow-hidden">
+      <section className="py-20 bg-gradient-to-b from-black/40 to-black/60 relative">
         {/* Background Effects */}
         <div className="absolute inset-0">
           <motion.div 
@@ -331,7 +339,7 @@ export default function Info() {
       
 
       {/* Server Info - Classic MU Season 1 Style */}
-      <section className="py-16 relative overflow-x-hidden md:overflow-hidden">
+      <section className="py-16 relative">
         {/* Background Effects */}
         <div className="absolute inset-0">
           <div className="absolute top-1/2 left-1/4 w-64 h-64 bg-yellow-500/10 rounded-full blur-3xl animate-pulse"></div>
@@ -351,7 +359,7 @@ export default function Info() {
                   className="relative bg-gradient-to-b from-gray-900 via-black to-gray-900 border-2 border-yellow-500/60 mu-modal-container rounded-lg p-8"
                   initial={{ opacity: 0, x: -50 }}
                   animate={{ opacity: 1, x: 0 }}
-                  transition={{ type: 'spring', damping: 20, stiffness: 300 }}
+                  transition={{ type: 'tween', duration: 0.4, ease: [0.25, 0.46, 0.45, 0.94] }}
                   whileHover={{ scale: 1.02, y: -5 }}
                 >
                   {/* Corner decorations */}
@@ -382,7 +390,7 @@ export default function Info() {
                       className="relative bg-black/40 rounded-lg p-4 border border-yellow-500/30 hover:border-yellow-400/60 transition-all duration-300 group mu-command-card"
                       initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: 0.1, type: 'spring', damping: 20 }}
+                      transition={{ delay: 0.05, type: 'tween', duration: 0.3, ease: [0.25, 0.46, 0.45, 0.94] }}
                       whileHover={{ scale: 1.05, y: -5 }}
                     >
                       {/* Corner decorations */}
@@ -406,7 +414,7 @@ export default function Info() {
                       className="relative bg-black/40 rounded-lg p-4 border border-yellow-500/30 hover:border-yellow-400/60 transition-all duration-300 group mu-command-card"
                       initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: 0.2, type: 'spring', damping: 20 }}
+                      transition={{ delay: 0.1, type: 'tween', duration: 0.3, ease: [0.25, 0.46, 0.45, 0.94] }}
                       whileHover={{ scale: 1.05, y: -5 }}
                     >
                       {/* Corner decorations */}
@@ -430,7 +438,7 @@ export default function Info() {
                       className="relative bg-black/40 rounded-lg p-4 border border-yellow-500/30 hover:border-yellow-400/60 transition-all duration-300 group mu-command-card"
                       initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: 0.3, type: 'spring', damping: 20 }}
+                      transition={{ delay: 0.15, type: 'tween', duration: 0.3, ease: [0.25, 0.46, 0.45, 0.94] }}
                       whileHover={{ scale: 1.05, y: -5 }}
                     >
                       {/* Corner decorations */}
@@ -454,7 +462,7 @@ export default function Info() {
                       className="relative bg-black/40 rounded-lg p-4 border border-yellow-500/30 hover:border-yellow-400/60 transition-all duration-300 group mu-command-card"
                       initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: 0.4, type: 'spring', damping: 20 }}
+                      transition={{ delay: 0.2, type: 'tween', duration: 0.3, ease: [0.25, 0.46, 0.45, 0.94] }}
                       whileHover={{ scale: 1.05, y: -5 }}
                     >
                       {/* Corner decorations */}
@@ -489,7 +497,7 @@ export default function Info() {
                   className="relative bg-gradient-to-b from-gray-900 via-black to-gray-900 border-2 border-yellow-500/60 mu-modal-container rounded-lg p-8"
                   initial={{ opacity: 0, x: 50 }}
                   animate={{ opacity: 1, x: 0 }}
-                  transition={{ type: 'spring', damping: 20, stiffness: 300 }}
+                  transition={{ type: 'tween', duration: 0.4, ease: [0.25, 0.46, 0.45, 0.94] }}
                   whileHover={{ scale: 1.02, y: -5 }}
                 >
                   {/* Corner decorations */}
@@ -520,7 +528,7 @@ export default function Info() {
                       className="relative bg-black/40 rounded-lg p-4 border border-yellow-500/30 hover:border-yellow-400/60 transition-all duration-300 group mu-command-card"
                       initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: 0.1, type: 'spring', damping: 20 }}
+                      transition={{ delay: 0.05, type: 'tween', duration: 0.3, ease: [0.25, 0.46, 0.45, 0.94] }}
                       whileHover={{ scale: 1.05, y: -5 }}
                     >
                       {/* Corner decorations */}
@@ -544,7 +552,7 @@ export default function Info() {
                       className="relative bg-black/40 rounded-lg p-4 border border-yellow-500/30 hover:border-yellow-400/60 transition-all duration-300 group mu-command-card"
                       initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: 0.2, type: 'spring', damping: 20 }}
+                      transition={{ delay: 0.1, type: 'tween', duration: 0.3, ease: [0.25, 0.46, 0.45, 0.94] }}
                       whileHover={{ scale: 1.05, y: -5 }}
                     >
                       {/* Corner decorations */}
@@ -568,7 +576,7 @@ export default function Info() {
                       className="relative bg-black/40 rounded-lg p-4 border border-yellow-500/30 hover:border-yellow-400/60 transition-all duration-300 group mu-command-card"
                       initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: 0.3, type: 'spring', damping: 20 }}
+                      transition={{ delay: 0.15, type: 'tween', duration: 0.3, ease: [0.25, 0.46, 0.45, 0.94] }}
                       whileHover={{ scale: 1.05, y: -5 }}
                     >
                       {/* Corner decorations */}
@@ -592,7 +600,7 @@ export default function Info() {
                       className="relative bg-black/40 rounded-lg p-4 border border-yellow-500/30 hover:border-yellow-400/60 transition-all duration-300 group mu-command-card"
                       initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: 0.4, type: 'spring', damping: 20 }}
+                      transition={{ delay: 0.2, type: 'tween', duration: 0.3, ease: [0.25, 0.46, 0.45, 0.94] }}
                       whileHover={{ scale: 1.05, y: -5 }}
                     >
                       {/* Corner decorations */}
@@ -620,7 +628,7 @@ export default function Info() {
       </section>
 
       {/* Game Commands Section - Classic MU Season 1 Style */}
-      <section className="py-16 bg-black/30 relative overflow-x-hidden md:overflow-hidden">
+      <section className="py-16 bg-black/30 relative">
         {/* Background Effects */}
         <div className="absolute inset-0">
           <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-yellow-500/10 rounded-full blur-3xl animate-pulse"></div>
@@ -680,7 +688,7 @@ export default function Info() {
                       className="relative bg-black/40 rounded-lg p-4 border border-yellow-500/30 hover:border-yellow-400/60 cursor-pointer transition-all duration-300 group mu-command-card"
                       initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: index * 0.05, type: 'spring', damping: 20 }}
+                      transition={{ delay: index * 0.03, type: 'tween', duration: 0.3, ease: [0.25, 0.46, 0.45, 0.94] }}
                       whileHover={{ scale: 1.05, y: -5 }}
                       whileTap={{ scale: 0.98 }}
                     >
@@ -743,7 +751,7 @@ export default function Info() {
       </section>
 
       {/* Features - Classic MU Season 1 Style */}
-      <section className="py-20 bg-gradient-to-b from-black/30 to-black/50 relative overflow-x-hidden md:overflow-hidden">
+      <section className="py-20 bg-gradient-to-b from-black/30 to-black/50 relative">
         {/* Background Effects */}
         <div className="absolute inset-0">
           <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-yellow-500/10 rounded-full blur-3xl animate-pulse"></div>
@@ -784,7 +792,7 @@ export default function Info() {
                 className="relative bg-black/40 rounded-lg p-6 border border-yellow-500/30 hover:border-yellow-400/60 cursor-pointer transition-all duration-300 group mu-command-card"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: index * 0.1, type: 'spring', damping: 20 }}
+                transition={{ delay: index * 0.05, type: 'tween', duration: 0.3, ease: [0.25, 0.46, 0.45, 0.94] }}
                 whileHover={{ scale: 1.05, y: -5 }}
                 whileTap={{ scale: 0.98 }}
               >

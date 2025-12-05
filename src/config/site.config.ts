@@ -1,41 +1,41 @@
 // Site Configuration - Thay đổi thông tin tại đây mà không cần sửa mã nguồn
 export const siteConfig = {
   // Thông tin game
-  nameGame: "MuOnline.com",
-  gameTitle: "Mu Online Season 1",
+  nameGame: "MuTruyenkyss1.com",
+  gameTitle: "Mu Truyen Ky Season 1",
   gameSubtitle: "Hành trình huyền thoại bắt đầu",
   
   // Thông tin server
-  serverName: "MuOnline.com",
+  serverName: "MuTruyenkyss1.com",
   serverVersion: "Season 1",
   serverIP: "127.0.0.1",
   serverPort: "55900",
   
   // Links mạng xã hội
-  linkFacebook: "https://facebook.com/MuOnline.com",
+  linkFacebook: "https://facebook.com/MuTruyenkyss1.com",
   linkDiscord: "https://discord.gg/MuOnline.com",
-  linkYoutube: "https://youtube.com/@MuOnline.com",
-  linkZalo: "https://zalo.me/MuOnline.com",
-  linkTikTok: "https://www.tiktok.com/@MuOnline.com",
+  linkYoutube: "https://youtube.com/@MuTruyenkyss1.com",
+  linkZalo: "https://zalo.me/MuTruyenkyss1.com",
+  linkTikTok: "https://www.tiktok.com/@MuTruyenkyss1.com",
   
   // Thông tin liên hệ
-  email: "support@MuOnline.com",
-  phone: "0123456789",
+  email: "support@MuTruyenkyss1.com",
+  phone: "0971371678",
   address: "Việt Nam",
-  adminZalo: "0123456789",
+  adminZalo: "0971371678",
   
   // Thông tin chuyển khoản
   payment: {
-    bankAccount: "0123456789",
-    accountHolder: "NGUYEN a",
+    bankAccount: "0971371678",
+    accountHolder: "Bui Hữu Bảo",
     bankName: "MB-BANK",
     // Có thể dùng đường dẫn local (ví dụ: "/qrcode.jpeg") hoặc URL (ví dụ: "https://example.com/qrcode.jpg")
-    qrCodeImage: "/qrcode.jpeg"
+    qrCodeImage: "https://img.vietqr.io/image/MB-0971371678-qr_only.png"
   },
   
   // Thông tin website
-  websiteUrl: "https://MuOnline.com",
-  websiteName: "MuOnline.com",
+  websiteUrl: "https://MuTruyenkyss1.com",
+  websiteName: "MuTruyenkyss1.com",
   
   // Thông tin game settings
   expRate: "100x",
@@ -52,7 +52,7 @@ export const siteConfig = {
   metaKeywords: [
     "Mu Online",
     "Mu Online Season 1",
-    "MuOnline.com",
+    "MuTruyenkyss1.com",
     "Server Mu Online",
     "Game Mu Online Việt Nam"
   ],

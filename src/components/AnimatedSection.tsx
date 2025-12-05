@@ -29,7 +29,10 @@ export default function AnimatedSection({
           observer.disconnect();
         }
       },
-      { threshold: 0.1 }
+      { 
+        threshold: 0.05, // Giảm threshold để trigger sớm hơn
+        rootMargin: '50px' // Thêm margin để trigger trước khi vào viewport
+      }
     );
 
     if (ref.current) {
@@ -61,9 +64,9 @@ export default function AnimatedSection({
       x: 0,
       opacity: 1,
       transition: {
-        duration,
-        delay,
-        ease: [0.22, 1, 0.36, 1] as const
+        duration: duration * 0.7, // Giảm duration để nhanh hơn
+        delay: delay * 0.5, // Giảm delay
+        ease: [0.25, 0.46, 0.45, 0.94] as const // Easing mượt hơn, ít giật hơn
       }
     }
   };

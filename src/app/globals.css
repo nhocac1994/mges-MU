@@ -20,7 +20,7 @@
 }
 
 html {
-  scroll-behavior: smooth;
+  scroll-behavior: auto; /* Scroll tự nhiên, không smooth để tránh giật */
   width: 100%;
   min-height: 100vh;
   margin: 0;
@@ -769,14 +769,26 @@ div[class*="fixed"][style*="background"] {
   animation: parallax 20s ease-in-out infinite alternate;
 }
 
-/* Scroll tự nhiên - Không dùng scroll snap, không smooth scroll */
-html {
-  scroll-behavior: auto; /* Scroll tự nhiên, không delay */
-}
+/* Scroll tự nhiên - Đã được set ở trên */
 
 /* Tối ưu scroll performance */
 * {
   -webkit-overflow-scrolling: touch;
+}
+
+/* Tối ưu rendering khi scroll - Giảm giật */
+@media (prefers-reduced-motion: no-preference) {
+  * {
+    will-change: auto; /* Chỉ set will-change khi cần thiết */
+  }
+}
+
+/* Tối ưu transform và opacity cho animation mượt hơn */
+[data-framer-component],
+[data-framer-name] {
+  transform: translateZ(0); /* Force GPU acceleration */
+  backface-visibility: hidden;
+  perspective: 1000px;
 }
 
 /* Ẩn scrollbar hoàn toàn */

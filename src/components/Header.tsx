@@ -6,6 +6,7 @@ import Image from 'next/image';
 import { motion } from 'framer-motion';
 import { usePathname } from 'next/navigation';
 import { useConfig } from '@/contexts/ConfigContext';
+import { getSiteConfig } from '@/lib/config';
 
 export default function Header() {
   const { config } = useConfig();
@@ -15,8 +16,17 @@ export default function Header() {
   const pathname = usePathname();
   const isHomePage = pathname === '/' || pathname === '/home';
   
-  // Đảm bảo config có giá trị
-  const displayName = config?.nameGame || 'Mu Online';
+  // Đảm bảo config có giá trị - Sử dụng giá trị từ config tĩnh để tránh hydration mismatch
+  // Lấy từ config tĩnh ngay để server và client render cùng giá trị
+  const staticConfig = getSiteConfig();
+  const [displayName, setDisplayName] = useState(staticConfig?.nameGame || 'Mu Online');
+  
+  useEffect(() => {
+    // Chỉ cập nhật sau khi client mount và có config từ API khác với config tĩnh
+    if (config?.nameGame && config.nameGame !== staticConfig?.nameGame) {
+      setDisplayName(config.nameGame);
+    }
+  }, [config?.nameGame, staticConfig?.nameGame]);
 
   useEffect(() => {
     setIsClient(true);
@@ -143,14 +153,14 @@ export default function Header() {
           <div className="md:hidden">
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-2">
-                <Image 
-                  src="/logo-truyenky.PNG" 
-                  alt={`${displayName} - Mu Online Season 1 Mobile Logo`} 
-                  width={40}
-                  height={16}
-                  className="w-8 h-auto border border-yellow-500/30 rounded"
-                />
-                <span className="text-yellow-400 font-bold text-sm mu-text-glow" style={{ fontFamily: 'Arial, sans-serif' }}>{displayName}</span>
+                {/* Logo đã được ẩn trên mobile */}
+                <span 
+                  className="text-yellow-400 font-bold text-sm mu-text-glow" 
+                  style={{ fontFamily: 'Arial, sans-serif' }}
+                  suppressHydrationWarning
+                >
+                  {displayName}
+                </span>
               </div>
               
               <motion.button 

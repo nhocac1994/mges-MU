@@ -5,7 +5,7 @@
 
 let configCache: any = null;
 let configCacheTime: number = 0;
-const CACHE_DURATION = 5 * 60 * 1000; // 5 phút
+const CACHE_DURATION = 10 * 60 * 1000; // Tăng lên 10 phút để cache lâu hơn
 
 /**
  * Load config từ API
@@ -19,8 +19,9 @@ export async function loadConfigFromAPI(): Promise<any> {
 
   try {
     // Sử dụng endpoint /api/config đã xử lý sẵn format
+    // API route đã có cache headers, không cần cache ở client
     const response = await fetch('/api/config', {
-      cache: 'no-store', // Không cache để luôn lấy config mới nhất
+      cache: 'default', // Sử dụng browser cache
     });
     
     if (!response.ok) {

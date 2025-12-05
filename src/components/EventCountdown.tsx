@@ -4,6 +4,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { useNotifications } from '@/hooks/useNotifications';
 import MuClassicModal from '@/components/MuClassicModal';
+import EventSkeleton from '@/components/EventSkeleton';
 
 interface EventFromAPI {
   name: string;
@@ -278,11 +279,7 @@ const EventCountdown: React.FC = () => {
 
   // Render loading state only on client-side after mount
   if (!mounted || loading) {
-    return (
-      <div className="space-y-4" suppressHydrationWarning>
-        <div className="text-center text-gray-400 py-8">Đang tải sự kiện...</div>
-      </div>
-    );
+    return <EventSkeleton />;
   }
 
   if (events.length === 0) {

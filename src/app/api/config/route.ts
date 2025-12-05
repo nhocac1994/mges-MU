@@ -8,14 +8,15 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:55777';
  */
 export async function GET() {
   try {
-    // Load từ backend C# config file
+    // Load từ backend C# config file với cache
     const response = await fetch(`${API_URL}/api/config-files/config.json`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
       },
       // Thêm timeout để tránh treo quá lâu
-      signal: AbortSignal.timeout(5000), // 5 giây timeout
+      signal: AbortSignal.timeout(3000), // Giảm xuống 3 giây để nhanh hơn
+      next: { revalidate: 300 }, // Cache 5 phút ở Next.js level
     });
 
     if (response.ok) {
@@ -39,6 +40,10 @@ export async function GET() {
         return NextResponse.json({
           success: true,
           data: configData
+        }, {
+          headers: {
+            'Cache-Control': 'public, s-maxage=300, stale-while-revalidate=600' // Cache 5 phút
+          }
         });
       } else {
 

@@ -3,7 +3,7 @@ import "./globals.css";
 import "../styles/mobile.css";
 import SecurityGuard from "@/components/SecurityGuard";
 import Header from "@/components/Header";
-import Footer from "@/components/Footer";
+import ConditionalFooter from "@/components/ConditionalFooter";
 import AutoRequestNotification from "@/components/AutoRequestNotification";
 import { ConfigProvider } from "@/contexts/ConfigContext";
 
@@ -189,7 +189,7 @@ export default function RootLayout({
           <SecurityGuard />
           <Header />
           {children}
-          <Footer />
+          <ConditionalFooter />
         </ConfigProvider>
       </body>
     </html>

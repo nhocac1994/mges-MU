@@ -13,26 +13,26 @@ interface ConfigContextType {
 const ConfigContext = createContext<ConfigContextType | undefined>(undefined);
 
 export function ConfigProvider({ children }: { children: ReactNode }) {
-  const [config, setConfig] = useState(getSiteConfig()); // Fallback về config tĩnh
-  const [loading, setLoading] = useState(true);
+  // Hiển thị config tĩnh ngay lập tức, không chờ API
+  const [config, setConfig] = useState(getSiteConfig());
+  const [loading, setLoading] = useState(false); // Bắt đầu với false vì đã có config tĩnh
 
   const loadConfig = async () => {
     try {
-      setLoading(true);
+      // Load config từ API trong background, không block UI
       const apiConfig = await loadConfigFromAPI();
       if (apiConfig) {
         setConfig(apiConfig);
-        // Không log config đã load (quá dài)
       }
     } catch (error) {
-
-      // Giữ config tĩnh nếu API lỗi
+      // Giữ config tĩnh nếu API lỗi, không cần thông báo
     } finally {
       setLoading(false);
     }
   };
 
   useEffect(() => {
+    // Load config trong background, không block rendering
     loadConfig();
   }, []);
 
