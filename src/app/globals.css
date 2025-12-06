@@ -27,6 +27,9 @@ html {
   padding: 0;
   overflow-x: hidden;
   overflow-y: auto;
+  /* Tối ưu scroll performance */
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-y: contain;
 }
 
 body {
@@ -41,6 +44,8 @@ body {
   min-height: 100vh;
   position: relative;
   cursor: url('/Mouser.PNG'), auto;
+  /* Tối ưu scroll performance */
+  -webkit-overflow-scrolling: touch;
 }
 
 /* Custom cursor cho các phần tử tương tác */
@@ -1115,48 +1120,33 @@ body::-webkit-scrollbar {
 }
 
 .mu-modal-border-glow {
-  background: linear-gradient(
-    45deg,
-    rgba(234, 179, 8, 0.3),
-    rgba(251, 146, 60, 0.3),
-    rgba(234, 179, 8, 0.3)
-  );
-  background-size: 200% 200%;
-  animation: mu-shimmer 3s linear infinite;
-  border-radius: 8px;
-  padding: 2px;
-  margin: -2px;
+  /* Đã tắt animation để loại bỏ hiệu ứng nhấp nháy */
+  display: none;
 }
 
 .mu-modal-container {
   touch-action: pan-y !important;
   overscroll-behavior: auto !important;
   position: relative;
-  animation: mu-border-glow 3s ease-in-out infinite;
+  /* Đã tắt animation để loại bỏ hiệu ứng nhấp nháy */
   box-shadow: 
-    0 0 20px rgba(234, 179, 8, 0.4),
-    0 0 40px rgba(234, 179, 8, 0.2),
-    inset 0 0 20px rgba(234, 179, 8, 0.1);
+    0 0 10px rgba(234, 179, 8, 0.2),
+    0 0 20px rgba(234, 179, 8, 0.1);
 }
 
 .mu-modal-shimmer {
-  background: linear-gradient(
-    90deg,
-    transparent,
-    rgba(253, 224, 71, 0.2),
-    transparent
-  );
-  background-size: 200% 100%;
-  animation: mu-shimmer 2s infinite;
+  /* Đã tắt animation để loại bỏ hiệu ứng nhấp nháy */
+  display: none;
 }
 
 .mu-text-glow {
-  animation: mu-text-glow 2s ease-in-out infinite;
+  /* Đã tắt animation để loại bỏ hiệu ứng nhấp nháy - không có style */
+  text-shadow: none;
 }
 
 .mu-dot-glow {
-  animation: mu-dot-pulse 2s ease-in-out infinite;
-  box-shadow: 0 0 10px rgba(253, 224, 71, 0.8);
+  /* Đã tắt animation để loại bỏ hiệu ứng nhấp nháy */
+  box-shadow: none;
 }
 
 .mu-close-button {
@@ -1172,29 +1162,19 @@ body::-webkit-scrollbar {
 }
 
 .mu-button-glow {
-  animation: mu-button-glow 2s ease-in-out infinite;
+  /* Đã tắt animation để loại bỏ hiệu ứng nhấp nháy */
   position: relative;
   overflow: hidden;
 }
 
 .mu-button-glow::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(
-    90deg,
-    transparent,
-    rgba(255, 255, 255, 0.3),
-    transparent
-  );
-  transition: left 0.5s;
+  /* Đã tắt animation để loại bỏ hiệu ứng nhấp nháy */
+  display: none;
 }
 
 .mu-button-glow:hover::before {
-  left: 100%;
+  /* Đã tắt animation để loại bỏ hiệu ứng nhấp nháy */
+  display: none;
 }
 
 .mu-modal-content {
@@ -1206,6 +1186,10 @@ body::-webkit-scrollbar {
   /* Đảm bảo có thể scroll */
   overflow-y: auto !important;
   overflow-x: hidden !important;
+  /* Cho phép scroll bằng wheel trên PC */
+  pointer-events: auto !important;
+  /* Đảm bảo scroll hoạt động trên PC */
+  -ms-overflow-style: auto !important;
 }
 
 /* Cho phép scroll trên TẤT CẢ các phần tử bên trong modal */
@@ -1345,4 +1329,44 @@ iframe[src*="vercel.com"],
   width: 0 !important;
   height: 0 !important;
   overflow: hidden !important;
+}
+
+/* Tối ưu scroll performance cho tất cả các trang */
+main,
+section,
+article {
+  /* GPU acceleration cho scroll - chỉ áp dụng cho các elements chính */
+  backface-visibility: hidden;
+}
+
+/* Tối ưu cho các elements có animation */
+[class*="motion"],
+[class*="animate"],
+[class*="AnimatedSection"] {
+  will-change: transform, opacity;
+  transform: translateZ(0);
+}
+
+/* Tối ưu cho background effects */
+[class*="NetworkOverlay"],
+[class*="FloatingParticles"],
+[class*="Network3D"] {
+  will-change: transform, opacity;
+  transform: translateZ(0);
+  contain: layout style paint;
+}
+
+/* Tối ưu cho fixed elements */
+[class*="fixed"] {
+  will-change: transform;
+  transform: translateZ(0);
+}
+
+/* Tối ưu scroll cho PC - giảm repaint */
+@media (min-width: 768px) {
+  /* Giảm animation trên PC để tăng performance */
+  [class*="animate-pulse"],
+  [class*="animate-spin"] {
+    animation-duration: 2s !important;
+  }
 }

@@ -176,6 +176,9 @@ export default function RootLayout({
               // Ẩn Vercel Toolbar
               (function() {
                 function hideVercelToolbar() {
+                  // Kiểm tra document.body tồn tại
+                  if (!document.body) return;
+                  
                   // Ẩn các element của Vercel Toolbar
                   const selectors = [
                     '[data-vercel-toolbar]',
@@ -186,39 +189,71 @@ export default function RootLayout({
                   ];
                   
                   selectors.forEach(selector => {
-                    const elements = document.querySelectorAll(selector);
-                    elements.forEach(el => {
-                      el.style.display = 'none';
-                      el.style.visibility = 'hidden';
-                      el.style.opacity = '0';
-                      el.style.pointerEvents = 'none';
-                      el.style.position = 'fixed';
-                      el.style.zIndex = '-9999';
-                      el.style.width = '0';
-                      el.style.height = '0';
-                      el.style.overflow = 'hidden';
-                    });
+                    try {
+                      const elements = document.querySelectorAll(selector);
+                      elements.forEach(el => {
+                        if (el && el.nodeType === 1) { // Kiểm tra là Element node
+                          el.style.display = 'none';
+                          el.style.visibility = 'hidden';
+                          el.style.opacity = '0';
+                          el.style.pointerEvents = 'none';
+                          el.style.position = 'fixed';
+                          el.style.zIndex = '-9999';
+                          el.style.width = '0';
+                          el.style.height = '0';
+                          el.style.overflow = 'hidden';
+                        }
+                      });
+                    } catch (e) {
+                      // Bỏ qua lỗi nếu có
+                    }
                   });
                 }
                 
-                // Chạy ngay lập tức
-                hideVercelToolbar();
+                // Khởi tạo observer sau khi body sẵn sàng
+                function initObserver() {
+                  // Kiểm tra kỹ document.body tồn tại và là Node
+                  if (!document.body || !(document.body instanceof Node)) {
+                    // Nếu body chưa sẵn sàng, thử lại sau
+                    if (document.readyState === 'loading') {
+                      setTimeout(initObserver, 50);
+                    }
+                    return;
+                  }
+                  
+                  // Chạy ngay lập tức
+                  hideVercelToolbar();
+                  
+                  // Theo dõi và ẩn các element mới được thêm vào
+                  try {
+                    // Kiểm tra lại một lần nữa trước khi observe
+                    if (document.body && document.body instanceof Node) {
+                      const observer = new MutationObserver(hideVercelToolbar);
+                      observer.observe(document.body, {
+                        childList: true,
+                        subtree: true
+                      });
+                    }
+                  } catch (e) {
+                    // Bỏ qua lỗi nếu không thể tạo observer
+                    console.warn('Cannot create MutationObserver:', e);
+                  }
+                }
                 
                 // Chạy sau khi DOM load
                 if (document.readyState === 'loading') {
-                  document.addEventListener('DOMContentLoaded', hideVercelToolbar);
+                  document.addEventListener('DOMContentLoaded', function() {
+                    // Đợi thêm một chút để đảm bảo body đã sẵn sàng
+                    setTimeout(initObserver, 100);
+                  });
                 } else {
-                  hideVercelToolbar();
+                  // Nếu DOM đã load, đợi một chút rồi init
+                  setTimeout(initObserver, 100);
                 }
                 
                 // Chạy sau khi page load
-                window.addEventListener('load', hideVercelToolbar);
-                
-                // Theo dõi và ẩn các element mới được thêm vào
-                const observer = new MutationObserver(hideVercelToolbar);
-                observer.observe(document.body, {
-                  childList: true,
-                  subtree: true
+                window.addEventListener('load', function() {
+                  setTimeout(hideVercelToolbar, 100);
                 });
               })();
             `,

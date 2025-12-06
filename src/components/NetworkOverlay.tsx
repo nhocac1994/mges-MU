@@ -27,10 +27,10 @@ export default function NetworkOverlay({ className = '' }: NetworkOverlayProps) 
     // Hàm để xác định số lượng nodes dựa trên kích thước màn hình
     const getNodeCount = () => {
       const width = window.innerWidth;
-      // Giảm nodes trên mobile để tối ưu performance
-      if (width <= 480) return 100; // Mobile nhỏ: 25 nodes
-      if (width <= 768) return 50; // Mobile: 35 nodes
-      return 200; // PC: 200 nodes
+      // Giảm nodes để tối ưu performance và tiết kiệm pin
+      if (width <= 480) return 30; // Mobile nhỏ: 30 nodes
+      if (width <= 768) return 40; // Mobile: 40 nodes
+      return 150; // PC: 60 nodes (giảm từ 200 xuống 60)
     };
     
     // Detect mobile
@@ -131,9 +131,9 @@ export default function NetworkOverlay({ className = '' }: NetworkOverlayProps) 
     window.addEventListener('mouseleave', handleMouseLeave);
 
     let animationFrame: number;
-    // Giảm FPS trên mobile để tối ưu performance
+    // Giảm FPS để tối ưu performance và tiết kiệm pin
     const currentIsMobile = window.innerWidth <= 768;
-    const targetFPS = currentIsMobile ? 30 : 30; // Giảm từ 20 xuống 15 trên mobile
+    const targetFPS = currentIsMobile ? 20 : 24; // Giảm FPS: mobile 20fps, PC 24fps (thay vì 30fps)
     const frameInterval = 1000 / targetFPS;
     let lastTime = performance.now();
 

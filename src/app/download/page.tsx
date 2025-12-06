@@ -3,12 +3,18 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
+import dynamic from 'next/dynamic';
 import { motion } from 'framer-motion';
-import NetworkOverlay from '@/components/NetworkOverlay';
 import DownloadLinks from '@/components/DownloadLinks';
 import MuClassicModal from '@/components/MuClassicModal';
 import { useConfig } from '@/contexts/ConfigContext';
 import AnimatedSection from '@/components/AnimatedSection';
+
+// Lazy load NetworkOverlay để tối ưu performance
+const NetworkOverlay = dynamic(() => import('@/components/NetworkOverlay'), {
+  ssr: false,
+  loading: () => null
+});
 
 export default function Download() {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -56,13 +62,31 @@ export default function Download() {
   }, []);
 
   useEffect(() => {
+    let ticking = false;
+    let lastScrollTop = 0;
+    let lastIsScrolled = false;
+    
     const handleScroll = () => {
-      const scrollTop = window.scrollY;
-      setScrollY(scrollTop);
-      setIsScrolled(scrollTop > 100);
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          const scrollTop = window.scrollY;
+          // Chỉ update state nếu giá trị thay đổi đáng kể (tránh re-render không cần thiết)
+          if (Math.abs(scrollTop - lastScrollTop) > 5) {
+            setScrollY(scrollTop);
+            const newIsScrolled = scrollTop > 100;
+            if (newIsScrolled !== lastIsScrolled) {
+              setIsScrolled(newIsScrolled);
+              lastIsScrolled = newIsScrolled;
+            }
+            lastScrollTop = scrollTop;
+          }
+          ticking = false;
+        });
+        ticking = true;
+      }
     };
 
-    window.addEventListener('scroll', handleScroll);
+    window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
@@ -75,8 +99,8 @@ export default function Download() {
     <div className="min-h-screen relative overflow-hidden" style={{
       fontFamily: 'Roboto, sans-serif'
     }}>
-      {/* Network Overlay - Luôn chạy trên background */}
-      <NetworkOverlay />
+      {/* Network Overlay - Chỉ hiển thị khi không scroll để tiết kiệm pin */}
+      {isClient && !isScrolled && <NetworkOverlay />}
       
       {/* Background Image - Desktop Only */}
       {isClient && (

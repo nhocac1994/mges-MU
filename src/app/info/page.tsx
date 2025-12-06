@@ -4,11 +4,21 @@ import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
+import dynamic from 'next/dynamic';
 import AnimatedSection from '@/components/AnimatedSection';
-import FloatingParticles from '@/components/FloatingParticles';
-import NetworkOverlay from '@/components/NetworkOverlay';
 import { useConfig } from '@/contexts/ConfigContext';
 import MuClassicModal from '@/components/MuClassicModal';
+
+// Lazy load các components nặng để tối ưu performance
+const FloatingParticles = dynamic(() => import('@/components/FloatingParticles'), {
+  ssr: false,
+  loading: () => null
+});
+
+const NetworkOverlay = dynamic(() => import('@/components/NetworkOverlay'), {
+  ssr: false,
+  loading: () => null
+});
 
 export default function Info() {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -192,13 +202,23 @@ export default function Info() {
 
   useEffect(() => {
     let ticking = false;
+    let lastScrollTop = 0;
+    let lastIsScrolled = false;
     
     const handleScroll = () => {
       if (!ticking) {
         window.requestAnimationFrame(() => {
           const scrollTop = window.scrollY;
-          setScrollY(scrollTop);
-          setIsScrolled(scrollTop > 100);
+          // Chỉ update state nếu giá trị thay đổi đáng kể (tránh re-render không cần thiết)
+          if (Math.abs(scrollTop - lastScrollTop) > 5) {
+            setScrollY(scrollTop);
+            const newIsScrolled = scrollTop > 100;
+            if (newIsScrolled !== lastIsScrolled) {
+              setIsScrolled(newIsScrolled);
+              lastIsScrolled = newIsScrolled;
+            }
+            lastScrollTop = scrollTop;
+          }
           ticking = false;
         });
         ticking = true;
@@ -218,11 +238,11 @@ export default function Info() {
     <div className="relative" style={{
       fontFamily: 'Roboto, sans-serif'
     }}>
-      {/* Network Overlay - Luôn chạy trên background */}
-      <NetworkOverlay />
+      {/* Network Overlay - Chỉ hiển thị khi không scroll để tiết kiệm pin */}
+      {isClient && !isScrolled && <NetworkOverlay />}
       
-      {/* Floating Particles Background */}
-      <FloatingParticles count={25} />
+      {/* Floating Particles Background - Giảm số lượng để tối ưu */}
+      {isClient && <FloatingParticles count={isScrolled ? 4 : 8} />}
       
       {/* Background Image - Desktop Only */}
       {isClient && (

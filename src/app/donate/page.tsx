@@ -4,11 +4,21 @@ import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
+import dynamic from 'next/dynamic';
 import AnimatedSection from '@/components/AnimatedSection';
-import FloatingParticles from '@/components/FloatingParticles';
-import NetworkOverlay from '@/components/NetworkOverlay';
 import MuClassicModal from '@/components/MuClassicModal';
 import { useConfig } from '@/contexts/ConfigContext';
+
+// Lazy load các components nặng để tối ưu performance
+const FloatingParticles = dynamic(() => import('@/components/FloatingParticles'), {
+  ssr: false,
+  loading: () => null
+});
+
+const NetworkOverlay = dynamic(() => import('@/components/NetworkOverlay'), {
+  ssr: false,
+  loading: () => null
+});
 
 export default function Donate() {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -112,13 +122,31 @@ export default function Donate() {
   }, []);
 
   useEffect(() => {
+    let ticking = false;
+    let lastScrollTop = 0;
+    let lastIsScrolled = false;
+    
     const handleScroll = () => {
-      const scrollTop = window.scrollY;
-      setScrollY(scrollTop);
-      setIsScrolled(scrollTop > 100);
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          const scrollTop = window.scrollY;
+          // Chỉ update state nếu giá trị thay đổi đáng kể (tránh re-render không cần thiết)
+          if (Math.abs(scrollTop - lastScrollTop) > 5) {
+            setScrollY(scrollTop);
+            const newIsScrolled = scrollTop > 100;
+            if (newIsScrolled !== lastIsScrolled) {
+              setIsScrolled(newIsScrolled);
+              lastIsScrolled = newIsScrolled;
+            }
+            lastScrollTop = scrollTop;
+          }
+          ticking = false;
+        });
+        ticking = true;
+      }
     };
 
-    window.addEventListener('scroll', handleScroll);
+    window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
@@ -127,15 +155,33 @@ export default function Donate() {
     return null;
   }
 
+  // Đảm bảo payment config có giá trị, merge với config mặc định nếu thiếu
+  const paymentConfig = config.payment || {
+    bankAccount: '0971371678',
+    accountHolder: 'Bui Hữu Bảo',
+    bankName: 'MB-BANK',
+    qrCodeImage: 'https://img.vietqr.io/image/MB-0971371678-qr_only.png'
+  };
+
+  // Merge với config mặc định để đảm bảo có đầy đủ thông tin
+  const finalPaymentConfig = {
+    bankAccount: paymentConfig.bankAccount || config.payment?.bankAccount || '0971371678',
+    accountHolder: paymentConfig.accountHolder || config.payment?.accountHolder || 'Bui Hữu Bảo',
+    bankName: paymentConfig.bankName || config.payment?.bankName || 'MB-BANK',
+    qrCodeImage: paymentConfig.qrCodeImage || config.payment?.qrCodeImage || 'https://img.vietqr.io/image/MB-0971371678-qr_only.png'
+  };
+
+  const adminZalo = config.adminZalo || '0971371678';
+
   return (
     <div className="relative" style={{
       fontFamily: 'Roboto, sans-serif'
     }}>
-      {/* Network Overlay - Luôn chạy trên background */}
-      <NetworkOverlay />
+      {/* Network Overlay - Chỉ hiển thị khi không scroll để tiết kiệm pin */}
+      {isClient && !isScrolled && <NetworkOverlay />}
       
-      {/* Floating Particles Background */}
-      <FloatingParticles count={25} />
+      {/* Floating Particles Background - Giảm số lượng để tối ưu */}
+      {isClient && <FloatingParticles count={isScrolled ? 4 : 8} />}
       
       {/* Background Image - Desktop Only */}
       {isClient && (
@@ -465,7 +511,7 @@ export default function Donate() {
                         Số tài khoản:
                       </div>
                       <div className="text-white font-mono text-xl font-bold" style={{ fontFamily: 'Courier New, monospace' }}>
-                        {config.payment?.bankAccount || '0356673016'}
+                        {finalPaymentConfig.bankAccount}
                       </div>
                     </div>
                   </div>
@@ -477,7 +523,7 @@ export default function Donate() {
                         Chủ tài khoản:
                       </div>
                       <div className="text-white font-bold text-lg" style={{ fontFamily: 'Arial, sans-serif' }}>
-                        {config.payment?.accountHolder || 'NGUYEN CANH QUYEN'}
+                        {finalPaymentConfig.accountHolder}
                       </div>
                     </div>
                   </div>
@@ -489,7 +535,7 @@ export default function Donate() {
                         Ngân hàng:
                       </div>
                       <div className="text-white font-bold text-lg" style={{ fontFamily: 'Arial, sans-serif' }}>
-                        {config.payment?.bankName || 'MB-BANK'}
+                        {finalPaymentConfig.bankName}
                       </div>
                     </div>
                   </div>
@@ -500,11 +546,11 @@ export default function Donate() {
                   <div className="text-yellow-400 font-bold text-lg mb-3" style={{ fontFamily: 'Arial, sans-serif' }}>
                     QR Code Thanh Toán
                   </div>
-                    {config.payment?.qrCodeImage ? (
-                      config.payment.qrCodeImage.startsWith('http://') || config.payment.qrCodeImage.startsWith('https://') ? (
+                    {finalPaymentConfig.qrCodeImage ? (
+                      finalPaymentConfig.qrCodeImage.startsWith('http://') || finalPaymentConfig.qrCodeImage.startsWith('https://') ? (
                         // External URL - use Image component with unoptimized
                         <Image 
-                          src={config.payment.qrCodeImage} 
+                          src={finalPaymentConfig.qrCodeImage} 
                           alt="QR Code" 
                           width={200} 
                           height={200}
@@ -514,7 +560,7 @@ export default function Donate() {
                       ) : (
                       // Local path - use Next.js Image
                       <Image 
-                        src={config.payment.qrCodeImage} 
+                        src={finalPaymentConfig.qrCodeImage} 
                         alt="QR Code" 
                         width={200} 
                         height={200}
@@ -554,7 +600,7 @@ export default function Donate() {
                   </li>
                   <li className="flex items-start gap-2">
                     <span className="text-yellow-400 mt-1">4.</span>
-                    <span>Gửi bill cho Admin qua Zalo: <strong className="text-yellow-400">{config.adminZalo || '03377.14.654'}</strong></span>
+                    <span>Gửi bill cho Admin qua Zalo</span>
                   </li>
                   <li className="flex items-start gap-2">
                     <span className="text-yellow-400 mt-1">5.</span>

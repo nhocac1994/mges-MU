@@ -14,7 +14,8 @@ const ConfigContext = createContext<ConfigContextType | undefined>(undefined);
 
 export function ConfigProvider({ children }: { children: ReactNode }) {
   // Hiển thị config tĩnh ngay lập tức, không chờ API
-  const [config, setConfig] = useState(getSiteConfig());
+  const defaultConfig = getSiteConfig();
+  const [config, setConfig] = useState(defaultConfig);
   const [loading, setLoading] = useState(false); // Bắt đầu với false vì đã có config tĩnh
 
   const loadConfig = async () => {
@@ -22,10 +23,22 @@ export function ConfigProvider({ children }: { children: ReactNode }) {
       // Load config từ API trong background, không block UI
       const apiConfig = await loadConfigFromAPI();
       if (apiConfig) {
-        setConfig(apiConfig);
+        // Merge config từ API với config mặc định để đảm bảo có đầy đủ thông tin
+        // Đặc biệt quan trọng cho payment config
+        const mergedConfig = {
+          ...defaultConfig,
+          ...apiConfig,
+          // Merge payment config riêng để đảm bảo không mất thông tin
+          payment: {
+            ...defaultConfig.payment,
+            ...(apiConfig.payment || {})
+          }
+        };
+        setConfig(mergedConfig);
       }
     } catch (error) {
       // Giữ config tĩnh nếu API lỗi, không cần thông báo
+      console.error('Failed to load config from API, using default config:', error);
     } finally {
       setLoading(false);
     }
