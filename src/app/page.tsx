@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import { motion } from 'framer-motion';
 import dynamic from 'next/dynamic';
 import NetworkOverlay from '@/components/NetworkOverlay';
@@ -40,8 +41,8 @@ export default function HeroPage() {
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
-  // Scroll handler - Khi scroll xuống thì header trượt xuống và navigate sang /home
-  // CHỈ hoạt động khi đang ở trang chủ (/)
+  // Scroll handler - CHỈ hoạt động trên mobile
+  // Trên PC: vô hiệu hóa scroll, chỉ dùng nút để chuyển trang
   useEffect(() => {
     if (!isClient) return;
     
@@ -51,8 +52,20 @@ export default function HeroPage() {
       return; // Không chạy logic này nếu không ở trang chủ
     }
     
+    // CHỈ cho phép scroll navigation trên mobile
+    if (!isMobile) {
+      // Trên PC: vô hiệu hóa scroll, chỉ dùng nút
+      // Ngăn scroll bằng cách set overflow hidden cho body
+      document.body.style.overflow = 'hidden';
+      return () => {
+        document.body.style.overflow = 'unset';
+      };
+    }
+    
+    // Chỉ chạy scroll handler trên mobile
     let ticking = false;
     let hasNavigated = false;
+    const scrollThreshold = 150; // Threshold cho mobile
     
     const handleScroll = () => {
       if (!ticking && !hasNavigated) {
@@ -66,9 +79,8 @@ export default function HeroPage() {
           const scrollTop = window.scrollY;
           setIsScrolled(scrollTop > 50);
           
-          // Khi scroll xuống > 100px, tự động navigate sang /home
-          // Và chỉ khi đang ở trang chủ
-          if (scrollTop > 100 && !hasNavigated && currentPath === '/') {
+          // Khi scroll xuống > threshold, tự động navigate sang /home
+          if (scrollTop > scrollThreshold && !hasNavigated && currentPath === '/') {
             hasNavigated = true;
             router.push('/home');
           }
@@ -81,18 +93,23 @@ export default function HeroPage() {
 
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
-  }, [router, isClient]);
+  }, [router, isClient, isMobile]);
 
   return (
     <>
-      <div className="relative min-h-screen" style={{
-      fontFamily: 'Roboto, sans-serif',
-      margin: 0,
-      padding: 0,
-      width: '100%',
-      minWidth: '100%',
-        maxWidth: '100%'
-      }}>
+      <div 
+        className="relative min-h-screen" 
+        style={{
+          fontFamily: 'Roboto, sans-serif',
+          margin: 0,
+          padding: 0,
+          width: '100%',
+          minWidth: '100%',
+          maxWidth: '100%',
+          touchAction: 'pan-y',
+          overscrollBehavior: 'auto'
+        }}
+      >
         {/* Network Overlay */}
       <NetworkOverlay />
       
@@ -121,26 +138,48 @@ export default function HeroPage() {
       {/* Hero Section - Full Screen */}
       {isClient && (
           <section 
-            className="fixed z-0 mobile-hero-optimized"
-        style={{
-          inset: 0,
-          width: '100%',
+            className="fixed z-10 mobile-hero-optimized"
+            style={{
+              inset: 0,
+              width: '100%',
               height: '100vh',
-              pointerEvents: 'auto'
+              pointerEvents: 'none', // Cho phép scroll xuyên qua
+              touchAction: 'pan-y',
+              overscrollBehavior: 'auto'
             }}
           >
             {/* Overlay */}
-        <div className="absolute inset-0 bg-black/3"></div>
+        <div className="absolute inset-0 bg-black/3" style={{ pointerEvents: 'none', zIndex: 1 }}></div>
         
         {/* Hero Content */}
-        <div className="absolute inset-0 flex items-center justify-center z-10">
-          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-black/3 to-black/10"></div>
+        <div 
+          className="absolute inset-0 flex items-center justify-center"
+          style={{
+            touchAction: 'pan-y',
+            overscrollBehavior: 'auto',
+            zIndex: 2,
+            pointerEvents: 'none' // Cho phép scroll xuyên qua
+          }}
+        >
+          <div 
+            className="absolute inset-0 bg-gradient-to-b from-transparent via-black/3 to-black/10"
+            style={{
+              touchAction: 'pan-y',
+              overscrollBehavior: 'auto',
+              pointerEvents: 'none'
+            }}
+          ></div>
           
           <motion.div 
             className="text-center text-white px-4 relative z-10"
             initial={{ opacity: 0, y: 50 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
+            style={{
+              touchAction: 'pan-y',
+              overscrollBehavior: 'auto',
+              pointerEvents: 'none' // Cho phép scroll xuyên qua text
+            }}
           >
             {/* Welcome Text */}
             <motion.div
@@ -206,34 +245,79 @@ export default function HeroPage() {
           </motion.div>
         </div>
         
-        {/* Scroll Indicator */}
+        {/* Start Button & Scroll Indicator */}
         <motion.div 
-          className="absolute bottom-8 left-1/2 transform -translate-x-1/2 text-white"
+          className="absolute bottom-8 left-1/2 transform -translate-x-1/2 text-white flex flex-col items-center gap-4"
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1, delay: 1 }}
-          style={{ filter: "brightness(1.5)" }}
+          style={{ 
+            filter: "brightness(1.5)",
+            touchAction: 'pan-y',
+            overscrollBehavior: 'auto',
+            pointerEvents: 'auto',
+            zIndex: 1000
+          }}
+          onClick={(e) => {
+            // Ngăn click event bubble lên để không ảnh hưởng scroll
+            e.stopPropagation();
+          }}
         >
-          <motion.div 
-            className="flex flex-col items-center"
-            animate={{ y: [0, 10, 0] }}
-            transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+          {/* Start Button - MU Classic Style */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 1.2 }}
+            whileHover={{ scale: 1.05, y: -2 }}
+            whileTap={{ scale: 0.98 }}
           >
-            <span className="text-sm mb-2 font-semibold drop-shadow-lg">Cuộn xuống để khám phá</span>
-            <div className="w-6 h-10 border-2 border-white rounded-full flex justify-center shadow-lg">
-              <motion.div 
-                className="w-1 h-3 bg-white rounded-full mt-2"
-                animate={{ opacity: [1, 0.3, 1] }}
-                transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
-              />
-            </div>
+            <Link 
+              href="/home"
+              className="relative inline-block px-8 py-4 bg-gradient-to-r from-yellow-600/30 via-orange-600/30 to-yellow-600/30 border-2 border-yellow-500/60 text-yellow-300 font-bold text-lg rounded-lg mu-button-glow hover:from-yellow-600/50 hover:via-orange-600/50 hover:to-yellow-600/50 hover:border-yellow-400/80 transition-all duration-300 shadow-lg cursor-pointer"
+              style={{ 
+                fontFamily: 'Arial, sans-serif',
+                touchAction: 'manipulation',
+                overscrollBehavior: 'auto',
+                pointerEvents: 'auto',
+                zIndex: 1000,
+                position: 'relative',
+                display: 'inline-block'
+              }}
+            >
+              {/* Corner decorations */}
+              <div className="absolute top-0 left-0 w-4 h-4 border-t-2 border-l-2 border-yellow-400/60 pointer-events-none"></div>
+              <div className="absolute top-0 right-0 w-4 h-4 border-t-2 border-r-2 border-yellow-400/60 pointer-events-none"></div>
+              <div className="absolute bottom-0 left-0 w-4 h-4 border-b-2 border-l-2 border-yellow-400/60 pointer-events-none"></div>
+              <div className="absolute bottom-0 right-0 w-4 h-4 border-b-2 border-r-2 border-yellow-400/60 pointer-events-none"></div>
+              
+              <span className="relative z-10">BẮT ĐẦU</span>
+            </Link>
           </motion.div>
+
+          {/* Scroll Indicator - CHỈ hiển thị trên mobile */}
+          {isMobile && (
+            <motion.div 
+              className="flex flex-col items-center opacity-70"
+              animate={{ y: [0, 10, 0] }}
+              transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+              style={{ pointerEvents: 'none' }}
+            >
+              <span className="text-xs mb-2 font-semibold drop-shadow-lg">Hoặc cuộn xuống</span>
+              <div className="w-6 h-10 border-2 border-white rounded-full flex justify-center shadow-lg">
+                <motion.div 
+                  className="w-1 h-3 bg-white rounded-full mt-2"
+                  animate={{ opacity: [1, 0.3, 1] }}
+                  transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
+                />
+              </div>
+            </motion.div>
+          )}
         </motion.div>
         </section>
       )}
 
-        {/* Spacer để có thể scroll - Chỉ render trên client để tránh hydration error */}
-        {isClient && <div style={{ height: '100vh' }}></div>}
+        {/* Spacer để có thể scroll - CHỈ trên mobile */}
+        {isClient && isMobile && <div style={{ height: '100vh' }}></div>}
     </div>
     </>
   );

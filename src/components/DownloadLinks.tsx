@@ -13,6 +13,7 @@ interface DownloadLinksProps {
  * Component hiển thị download links (mega, media, launcher) - Classic MU Season 1 Style
  */
 export default function DownloadLinks({ mega, media, launcher }: DownloadLinksProps) {
+
   const downloadOptions = [
     { 
       name: 'MEGA', 
@@ -41,12 +42,24 @@ export default function DownloadLinks({ mega, media, launcher }: DownloadLinksPr
   ].filter(option => option.url);
 
   return (
-    <div className="relative">
+    <div 
+      className="relative" 
+      style={{ 
+        touchAction: 'pan-y',
+        overscrollBehavior: 'auto'
+      }}
+    >
       {/* Border Glow Effect */}
       <div className="absolute inset-0 mu-modal-border-glow"></div>
       
-      {/* Main Container */}
-      <div className="relative bg-gradient-to-b from-gray-900 via-black to-gray-900 border-2 border-yellow-500/60 mu-modal-container rounded-lg p-8">
+      {/* Main Container - Cho phép scroll ngay cả khi con trỏ ở trên */}
+      <div 
+        className="relative bg-gradient-to-b from-gray-900 via-black to-gray-900 border-2 border-yellow-500/60 mu-modal-container rounded-lg p-8"
+        style={{ 
+          touchAction: 'pan-y',
+          overscrollBehavior: 'auto'
+        }}
+      >
         {/* Header */}
         <div className="relative bg-gradient-to-r from-yellow-600/20 via-orange-600/20 to-yellow-600/20 border-b-2 border-yellow-500/60 px-6 py-4 mb-6 -mx-8 -mt-8 rounded-t-lg">
           <div className="absolute inset-0 mu-modal-shimmer"></div>
@@ -67,9 +80,13 @@ export default function DownloadLinks({ mega, media, launcher }: DownloadLinksPr
                 target="_blank"
                 rel="noopener noreferrer"
                 className="relative bg-black/40 rounded-lg p-6 border border-yellow-500/30 hover:border-yellow-400/60 transition-all duration-300 group mu-command-card cursor-pointer"
+                style={{ 
+                  touchAction: 'pan-y',
+                  overscrollBehavior: 'auto'
+                }}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: index * 0.1, type: 'spring', damping: 20 }}
+                transition={{ delay: index * 0.1, type: 'tween', duration: 0.3, ease: [0.25, 0.46, 0.45, 0.94] }}
                 whileHover={{ scale: 1.05, y: -5 }}
                 whileTap={{ scale: 0.98 }}
               >

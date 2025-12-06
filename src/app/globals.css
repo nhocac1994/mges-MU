@@ -776,6 +776,150 @@ div[class*="fixed"][style*="background"] {
   -webkit-overflow-scrolling: touch;
 }
 
+/* Đảm bảo scroll hoạt động trên trang hero (/) */
+.mobile-hero-optimized,
+section[class*="hero"],
+section[class*="Hero"],
+[class*="hero"] {
+  touch-action: pan-y !important;
+  overscroll-behavior: auto !important;
+  pointer-events: auto !important;
+}
+
+.mobile-hero-optimized *,
+section[class*="hero"] *,
+section[class*="Hero"] *,
+[class*="hero"] * {
+  touch-action: pan-y !important;
+  overscroll-behavior: auto !important;
+}
+
+/* Đặc biệt cho các phần tử text và content trong hero */
+.mobile-hero-optimized p,
+.mobile-hero-optimized h1,
+.mobile-hero-optimized h2,
+.mobile-hero-optimized h3,
+.mobile-hero-optimized div,
+.mobile-hero-optimized span {
+  touch-action: pan-y !important;
+  overscroll-behavior: auto !important;
+  pointer-events: auto !important;
+}
+
+/* Tối ưu scroll trên mobile - Scroll tự nhiên và mượt hơn */
+@media (max-width: 768px) {
+  html {
+    scroll-behavior: auto;
+    /* Tăng momentum scrolling trên mobile */
+    -webkit-overflow-scrolling: touch;
+    /* Loại bỏ scroll snap để scroll tự nhiên */
+    scroll-snap-type: none;
+  }
+  
+  body {
+    /* Loại bỏ overscroll contain để scroll mượt hơn */
+    overscroll-behavior-y: auto;
+    /* Tối ưu touch scrolling */
+    touch-action: pan-y;
+    /* Momentum scrolling */
+    -webkit-overflow-scrolling: touch;
+    /* Loại bỏ scroll snap */
+    scroll-snap-type: none;
+  }
+  
+  /* Loại bỏ scroll snap cho tất cả các phần tử */
+  * {
+    scroll-snap-align: none;
+    scroll-snap-stop: normal;
+  }
+  
+  /* Tối ưu scroll cho các section - Loại bỏ contain để scroll tự nhiên */
+  section, main, div[class*="container"], article {
+    overscroll-behavior: auto;
+    /* Đảm bảo các section không có height cố định gây snap */
+    min-height: auto !important;
+    /* Thêm padding để các section không dính nhau */
+    position: relative;
+  }
+  
+  /* Cho phép scroll trên các phần tử container, không áp dụng cho input/textarea */
+  div, section, article, main, aside, header, footer {
+    touch-action: pan-y !important;
+    overscroll-behavior: auto !important;
+  }
+  
+  /* Đặc biệt cho các link và button - vẫn cho phép scroll */
+  a, button, [role="button"] {
+    touch-action: pan-y !important;
+    overscroll-behavior: auto !important;
+  }
+  
+  /* Modal và card containers - cho phép scroll */
+  [class*="modal"], [class*="card"], [class*="container"], [class*="mu-modal"], [class*="DownloadLinks"] {
+    touch-action: pan-y !important;
+    overscroll-behavior: auto !important;
+    pointer-events: auto !important;
+  }
+  
+  /* Cho phép scroll trên TẤT CẢ các phần tử trong modal content */
+  .mu-modal-content * {
+    touch-action: pan-y !important;
+    overscroll-behavior: auto !important;
+  }
+  
+  /* Đặc biệt cho các div, section, article trong modal */
+  .mu-modal-content div,
+  .mu-modal-content section,
+  .mu-modal-content article,
+  .mu-modal-content ul,
+  .mu-modal-content li,
+  .mu-modal-content [class*="bg-black"],
+  .mu-modal-content [class*="rounded-lg"],
+  .mu-modal-content [class*="border"],
+  .mu-modal-content [class*="space-y"] {
+    touch-action: pan-y !important;
+    overscroll-behavior: auto !important;
+    pointer-events: auto !important;
+  }
+  
+  /* Giữ nguyên touch-action cho input/textarea để có thể nhập liệu */
+  input, textarea, select {
+    touch-action: manipulation !important;
+  }
+  
+  /* Loại bỏ height 100vh trên mobile để scroll tự nhiên */
+  section[class*="min-h-screen"],
+  div[class*="min-h-screen"],
+  section[class*="min-h-\[100vh\]"] {
+    min-height: auto !important;
+    /* Thêm padding thay vì height cố định */
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+  }
+  
+  /* Đảm bảo các phần tử không bị overflow hidden gây snap */
+  section, main, article {
+    overflow: visible !important;
+  }
+  
+  /* Đảm bảo các section có spacing hợp lý để scroll mượt */
+  section + section {
+    margin-top: 1rem;
+  }
+  
+  /* Tối ưu padding cho các section trên mobile */
+  section[class*="py-"] {
+    padding-top: 1.5rem !important;
+    padding-bottom: 1.5rem !important;
+  }
+  
+  /* Giảm khoảng cách giữa các phần để scroll tự nhiên hơn */
+  .max-w-6xl, .max-w-4xl, .max-w-5xl {
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+  }
+}
+
 /* Tối ưu rendering khi scroll - Giảm giật */
 @media (prefers-reduced-motion: no-preference) {
   * {
@@ -985,6 +1129,8 @@ body::-webkit-scrollbar {
 }
 
 .mu-modal-container {
+  touch-action: pan-y !important;
+  overscroll-behavior: auto !important;
   position: relative;
   animation: mu-border-glow 3s ease-in-out infinite;
   box-shadow: 
@@ -1052,8 +1198,49 @@ body::-webkit-scrollbar {
 }
 
 .mu-modal-content {
+  touch-action: pan-y !important;
+  overscroll-behavior: auto !important;
+  -webkit-overflow-scrolling: touch !important;
   scrollbar-width: thin;
   scrollbar-color: rgba(234, 179, 8, 0.5) transparent;
+  /* Đảm bảo có thể scroll */
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+}
+
+/* Cho phép scroll trên TẤT CẢ các phần tử bên trong modal */
+.mu-modal-content *,
+.mu-modal-content > *,
+.mu-modal-content div,
+.mu-modal-content section,
+.mu-modal-content article,
+.mu-modal-content ul,
+.mu-modal-content li,
+.mu-modal-content p,
+.mu-modal-content h1,
+.mu-modal-content h2,
+.mu-modal-content h3,
+.mu-modal-content h4,
+.mu-modal-content h5,
+.mu-modal-content h6 {
+  touch-action: pan-y !important;
+  overscroll-behavior: auto !important;
+  pointer-events: auto !important;
+}
+
+/* Đặc biệt cho các card và container trong modal */
+.mu-modal-content [class*="bg-black"],
+.mu-modal-content [class*="rounded-lg"],
+.mu-modal-content [class*="border"],
+.mu-modal-content [class*="card"],
+.mu-modal-content [class*="container"],
+.mu-modal-content [class*="space-y"],
+.mu-modal-content [class*="p-4"],
+.mu-modal-content [class*="p-6"],
+.mu-modal-content [class*="p-8"] {
+  touch-action: pan-y !important;
+  overscroll-behavior: auto !important;
+  pointer-events: auto !important;
 }
 
 .mu-modal-content::-webkit-scrollbar {
@@ -1073,10 +1260,52 @@ body::-webkit-scrollbar {
   background: rgba(234, 179, 8, 0.8);
 }
 
+/* Cho phép scroll trên TẤT CẢ các phần tử bên trong modal */
+.mu-modal-content *,
+.mu-modal-content > *,
+.mu-modal-content div,
+.mu-modal-content section,
+.mu-modal-content article,
+.mu-modal-content ul,
+.mu-modal-content li,
+.mu-modal-content p,
+.mu-modal-content h1,
+.mu-modal-content h2,
+.mu-modal-content h3,
+.mu-modal-content h4,
+.mu-modal-content h5,
+.mu-modal-content h6 {
+  touch-action: pan-y !important;
+  overscroll-behavior: auto !important;
+  pointer-events: auto !important;
+}
+
+/* Đặc biệt cho các card và container trong modal */
+.mu-modal-content [class*="bg-black"],
+.mu-modal-content [class*="rounded-lg"],
+.mu-modal-content [class*="border"],
+.mu-modal-content [class*="card"],
+.mu-modal-content [class*="container"],
+.mu-modal-content [class*="space-y"] {
+  touch-action: pan-y !important;
+  overscroll-behavior: auto !important;
+  pointer-events: auto !important;
+}
+
 /* MU Classic Command Card Styles */
 .mu-command-card {
   position: relative;
   overflow: hidden;
+  touch-action: pan-y !important;
+  overscroll-behavior: auto !important;
+  /* Đảm bảo scroll events không bị chặn */
+  pointer-events: auto !important;
+}
+
+/* Cho phép scroll trên tất cả các card con */
+.mu-command-card * {
+  touch-action: pan-y !important;
+  pointer-events: auto !important;
 }
 
 .mu-command-card::before {

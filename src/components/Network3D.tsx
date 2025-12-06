@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from 'react';
 
 export default function Network3D() {
   const [isMounted, setIsMounted] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const mousePosRef = useRef({ x: 0.5, y: 0.5 });
   const smoothMousePosRef = useRef({ x: 0.5, y: 0.5 });
@@ -13,6 +14,12 @@ export default function Network3D() {
 
   useEffect(() => {
     setIsMounted(true);
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
   useEffect(() => {
@@ -63,26 +70,32 @@ export default function Network3D() {
     };
     window.addEventListener('mousemove', handleMouseMove, { passive: true });
 
+    // Phát hiện mobile
+    const isMobileDevice = window.innerWidth <= 768;
+    
     // Giảm số nodes để tối ưu performance
-    const nodeCount = prefersReducedMotion ? 20 : 30; // Giảm từ 50 xuống 30
+    const nodeCount = prefersReducedMotion ? 20 : (isMobileDevice ? 25 : 30);
     const nodes: Array<{ x: number; y: number; z: number; vx: number; vy: number }> = [];
 
     // Lấy kích thước canvas sau khi scale
     const canvasWidth = window.innerWidth;
     const canvasHeight = window.innerHeight;
 
+    // Giảm tốc độ di chuyển trên mobile
+    const speedMultiplier = isMobileDevice ? 0.4 : 1; // Giảm 60% tốc độ trên mobile
+
     for (let i = 0; i < nodeCount; i++) {
       nodes.push({
         x: Math.random() * canvasWidth,
         y: Math.random() * canvasHeight,
         z: Math.random() * 1000,
-        vx: (Math.random() - 0.5) * 0.5,
-        vy: (Math.random() - 0.5) * 0.5
+        vx: (Math.random() - 0.5) * 0.5 * speedMultiplier, // Giảm tốc độ trên mobile
+        vy: (Math.random() - 0.5) * 0.5 * speedMultiplier // Giảm tốc độ trên mobile
       });
     }
 
     let animationFrame: number;
-    const targetFPS = 30; // Giới hạn FPS để tiết kiệm pin
+    const targetFPS = 20; // Giới hạn FPS để tiết kiệm pin
     const frameInterval = 1000 / targetFPS;
 
     const animate = (currentTime: number) => {
@@ -111,16 +124,19 @@ export default function Network3D() {
       ctx.fillRect(0, 0, canvas.width / (window.devicePixelRatio || 1), canvas.height / (window.devicePixelRatio || 1));
 
       // Update and draw nodes với mouse influence
-      const mouseInfluenceX = (smoothMousePosRef.current.x - 0.5) * 60;
-      const mouseInfluenceY = (smoothMousePosRef.current.y - 0.5) * 60;
+      // Giảm mouse influence trên mobile
+      const mouseInfluenceMultiplier = isMobileDevice ? 0.3 : 1; // Giảm 70% trên mobile
+      const mouseInfluenceX = (smoothMousePosRef.current.x - 0.5) * 60 * mouseInfluenceMultiplier;
+      const mouseInfluenceY = (smoothMousePosRef.current.y - 0.5) * 60 * mouseInfluenceMultiplier;
 
       // Batch operations để tối ưu
       ctx.save();
       
       nodes.forEach((node) => {
-        // Update position
-        node.x += node.vx + mouseInfluenceX * 0.004;
-        node.y += node.vy + mouseInfluenceY * 0.004;
+        // Update position - giảm tốc độ trên mobile
+        const movementSpeed = isMobileDevice ? 0.6 : 1; // Giảm 40% tốc độ di chuyển trên mobile
+        node.x += (node.vx + mouseInfluenceX * 0.004) * movementSpeed;
+        node.y += (node.vy + mouseInfluenceY * 0.004) * movementSpeed;
 
         // Wrap around
         const canvasWidth = canvas.width / (window.devicePixelRatio || 1);

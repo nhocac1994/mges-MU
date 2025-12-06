@@ -22,6 +22,9 @@ export default function AnimatedSection({
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    // Trên mobile, giảm animation để scroll mượt hơn
+    const isMobile = typeof window !== 'undefined' && window.innerWidth <= 768;
+    
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
@@ -30,8 +33,8 @@ export default function AnimatedSection({
         }
       },
       { 
-        threshold: 0.05, // Giảm threshold để trigger sớm hơn
-        rootMargin: '50px' // Thêm margin để trigger trước khi vào viewport
+        threshold: isMobile ? 0.01 : 0.05, // Threshold thấp hơn trên mobile
+        rootMargin: isMobile ? '100px' : '50px' // Margin lớn hơn trên mobile để trigger sớm
       }
     );
 
@@ -57,6 +60,9 @@ export default function AnimatedSection({
     }
   };
 
+  // Trên mobile, giảm animation để scroll mượt hơn
+  const isMobile = typeof window !== 'undefined' && window.innerWidth <= 768;
+  
   const variants = {
     hidden: getInitialPosition(),
     visible: {
@@ -64,8 +70,8 @@ export default function AnimatedSection({
       x: 0,
       opacity: 1,
       transition: {
-        duration: duration * 0.7, // Giảm duration để nhanh hơn
-        delay: delay * 0.5, // Giảm delay
+        duration: isMobile ? duration * 0.4 : duration * 0.7, // Nhanh hơn trên mobile
+        delay: isMobile ? 0 : delay * 0.5, // Không delay trên mobile
         ease: [0.25, 0.46, 0.45, 0.94] as const // Easing mượt hơn, ít giật hơn
       }
     }

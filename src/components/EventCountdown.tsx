@@ -294,13 +294,29 @@ const EventCountdown: React.FC = () => {
 
   return (
     <>
-      <div className="space-y-4">
+      <div 
+        className="space-y-4"
+        style={{ 
+          touchAction: 'pan-y',
+          overscrollBehavior: 'auto'
+        }}
+      >
         {/* Events List */}
-        <div className="space-y-3">
+        <div 
+          className="space-y-3"
+          style={{ 
+            touchAction: 'pan-y',
+            overscrollBehavior: 'auto'
+          }}
+        >
           {events.map((event, index) => (
           <motion.div 
             key={index}
             onClick={() => handleEventClick(event)}
+            onWheel={(e) => {
+              // Cho phép scroll ngay cả khi con trỏ ở trên card
+              e.stopPropagation();
+            }}
             className={`relative bg-gradient-to-r ${event.bgColor} rounded-lg p-3 sm:p-4 border-2 ${event.borderColor} hover:border-opacity-70 transition-all duration-300 cursor-pointer mu-command-card ${
               isEventRunning(event) ? 'ring-2 ring-green-400 ring-opacity-50' : ''
             }`}
@@ -314,7 +330,11 @@ const EventCountdown: React.FC = () => {
               stiffness: 300,
               delay: index * 0.1
             }}
-            style={{ fontFamily: 'Arial, sans-serif' }}
+            style={{ 
+              fontFamily: 'Arial, sans-serif',
+              touchAction: 'pan-y',
+              overscrollBehavior: 'auto'
+            }}
           >
             {/* Corner decorations */}
             <div className="absolute top-0 left-0 w-3 h-3 border-t border-l border-yellow-500/50"></div>

@@ -261,7 +261,7 @@ const VideoSection = () => {
   return (
     <section
       ref={videoRef}
-      className={`flex flex-col items-center justify-center relative bg-black/40 backdrop-blur-sm ${isMobile ? 'min-h-[100vh]' : 'min-h-screen'}`}
+      className={`flex flex-col items-center justify-center relative bg-black/40 backdrop-blur-sm ${isMobile ? 'min-h-[80vh] py-12' : 'min-h-screen'}`}
     >
       <div className="absolute inset-0 bg-gradient-to-b from-black/60 md:from-black via-black/40 md:via-black/80 to-black/60 md:to-black z-10 pointer-events-none"></div>
       
@@ -323,15 +323,17 @@ export default function HomePage() {
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
-  // Scroll handler - Khi scroll lên trên cùng thì navigate về trang hero
-  // CHỈ hoạt động khi đang ở trang /home, không áp dụng cho các trang khác
+  // Tắt scroll navigation từ /home về / trên mobile
+  // Sử dụng idle redirect thay thế (tự động quay về sau 1 phút không hoạt động)
+  // Chỉ giữ scroll navigation trên desktop
   useEffect(() => {
     if (!isClient) return;
+    if (isMobile) return; // Tắt trên mobile
     
     // Kiểm tra xem có đang ở trang /home không
     const currentPath = window.location.pathname;
     if (currentPath !== '/home') {
-      return; // Không chạy logic này nếu không ở trang /home
+      return;
     }
     
     let ticking = false;
@@ -341,10 +343,9 @@ export default function HomePage() {
     const handleScroll = () => {
       if (!ticking) {
         window.requestAnimationFrame(() => {
-          // Kiểm tra lại pathname trước khi navigate
           const currentPath = window.location.pathname;
           if (currentPath !== '/home') {
-            return; // Không navigate nếu đã chuyển sang trang khác
+            return;
           }
           
           const scrollTop = window.scrollY;
@@ -371,7 +372,7 @@ export default function HomePage() {
 
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
-  }, [router, isClient]);
+  }, [router, isClient, isMobile]);
 
   useEffect(() => {
     const loadDownloadLinks = async () => {
@@ -391,7 +392,7 @@ export default function HomePage() {
 
   const news = [
     {
-      title: 'HƯỚNG DẪN CHƠI MU DAU TRUONG - SEASON 1',
+      title: 'HƯỚNG DẪN CHƠI MU - SEASON 1',
       date: '14/09/2025',
       type: 'Guide',
       link: '/news/guide',
@@ -659,7 +660,13 @@ export default function HomePage() {
             <AnimatedSection direction="left" delay={0.2}>
               <div className="relative">
                 <div className="absolute inset-0 mu-modal-border-glow rounded-lg"></div>
-                <div className="relative bg-gradient-to-b from-gray-900 via-black to-gray-900 border-2 border-yellow-500/60 mu-modal-container rounded-lg p-6">
+                <div 
+                  className="relative bg-gradient-to-b from-gray-900 via-black to-gray-900 border-2 border-yellow-500/60 mu-modal-container rounded-lg p-6"
+                  style={{ 
+                    touchAction: 'pan-y',
+                    overscrollBehavior: 'auto'
+                  }}
+                >
                   {/* Corner decorations */}
                   <div className="absolute top-0 left-0 w-6 h-6 border-t-2 border-l-2 border-yellow-500/60"></div>
                   <div className="absolute top-0 right-0 w-6 h-6 border-t-2 border-r-2 border-yellow-500/60"></div>
@@ -696,11 +703,21 @@ export default function HomePage() {
                       Xem Thêm
                     </Link>
                   </div>
-                  <div className="space-y-4">
+                  <div 
+                    className="space-y-4"
+                    style={{ 
+                      touchAction: 'pan-y',
+                      overscrollBehavior: 'auto'
+                    }}
+                  >
                     {news.map((item, index) => (
                       <motion.div 
                         key={index} 
                         onClick={(e) => handleNewsClick(e, item)}
+                        onWheel={(e) => {
+                          // Cho phép scroll ngay cả khi con trỏ ở trên card
+                          e.stopPropagation();
+                        }}
                         className="relative bg-black/40 rounded-lg p-4 border border-yellow-500/30 hover:border-yellow-400/60 transition-all duration-300 group cursor-pointer mu-command-card"
                         whileHover={{ scale: 1.02, y: -2 }}
                         whileTap={{ scale: 0.98, y: 0 }}
@@ -711,6 +728,10 @@ export default function HomePage() {
                           damping: 20,
                           stiffness: 300,
                           delay: index * 0.1
+                        }}
+                        style={{ 
+                          touchAction: 'pan-y',
+                          overscrollBehavior: 'auto'
                         }}
                       >
                         {/* Corner decorations */}

@@ -396,7 +396,7 @@ export default function Dashboard() {
   }
 
   return (
-    <div className={`relative ${typeof window !== 'undefined' && window.innerWidth <= 768 ? '' : 'min-h-screen overflow-hidden'}`} style={{
+    <div className="relative" style={{
       fontFamily: 'Arial, sans-serif'
     }}>
       {/* Network Overlay - Luôn chạy trên background */}

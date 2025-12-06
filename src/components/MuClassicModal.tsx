@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 interface MuClassicModalProps {
@@ -26,6 +26,9 @@ const MuClassicModal: React.FC<MuClassicModalProps> = ({
   newsDate,
   newsType
 }) => {
+  const modalContentRef = useRef<HTMLDivElement>(null);
+  const modalContainerRef = useRef<HTMLDivElement>(null);
+
   // Đóng modal khi nhấn ESC
   useEffect(() => {
     const handleEscape = (e: KeyboardEvent) => {
@@ -36,15 +39,78 @@ const MuClassicModal: React.FC<MuClassicModalProps> = ({
 
     if (isOpen) {
       document.addEventListener('keydown', handleEscape);
-      // Ngăn scroll body khi modal mở
-      document.body.style.overflow = 'hidden';
+      // KHÔNG ngăn scroll body - cho phép scroll tự nhiên
+      // document.body.style.overflow = 'hidden'; // Đã xóa dòng này
     }
 
     return () => {
       document.removeEventListener('keydown', handleEscape);
-      document.body.style.overflow = 'unset';
+      // document.body.style.overflow = 'unset'; // Đã xóa dòng này
     };
   }, [isOpen, onClose]);
+
+  // Cho phép scroll ngay cả khi con trỏ ở trên modal - Cách tiếp cận mới
+  useEffect(() => {
+    if (!isOpen) return;
+
+    const modalContent = modalContentRef.current;
+    const modalContainer = modalContainerRef.current;
+
+    if (!modalContent || !modalContainer) return;
+
+    // Cho phép scroll bằng wheel event - không chặn
+    const handleWheel = (e: WheelEvent) => {
+      const element = e.currentTarget as HTMLElement;
+      
+      // Kiểm tra nếu có thể scroll trong element
+      if (element === modalContent) {
+        const { scrollTop, scrollHeight, clientHeight } = element;
+        const canScrollUp = scrollTop > 0;
+        const canScrollDown = scrollTop + clientHeight < scrollHeight;
+        
+        // Nếu có thể scroll trong modal, cho phép scroll
+        if ((canScrollUp && e.deltaY < 0) || (canScrollDown && e.deltaY > 0)) {
+          // Scroll trong modal
+          return;
+        }
+      }
+      
+      // Nếu không thể scroll trong modal, scroll trên body
+      e.preventDefault();
+      window.scrollBy({
+        top: e.deltaY,
+        behavior: 'auto'
+      });
+    };
+
+    // Cho phép scroll bằng touch - không chặn
+    const handleTouchMove = (e: TouchEvent) => {
+      // Không chặn touch events
+      // Cho phép scroll tự nhiên
+    };
+
+    // Thêm event listeners với capture phase để bắt sớm
+    modalContent.addEventListener('wheel', handleWheel, { passive: false, capture: true });
+    modalContainer.addEventListener('wheel', handleWheel, { passive: false, capture: true });
+    modalContent.addEventListener('touchmove', handleTouchMove, { passive: true });
+    modalContainer.addEventListener('touchmove', handleTouchMove, { passive: true });
+
+    // Thêm listener cho toàn bộ modal wrapper
+    const modalWrapper = modalContainer.parentElement;
+    if (modalWrapper) {
+      modalWrapper.addEventListener('wheel', handleWheel, { passive: false, capture: true });
+    }
+
+    return () => {
+      modalContent.removeEventListener('wheel', handleWheel, { capture: true });
+      modalContainer.removeEventListener('wheel', handleWheel, { capture: true });
+      modalContent.removeEventListener('touchmove', handleTouchMove);
+      modalContainer.removeEventListener('touchmove', handleTouchMove);
+      if (modalWrapper) {
+        modalWrapper.removeEventListener('wheel', handleWheel, { capture: true });
+      }
+    };
+  }, [isOpen]);
 
   return (
     <AnimatePresence>
@@ -73,13 +139,44 @@ const MuClassicModal: React.FC<MuClassicModalProps> = ({
             }}
             className="fixed inset-0 z-[9999] flex items-center justify-center p-2 md:p-4 pointer-events-none"
             onClick={(e) => e.stopPropagation()}
+            onWheel={(e) => {
+              // Cho phép scroll trên backdrop
+              e.stopPropagation();
+            }}
+            style={{ 
+              touchAction: 'pan-y',
+              overscrollBehavior: 'auto'
+            }}
           >
-            <div className="relative w-full max-w-[95vw] md:max-w-2xl max-h-[95vh] md:max-h-[90vh] overflow-hidden pointer-events-auto">
+            <div 
+              ref={modalContainerRef}
+              className="relative w-full max-w-[95vw] md:max-w-2xl max-h-[95vh] md:max-h-[90vh] overflow-hidden pointer-events-auto"
+              onWheel={(e) => {
+                // Cho phép scroll events
+                e.stopPropagation();
+              }}
+              style={{ 
+                touchAction: 'pan-y',
+                overscrollBehavior: 'auto',
+                WebkitOverflowScrolling: 'touch'
+              }}
+            >
               {/* Border Glow Effect */}
               <div className="absolute inset-0 mu-modal-border-glow"></div>
               
               {/* Main Content */}
-              <div className="relative bg-gradient-to-b from-gray-900 via-black to-gray-900 border-2 border-yellow-500/60 mu-modal-container">
+              <div 
+                className="relative bg-gradient-to-b from-gray-900 via-black to-gray-900 border-2 border-yellow-500/60 mu-modal-container"
+                onWheel={(e) => {
+                  // Cho phép scroll events
+                  e.stopPropagation();
+                }}
+                style={{ 
+                  touchAction: 'pan-y',
+                  overscrollBehavior: 'auto',
+                  WebkitOverflowScrolling: 'touch'
+                }}
+              >
                 {/* Header */}
                 <div className="relative bg-gradient-to-r from-yellow-600/20 via-orange-600/20 to-yellow-600/20 border-b-2 border-yellow-500/60 px-3 py-2 md:px-6 md:py-4">
                   {/* Shimmer effect trên header */}
@@ -130,7 +227,30 @@ const MuClassicModal: React.FC<MuClassicModalProps> = ({
                 </div>
 
                 {/* Content */}
-                <div className="p-3 md:p-6 overflow-y-auto max-h-[calc(95vh-140px)] md:max-h-[calc(90vh-180px)] mu-modal-content">
+                <div 
+                  ref={modalContentRef}
+                  className="p-3 md:p-6 overflow-y-auto max-h-[calc(95vh-140px)] md:max-h-[calc(90vh-180px)] mu-modal-content"
+                  onWheel={(e) => {
+                    const element = e.currentTarget as HTMLDivElement;
+                    const { scrollTop, scrollHeight, clientHeight } = element;
+                    const canScrollUp = scrollTop > 0;
+                    const canScrollDown = scrollTop + clientHeight < scrollHeight;
+                    
+                    // Nếu không thể scroll trong modal, scroll trên body
+                    if (!canScrollUp && e.deltaY < 0) {
+                      e.preventDefault();
+                      window.scrollBy({ top: e.deltaY, behavior: 'auto' });
+                    } else if (!canScrollDown && e.deltaY > 0) {
+                      e.preventDefault();
+                      window.scrollBy({ top: e.deltaY, behavior: 'auto' });
+                    }
+                  }}
+                  style={{ 
+                    touchAction: 'pan-y',
+                    overscrollBehavior: 'auto',
+                    WebkitOverflowScrolling: 'touch'
+                  }}
+                >
                   {children}
                 </div>
 

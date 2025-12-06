@@ -2,10 +2,11 @@ import type { Metadata } from "next";
 import "./globals.css";
 import "../styles/mobile.css";
 import SecurityGuard from "@/components/SecurityGuard";
-import Header from "@/components/Header";
+import ConditionalHeader from "@/components/ConditionalHeader";
 import ConditionalFooter from "@/components/ConditionalFooter";
 import AutoRequestNotification from "@/components/AutoRequestNotification";
 import { ConfigProvider } from "@/contexts/ConfigContext";
+import IdleRedirectProvider from "@/components/IdleRedirectProvider";
 
 // Sử dụng font system thay vì Google Fonts để tránh timeout
 const geistSans = {
@@ -185,11 +186,13 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <ConfigProvider>
-          <AutoRequestNotification />
-          <SecurityGuard />
-          <Header />
-          {children}
-          <ConditionalFooter />
+          <IdleRedirectProvider>
+            <AutoRequestNotification />
+            <SecurityGuard />
+            <ConditionalHeader />
+            {children}
+            <ConditionalFooter />
+          </IdleRedirectProvider>
         </ConfigProvider>
       </body>
     </html>
