@@ -148,6 +148,82 @@ export default function RootLayout({
         <meta name="apple-mobile-web-app-title" content={config.nameGame} />
         <link rel="apple-touch-icon" href="/favicon/apple-touch-icon.png" />
         
+        {/* Ẩn Vercel Toolbar */}
+        <style
+          dangerouslySetInnerHTML={{
+            __html: `
+              /* Ẩn Vercel Toolbar */
+              [data-vercel-toolbar],
+              [data-vercel-toolbar] *,
+              iframe[src*="vercel.live"],
+              iframe[src*="vercel.com"] {
+                display: none !important;
+                visibility: hidden !important;
+                opacity: 0 !important;
+                pointer-events: none !important;
+                position: fixed !important;
+                z-index: -9999 !important;
+                width: 0 !important;
+                height: 0 !important;
+                overflow: hidden !important;
+              }
+            `,
+          }}
+        />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              // Ẩn Vercel Toolbar
+              (function() {
+                function hideVercelToolbar() {
+                  // Ẩn các element của Vercel Toolbar
+                  const selectors = [
+                    '[data-vercel-toolbar]',
+                    'iframe[src*="vercel.live"]',
+                    'iframe[src*="vercel.com"]',
+                    '[id*="vercel"]',
+                    '[class*="vercel-toolbar"]'
+                  ];
+                  
+                  selectors.forEach(selector => {
+                    const elements = document.querySelectorAll(selector);
+                    elements.forEach(el => {
+                      el.style.display = 'none';
+                      el.style.visibility = 'hidden';
+                      el.style.opacity = '0';
+                      el.style.pointerEvents = 'none';
+                      el.style.position = 'fixed';
+                      el.style.zIndex = '-9999';
+                      el.style.width = '0';
+                      el.style.height = '0';
+                      el.style.overflow = 'hidden';
+                    });
+                  });
+                }
+                
+                // Chạy ngay lập tức
+                hideVercelToolbar();
+                
+                // Chạy sau khi DOM load
+                if (document.readyState === 'loading') {
+                  document.addEventListener('DOMContentLoaded', hideVercelToolbar);
+                } else {
+                  hideVercelToolbar();
+                }
+                
+                // Chạy sau khi page load
+                window.addEventListener('load', hideVercelToolbar);
+                
+                // Theo dõi và ẩn các element mới được thêm vào
+                const observer = new MutationObserver(hideVercelToolbar);
+                observer.observe(document.body, {
+                  childList: true,
+                  subtree: true
+                });
+              })();
+            `,
+          }}
+        />
         {/* Service Worker Registration */}
         <script
           dangerouslySetInnerHTML={{
