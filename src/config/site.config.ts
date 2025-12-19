@@ -9,10 +9,10 @@ export const siteConfig = {
   serverName: "MuTruyenkyss1.com",
   serverVersion: "Season 1",
   serverIP: "127.0.0.1",
-  serverPort: "55900",
+  serverPort: "55000",
   
   // Links mạng xã hội
-  linkFacebook: "https://facebook.com/MuTruyenkyss1.com",
+  linkFacebook: "https://www.facebook.com/share/1Bns6LvrNQ/?mibextid=wwXIfr",
   linkDiscord: "https://discord.gg/MuOnline.com",
   linkYoutube: "https://youtube.com/@MuTruyenkyss1.com",
   linkZalo: "https://zalo.me/MuTruyenkyss1.com",
@@ -20,17 +20,17 @@ export const siteConfig = {
   
   // Thông tin liên hệ
   email: "support@MuTruyenkyss1.com",
-  phone: "0971371678",
+  phone: "0349915770",
   address: "Việt Nam",
-  adminZalo: "0971371678",
+  adminZalo: "0349915770",
   
   // Thông tin chuyển khoản
   payment: {
-    bankAccount: "0971371678",
-    accountHolder: "Bui Hữu Bảo",
+    bankAccount: "0349915770",
+    accountHolder: "NGUYEN THANH DUONG",
     bankName: "MB-BANK",
     // Có thể dùng đường dẫn local (ví dụ: "/qrcode.jpeg") hoặc URL (ví dụ: "https://example.com/qrcode.jpg")
-    qrCodeImage: "https://img.vietqr.io/image/MB-0971371678-qr_only.png"
+    qrCodeImage: "https://img.vietqr.io/image/MB-0090123452222-qr_only.png"
   },
   
   // Thông tin website

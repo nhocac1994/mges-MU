@@ -81,7 +81,7 @@ export default function NewsRoadmap() {
                       <span className="bg-gradient-to-r from-purple-600 to-purple-500 text-white px-4 py-1 rounded-full text-sm font-bold border border-yellow-500/30 mu-button-glow" style={{ fontFamily: 'Arial, sans-serif' }}>
                         UPDATE
                       </span>
-                      <span className="text-yellow-400 font-semibold" style={{ fontFamily: 'Arial, sans-serif' }}>20/09/2024</span>
+                      <span className="text-yellow-400 font-semibold" style={{ fontFamily: 'Arial, sans-serif' }}>{new Date().toLocaleDateString('vi-VN')}</span>
                     </div>
                     
                     <h1 className="text-4xl font-bold text-yellow-300 mb-6 mu-text-glow" style={{ fontFamily: 'Arial, sans-serif' }}>
@@ -90,119 +90,78 @@ export default function NewsRoadmap() {
                     
                     <div className="prose prose-invert max-w-none">
                       <AnimatedSection direction="up" delay={0.3}>
-                        <h2 className="text-2xl font-bold text-yellow-400 mb-4" style={{ fontFamily: 'Arial, sans-serif' }}>🚀 Giai Đoạn 1: Khởi Động (Q4 2024)</h2>
+                        <h2 className="text-2xl font-bold text-yellow-400 mb-4" style={{ fontFamily: 'Arial, sans-serif' }}>🚀 3 Tháng Đầu: Khởi Động Box 1 & 2</h2>
                         <p className="text-gray-300 mb-6 leading-relaxed">
-                          Giai đoạn đầu tiên tập trung vào việc ổn định server và thu hút người chơi:
+                          Giai đoạn đầu tiên tập trung vào việc mở đồ box và tạo nền tảng cho người chơi:
                         </p>
                         
-                        <div className="space-y-6 mb-8">
-                          {[
-                            { title: '✅ Đã Hoàn Thành', color: 'green', items: [
-                              'Khởi động server Season 1',
-                              'Hệ thống đăng ký/đăng nhập',
-                              'Website chính thức',
-                              'Hệ thống anti-cheat cơ bản'
-                            ]},
-                            { title: '🔄 Đang Thực Hiện', color: 'blue', items: [
-                              'Tối ưu hóa server performance',
-                              'Thêm các sự kiện hàng ngày',
-                              'Cải thiện hệ thống support',
-                              'Phát triển mobile app'
-                            ]}
-                          ].map((section, idx) => (
-                            <motion.div
-                              key={idx}
-                              className={`relative bg-black/40 rounded-lg p-6 border ${
-                                section.color === 'green' ? 'border-green-500/30 hover:border-green-400/60' : 'border-blue-500/30 hover:border-blue-400/60'
-                              } transition-all duration-300 mu-command-card`}
-                              initial={{ opacity: 0, x: -20 }}
-                              animate={{ opacity: 1, x: 0 }}
-                              transition={{ delay: 0.3 + idx * 0.1 }}
-                              whileHover={{ scale: 1.02, x: 5 }}
-                            >
-                              {/* Corner decorations */}
-                              <div className="absolute top-0 left-0 w-3 h-3 border-t border-l border-yellow-500/50"></div>
-                              <div className="absolute top-0 right-0 w-3 h-3 border-t border-r border-yellow-500/50"></div>
-                              <div className="absolute bottom-0 left-0 w-3 h-3 border-b border-l border-yellow-500/50"></div>
-                              <div className="absolute bottom-0 right-0 w-3 h-3 border-b border-r border-yellow-500/50"></div>
-                              
-                              <h3 className={`text-xl font-bold mb-4 ${
-                                section.color === 'green' ? 'text-green-400' : 'text-blue-400'
-                              }`} style={{ fontFamily: 'Arial, sans-serif' }}>{section.title}</h3>
-                              <ul className="text-gray-300 space-y-2">
-                                {section.items.map((item, i) => (
-                                  <li key={i} className="flex items-start gap-2">
-                                    <span className={`w-2 h-2 rounded-full mt-2 animate-pulse ${
-                                      section.color === 'green' ? 'bg-green-400 mu-dot-glow' : 'bg-blue-400 mu-dot-glow'
-                                    }`} style={{animationDelay: `${i * 0.2}s`}}></span>
-                                    <span>{item}</span>
-                                  </li>
-                                ))}
-                              </ul>
-                            </motion.div>
-                          ))}
-                        </div>
+                        <motion.div
+                          className="relative bg-black/40 rounded-lg p-6 border border-green-500/30 hover:border-green-400/60 transition-all duration-300 mu-command-card mb-8"
+                          initial={{ opacity: 0, y: 20 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ delay: 0.3 }}
+                          whileHover={{ scale: 1.02, y: -5 }}
+                        >
+                          {/* Corner decorations */}
+                          <div className="absolute top-0 left-0 w-3 h-3 border-t border-l border-yellow-500/50"></div>
+                          <div className="absolute top-0 right-0 w-3 h-3 border-t border-r border-yellow-500/50"></div>
+                          <div className="absolute bottom-0 left-0 w-3 h-3 border-b border-l border-yellow-500/50"></div>
+                          <div className="absolute bottom-0 right-0 w-3 h-3 border-b border-r border-yellow-500/50"></div>
+                          
+                          <h3 className="text-xl font-bold text-green-400 mb-4" style={{ fontFamily: 'Arial, sans-serif' }}>⚔️ Nội Dung Cập Nhật</h3>
+                          <ul className="text-gray-300 space-y-2">
+                            {[
+                              'Mở đồ Box 1',
+                              'Mở đồ Box 2',
+                              'Tất cả đều 1 Ốp (Option)'
+                            ].map((item, i) => (
+                              <li key={i} className="flex items-start gap-2">
+                                <span className="w-2 h-2 bg-green-400 rounded-full mt-2 animate-pulse mu-dot-glow" style={{animationDelay: `${i * 0.2}s`}}></span>
+                                <span>{item}</span>
+                              </li>
+                            ))}
+                          </ul>
+                        </motion.div>
                       </AnimatedSection>
 
                       <AnimatedSection direction="up" delay={0.4}>
-                        <h2 className="text-2xl font-bold text-yellow-400 mb-4" style={{ fontFamily: 'Arial, sans-serif' }}>🎯 Giai Đoạn 2: Phát Triển (Q1 2025)</h2>
+                        <h2 className="text-2xl font-bold text-yellow-400 mb-4" style={{ fontFamily: 'Arial, sans-serif' }}>🎯 Tháng 4 & 5: Mở Rộng Box 3</h2>
                         <p className="text-gray-300 mb-6 leading-relaxed">
-                          Giai đoạn thứ hai tập trung vào việc thêm tính năng mới và cải thiện trải nghiệm:
+                          Giai đoạn thứ hai tiếp tục mở rộng hệ thống box:
                         </p>
                         
-                        <div className="grid md:grid-cols-2 gap-6 mb-8">
-                          {[
-                            { title: '🎮 Tính Năng Game', color: 'green', items: [
-                              'Thêm class Summoner',
-                              'Hệ thống guild war nâng cao',
-                              'Thêm map mới',
-                              'Hệ thống quest tự động'
-                            ]},
-                            { title: '💻 Tính Năng Website', color: 'blue', items: [
-                              'Hệ thống ranking online',
-                              'Forum cộng đồng',
-                              'Hệ thống vote server',
-                              'API cho mobile app'
-                            ]}
-                          ].map((feature, idx) => (
-                            <motion.div
-                              key={idx}
-                              className={`relative bg-black/40 rounded-lg p-6 border ${
-                                feature.color === 'green' ? 'border-green-500/30 hover:border-green-400/60' : 'border-blue-500/30 hover:border-blue-400/60'
-                              } transition-all duration-300 mu-command-card`}
-                              initial={{ opacity: 0, y: 20 }}
-                              animate={{ opacity: 1, y: 0 }}
-                              transition={{ delay: 0.4 + idx * 0.1 }}
-                              whileHover={{ scale: 1.02, y: -5 }}
-                            >
-                              {/* Corner decorations */}
-                              <div className="absolute top-0 left-0 w-3 h-3 border-t border-l border-yellow-500/50"></div>
-                              <div className="absolute top-0 right-0 w-3 h-3 border-t border-r border-yellow-500/50"></div>
-                              <div className="absolute bottom-0 left-0 w-3 h-3 border-b border-l border-yellow-500/50"></div>
-                              <div className="absolute bottom-0 right-0 w-3 h-3 border-b border-r border-yellow-500/50"></div>
-                              
-                              <h3 className={`text-xl font-bold mb-4 ${
-                                feature.color === 'green' ? 'text-green-400' : 'text-blue-400'
-                              }`} style={{ fontFamily: 'Arial, sans-serif' }}>{feature.title}</h3>
-                              <ul className="text-gray-300 space-y-2">
-                                {feature.items.map((item, i) => (
-                                  <li key={i} className="flex items-start gap-2">
-                                    <span className={`w-2 h-2 rounded-full mt-2 animate-pulse ${
-                                      feature.color === 'green' ? 'bg-green-400 mu-dot-glow' : 'bg-blue-400 mu-dot-glow'
-                                    }`} style={{animationDelay: `${i * 0.2}s`}}></span>
-                                    <span>{item}</span>
-                                  </li>
-                                ))}
-                              </ul>
-                            </motion.div>
-                          ))}
-                        </div>
+                        <motion.div
+                          className="relative bg-black/40 rounded-lg p-6 border border-blue-500/30 hover:border-blue-400/60 transition-all duration-300 mu-command-card mb-8"
+                          initial={{ opacity: 0, y: 20 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ delay: 0.4 }}
+                          whileHover={{ scale: 1.02, y: -5 }}
+                        >
+                          {/* Corner decorations */}
+                          <div className="absolute top-0 left-0 w-3 h-3 border-t border-l border-yellow-500/50"></div>
+                          <div className="absolute top-0 right-0 w-3 h-3 border-t border-r border-yellow-500/50"></div>
+                          <div className="absolute bottom-0 left-0 w-3 h-3 border-b border-l border-yellow-500/50"></div>
+                          <div className="absolute bottom-0 right-0 w-3 h-3 border-b border-r border-yellow-500/50"></div>
+                          
+                          <h3 className="text-xl font-bold text-blue-400 mb-4" style={{ fontFamily: 'Arial, sans-serif' }}>⚔️ Nội Dung Cập Nhật</h3>
+                          <ul className="text-gray-300 space-y-2">
+                            {[
+                              'Mở đồ Box 3',
+                              '1 Ốp (Option)'
+                            ].map((item, i) => (
+                              <li key={i} className="flex items-start gap-2">
+                                <span className="w-2 h-2 bg-blue-400 rounded-full mt-2 animate-pulse mu-dot-glow" style={{animationDelay: `${i * 0.2}s`}}></span>
+                                <span>{item}</span>
+                              </li>
+                            ))}
+                          </ul>
+                        </motion.div>
                       </AnimatedSection>
 
                       <AnimatedSection direction="up" delay={0.5}>
-                        <h2 className="text-2xl font-bold text-yellow-400 mb-4" style={{ fontFamily: 'Arial, sans-serif' }}>🌟 Giai Đoạn 3: Mở Rộng (Q2 2025)</h2>
+                        <h2 className="text-2xl font-bold text-yellow-400 mb-4" style={{ fontFamily: 'Arial, sans-serif' }}>🌟 Tháng Thứ 3: Bắt Đầu Mở W2</h2>
                         <p className="text-gray-300 mb-6 leading-relaxed">
-                          Giai đoạn thứ ba tập trung vào việc mở rộng server và thêm tính năng cao cấp:
+                          Giai đoạn thứ ba bắt đầu mở rộng sang W2:
                         </p>
                         
                         <motion.div
@@ -218,14 +177,12 @@ export default function NewsRoadmap() {
                           <div className="absolute bottom-0 left-0 w-3 h-3 border-b border-l border-yellow-500/50"></div>
                           <div className="absolute bottom-0 right-0 w-3 h-3 border-b border-r border-yellow-500/50"></div>
                           
-                          <h3 className="text-xl font-bold text-purple-400 mb-4" style={{ fontFamily: 'Arial, sans-serif' }}>🎪 Tính Năng Cao Cấp</h3>
+                          <h3 className="text-xl font-bold text-purple-400 mb-4" style={{ fontFamily: 'Arial, sans-serif' }}>🌍 Nội Dung Cập Nhật</h3>
                           <ul className="text-gray-300 space-y-2">
                             {[
-                              'Hệ thống castle siege nâng cao',
-                              'Thêm class Rage Fighter',
-                              'Hệ thống pet và mount',
-                              'Thêm server PvP riêng',
-                              'Hệ thống tournament tự động'
+                              'Bắt đầu mở W2',
+                              'Các tính năng mới cho W2',
+                              'Nâng cấp hệ thống game'
                             ].map((item, i) => (
                               <li key={i} className="flex items-start gap-2">
                                 <span className="w-2 h-2 bg-purple-400 rounded-full mt-2 animate-pulse mu-dot-glow" style={{animationDelay: `${i * 0.2}s`}}></span>
@@ -237,58 +194,38 @@ export default function NewsRoadmap() {
                       </AnimatedSection>
 
                       <AnimatedSection direction="up" delay={0.6}>
-                        <h2 className="text-2xl font-bold text-yellow-400 mb-4" style={{ fontFamily: 'Arial, sans-serif' }}>🔮 Giai Đoạn 4: Tương Lai (Q3-Q4 2025)</h2>
+                        <h2 className="text-2xl font-bold text-yellow-400 mb-4" style={{ fontFamily: 'Arial, sans-serif' }}>⚡ Tháng Thứ 6: Hoàn Thiện Box 4 & 5</h2>
                         <p className="text-gray-300 mb-6 leading-relaxed">
-                          Giai đoạn cuối tập trung vào việc phát triển dài hạn và mở rộng cộng đồng:
+                          Giai đoạn cuối cùng hoàn thiện hệ thống box:
                         </p>
                         
-                        <div className="grid md:grid-cols-2 gap-6 mb-8">
-                          {[
-                            { title: '🌍 Mở Rộng', color: 'yellow', items: [
-                              'Thêm server quốc tế',
-                              'Hệ thống cross-server',
-                              'Thêm ngôn ngữ',
-                              'Partnership với các server khác'
-                            ]},
-                            { title: '🚀 Công Nghệ', color: 'red', items: [
-                              'Upgrade lên Season 2',
-                              'Hệ thống AI anti-cheat',
-                              'Cloud infrastructure',
-                              'Blockchain integration'
-                            ]}
-                          ].map((future, idx) => (
-                            <motion.div
-                              key={idx}
-                              className={`relative bg-black/40 rounded-lg p-6 border ${
-                                future.color === 'yellow' ? 'border-yellow-500/30 hover:border-yellow-400/60' : 'border-red-500/30 hover:border-red-400/60'
-                              } transition-all duration-300 mu-command-card`}
-                              initial={{ opacity: 0, y: 20 }}
-                              animate={{ opacity: 1, y: 0 }}
-                              transition={{ delay: 0.6 + idx * 0.1 }}
-                              whileHover={{ scale: 1.02, y: -5 }}
-                            >
-                              {/* Corner decorations */}
-                              <div className="absolute top-0 left-0 w-3 h-3 border-t border-l border-yellow-500/50"></div>
-                              <div className="absolute top-0 right-0 w-3 h-3 border-t border-r border-yellow-500/50"></div>
-                              <div className="absolute bottom-0 left-0 w-3 h-3 border-b border-l border-yellow-500/50"></div>
-                              <div className="absolute bottom-0 right-0 w-3 h-3 border-b border-r border-yellow-500/50"></div>
-                              
-                              <h3 className={`text-xl font-bold mb-4 ${
-                                future.color === 'yellow' ? 'text-yellow-400' : 'text-red-400'
-                              }`} style={{ fontFamily: 'Arial, sans-serif' }}>{future.title}</h3>
-                              <ul className="text-gray-300 space-y-2">
-                                {future.items.map((item, i) => (
-                                  <li key={i} className="flex items-start gap-2">
-                                    <span className={`w-2 h-2 rounded-full mt-2 animate-pulse ${
-                                      future.color === 'yellow' ? 'bg-yellow-400 mu-dot-glow' : 'bg-red-400 mu-dot-glow'
-                                    }`} style={{animationDelay: `${i * 0.2}s`}}></span>
-                                    <span>{item}</span>
-                                  </li>
-                                ))}
-                              </ul>
-                            </motion.div>
-                          ))}
-                        </div>
+                        <motion.div
+                          className="relative bg-black/40 rounded-lg p-6 border border-orange-500/30 hover:border-orange-400/60 transition-all duration-300 mu-command-card mb-8"
+                          initial={{ opacity: 0, y: 20 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ delay: 0.6 }}
+                          whileHover={{ scale: 1.02, y: -5 }}
+                        >
+                          {/* Corner decorations */}
+                          <div className="absolute top-0 left-0 w-3 h-3 border-t border-l border-yellow-500/50"></div>
+                          <div className="absolute top-0 right-0 w-3 h-3 border-t border-r border-yellow-500/50"></div>
+                          <div className="absolute bottom-0 left-0 w-3 h-3 border-b border-l border-yellow-500/50"></div>
+                          <div className="absolute bottom-0 right-0 w-3 h-3 border-b border-r border-yellow-500/50"></div>
+                          
+                          <h3 className="text-xl font-bold text-orange-400 mb-4" style={{ fontFamily: 'Arial, sans-serif' }}>⚔️ Nội Dung Cập Nhật</h3>
+                          <ul className="text-gray-300 space-y-2">
+                            {[
+                              'Mở đồ Box 4',
+                              'Mở đồ Box 5',
+                              'Tất cả đều 1 Ốp (Option)'
+                            ].map((item, i) => (
+                              <li key={i} className="flex items-start gap-2">
+                                <span className="w-2 h-2 bg-orange-400 rounded-full mt-2 animate-pulse mu-dot-glow" style={{animationDelay: `${i * 0.2}s`}}></span>
+                                <span>{item}</span>
+                              </li>
+                            ))}
+                          </ul>
+                        </motion.div>
                       </AnimatedSection>
 
                       <AnimatedSection direction="up" delay={0.7}>
@@ -304,28 +241,39 @@ export default function NewsRoadmap() {
                           <div className="absolute bottom-0 left-0 w-3 h-3 border-b border-l border-yellow-500/50"></div>
                           <div className="absolute bottom-0 right-0 w-3 h-3 border-b border-r border-yellow-500/50"></div>
                           
-                          <h3 className="text-xl font-bold text-yellow-400 mb-4" style={{ fontFamily: 'Arial, sans-serif' }}>📊 Thống Kê Mục Tiêu</h3>
-                          <div className="grid md:grid-cols-3 gap-6">
-                            {[
-                              { value: '1,000+', label: 'Người chơi online', color: 'green' },
-                              { value: '10,000+', label: 'Tài khoản đăng ký', color: 'blue' },
-                              { value: '99.9%', label: 'Uptime server', color: 'purple' }
-                            ].map((stat, idx) => (
-                              <motion.div
-                                key={idx}
-                                className="text-center"
-                                initial={{ opacity: 0, scale: 0.8 }}
-                                animate={{ opacity: 1, scale: 1 }}
-                                transition={{ delay: 0.7 + idx * 0.1 }}
-                              >
-                                <div className={`text-3xl font-bold mb-2 ${
-                                  stat.color === 'green' ? 'text-green-400' : stat.color === 'blue' ? 'text-blue-400' : 'text-purple-400'
-                                } mu-text-glow`} style={{ fontFamily: 'Arial, sans-serif' }}>
-                                  {stat.value}
-                                </div>
-                                <div className="text-gray-300">{stat.label}</div>
-                              </motion.div>
-                            ))}
+                          <h3 className="text-xl font-bold text-yellow-400 mb-4" style={{ fontFamily: 'Arial, sans-serif' }}>📊 Lộ Trình Tóm Tắt</h3>
+                          <div className="space-y-4">
+                            <div className="flex items-start gap-3 p-3 bg-black/30 rounded border border-green-500/20">
+                              <span className="text-green-400 font-bold text-lg">1-3</span>
+                              <div className="flex-1">
+                                <div className="text-yellow-400 font-semibold mb-1">3 Tháng Đầu</div>
+                                <div className="text-gray-300 text-sm">Đồ Box 1, Box 2 (Tất cả 1 Ốp)</div>
+                              </div>
+                            </div>
+                            <div className="flex items-start gap-3 p-3 bg-black/30 rounded border border-purple-500/20">
+                              <span className="text-purple-400 font-bold text-lg">3</span>
+                              <div className="flex-1">
+                                <div className="text-yellow-400 font-semibold mb-1">Tháng Thứ 3</div>
+                                <div className="text-gray-300 text-sm">Bắt đầu mở W2</div>
+                              </div>
+                            </div>
+                            <div className="flex items-start gap-3 p-3 bg-black/30 rounded border border-blue-500/20">
+                              <span className="text-blue-400 font-bold text-lg">4-5</span>
+                              <div className="flex-1">
+                                <div className="text-yellow-400 font-semibold mb-1">Tháng 4 & 5</div>
+                                <div className="text-gray-300 text-sm">Đồ Box 3 (1 Ốp)</div>
+                              </div>
+                            </div>
+                            <div className="flex items-start gap-3 p-3 bg-black/30 rounded border border-orange-500/20">
+                              <span className="text-orange-400 font-bold text-lg">6</span>
+                              <div className="flex-1">
+                                <div className="text-yellow-400 font-semibold mb-1">Tháng Thứ 6</div>
+                                <div className="text-gray-300 text-sm">Đồ Box 4, Box 5 (Tất cả 1 Ốp)</div>
+                              </div>
+                            </div>
+                            <div className="mt-4 p-3 bg-red-500/10 rounded border border-red-500/30">
+                              <div className="text-red-400 font-semibold text-sm">⚠️ Lưu ý: Server chỉ có tới W2, không có W3</div>
+                            </div>
                           </div>
                         </motion.div>
                       </AnimatedSection>
