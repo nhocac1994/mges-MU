@@ -197,7 +197,9 @@ export default function Info() {
     { command: '/addvit [points]', description: 'Cộng điểm máu', details: 'Thêm điểm vào chỉ số Vitality (Máu). Ví dụ: /addvit 100' },
     { command: '/addene [points]', description: 'Cộng điểm năng lượng', details: 'Thêm điểm vào chỉ số Energy (Năng lượng). Ví dụ: /addene 100' },
     { command: '/addcmd [points]', description: 'Cộng điểm mệnh lệnh', details: 'Thêm điểm vào chỉ số Command (Mệnh lệnh). Ví dụ: /addcmd 100' },
-    { command: '/thungdo [0-5]', description: 'Mở thùng đồ cá nhân từ 1 - 5', details: 'Mở thùng đồ cá nhân. Số từ 0-5 tương ứng với các thùng đồ khác nhau.' }
+    { command: '/thungdo [0-5]', description: 'Mở thùng đồ cá nhân từ 1 - 5', details: 'Mở thùng đồ cá nhân. Số từ 0-5 tương ứng với các thùng đồ khác nhau.' },
+    { command: '/pack [tên ngọc] [số lượng]', description: 'Nén ngọc thành cụm', details: 'Nén các ngọc riêng lẻ thành cụm để tiết kiệm không gian kho. Ví dụ: /pack chaos 10 (nén 10 ngọc chaos thành 1 cụm)' },
+    { command: '/unpack [tên ngọc] [số lượng]', description: 'Giải nén cụm ngọc', details: 'Giải nén cụm ngọc thành các ngọc riêng lẻ. Ví dụ: /unpack chaos 10 (giải nén 1 cụm 10 ngọc chaos thành 10 ngọc riêng lẻ)' }
   ];
 
   useEffect(() => {

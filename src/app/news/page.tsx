@@ -153,10 +153,69 @@ export default function News() {
         <h3>Tương Lai</h3>
         <p>Chúng tôi sẽ tiếp tục phát triển và cải thiện server dựa trên phản hồi từ người chơi.</p>
       `
+    },
+    {
+      id: 'reset',
+      type: 'NOTICE',
+      date: '10/01/2025',
+      title: 'HỆ THỐNG RESET',
+      description: 'Thông tin chi tiết về hệ thống Reset trong game, bao gồm cách reset, chi phí reset cho tài khoản VIP và thường, giới hạn reset hàng ngày.',
+      link: '/news/reset',
+      color: 'blue',
+      content: `
+        <h2>HỆ THỐNG RESET</h2>
+        <p>Thông tin chi tiết về hệ thống Reset trong game ${config.nameGame} - ${config.gameTitle}!</p>
+        
+        <h3>Reset Khi Khai Mở Server</h3>
+        <ul>
+          <li>Server khai mở sẽ được reset <strong>50 lần miễn phí</strong></li>
+          <li>Đây là cơ hội đặc biệt cho người chơi mới</li>
+          <li>Tận dụng tối đa 50 lần reset để phát triển nhân vật mạnh mẽ</li>
+        </ul>
+        
+        <h3>Giới Hạn Reset Hàng Ngày</h3>
+        <ul>
+          <li>Mỗi ngày sẽ có <strong>2 lần reset</strong></li>
+          <li>Reset được tính từ 0h00 mỗi ngày</li>
+          <li>Sử dụng reset một cách thông minh để phát triển nhân vật hiệu quả</li>
+        </ul>
+        
+        <h3>Cách Reset</h3>
+        <ul>
+          <li><strong>Lệnh Reset:</strong> <code>/reset</code> - Reset nhân vật về level 1 và nhận thêm stat points</li>
+          <li><strong>Reset Auto:</strong> <code>/reset auto</code> - Tự động reset khi đạt level 400</li>
+        </ul>
+        
+        <h3>Chi Phí Reset</h3>
+        
+        <h4>Tài Khoản VIP:</h4>
+        <ul>
+          <li>Chi phí: <strong>10.000.000 Zen</strong></li>
+          <li>Ưu đãi đặc biệt cho thành viên VIP</li>
+          <li>Tiết kiệm đáng kể so với tài khoản thường</li>
+        </ul>
+        
+        <h4>Tài Khoản Thường:</h4>
+        <ul>
+          <li>Cần: <strong>1 Ngọc Sáng Tạo + 30.000.000 Zen</strong></li>
+          <li>Ngọc Sáng Tạo có thể kiếm được từ các sự kiện hoặc mua từ shop</li>
+          <li>Chuẩn bị đầy đủ vật phẩm trước khi reset</li>
+        </ul>
+        
+        <h3>Lưu Ý Quan Trọng</h3>
+        <ul>
+          <li>Reset sẽ đưa nhân vật về level 1</li>
+          <li>Bạn sẽ nhận được thêm stat points sau mỗi lần reset</li>
+          <li>Đảm bảo có đủ vật phẩm và zen trước khi reset</li>
+          <li>Reset là cách tốt để tăng sức mạnh nhân vật lâu dài</li>
+          <li>Lên kế hoạch reset hợp lý để tối ưu hóa sự phát triển</li>
+        </ul>
+      `
     }
   ];
 
   const recentNews = [
+    { title: 'HỆ THỐNG RESET', date: '10/01/2025', link: '/news/reset' },
     { title: 'THÔNG BÁO MỞ SERVER', date: '19/09/2024', link: '/news/opening' },
     { title: 'CẬP NHẬT PATCH 1.1', date: '18/09/2024', link: '/news/update' },
     { title: 'SỰ KIỆN DOUBLE EXP', date: '17/09/2024', link: '/news/events' }

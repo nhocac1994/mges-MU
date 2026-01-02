@@ -276,6 +276,184 @@ const EventCountdown: React.FC = () => {
     return false;
   };
 
+  // Helper function to get event benefits based on event name
+  const getEventBenefits = (eventName: string): React.ReactElement => {
+    const normalizedName = eventName.toLowerCase().trim();
+    
+    // Vua Xương (King/King of Bones) - handles both "Vua Xuong" and "Vua Xương"
+    if (normalizedName.includes('vua') && (normalizedName.includes('xuong') || normalizedName.includes('xương'))) {
+      return (
+        <>
+          <li className="flex items-start gap-2">
+            <span className="text-yellow-400 mt-1">💀</span>
+            <span>Drop các vé sự kiện</span>
+          </li>
+          <li className="flex items-start gap-2">
+            <span className="text-yellow-400 mt-1">📍</span>
+            <span>Diễn ra tại: <span className="text-green-400 font-semibold">Lorencia</span></span>
+          </li>
+        </>
+      );
+    }
+    
+    // Rồng Đỏ (Red Dragon) - handles both "Rong Do" and "Rồng Đỏ"
+    if (normalizedName.includes('rong') && (normalizedName.includes('do') || normalizedName.includes('đỏ'))) {
+      return (
+        <>
+          <li className="flex items-start gap-2">
+            <span className="text-yellow-400 mt-1">💎</span>
+            <span>Drop các loại ngọc và Zen</span>
+          </li>
+          <li className="flex items-start gap-2">
+            <span className="text-yellow-400 mt-1">📍</span>
+            <span>Diễn ra tại: <span className="text-blue-400 font-semibold">Devias</span></span>
+          </li>
+        </>
+      );
+    }
+    
+    // Boss Vàng (Golden Boss) - không phải VIP
+    if ((normalizedName.includes('boss') && normalizedName.includes('vang')) && !normalizedName.includes('vip')) {
+      return (
+        <>
+          <li className="flex items-start gap-2">
+            <span className="text-yellow-400 mt-1">📦</span>
+            <span>Drop Box 1 và Box 2</span>
+          </li>
+          <li className="flex items-start gap-2">
+            <span className="text-yellow-400 mt-1">📍</span>
+            <span>Diễn ra tại: <span className="text-green-400 font-semibold">Lorencia</span></span>
+          </li>
+        </>
+      );
+    }
+    
+    // Boss Vàng VIP
+    if (normalizedName.includes('boss') && normalizedName.includes('vang') && normalizedName.includes('vip')) {
+      return (
+        <>
+          <li className="flex items-start gap-2">
+            <span className="text-yellow-400 mt-1">📦</span>
+            <span>Drop <span className="text-yellow-400 font-semibold">5 Box 2</span></span>
+          </li>
+          <li className="flex items-start gap-2">
+            <span className="text-yellow-400 mt-1">📍</span>
+            <span>Diễn ra tại: <span className="text-green-400 font-semibold">Lorencia</span></span>
+          </li>
+        </>
+      );
+    }
+    
+    // Bình Đoàn Phù Thuỷ (Wizard Squad) - handles both with and without diacritics
+    if (normalizedName.includes('binh') && (normalizedName.includes('doan') || normalizedName.includes('đoàn')) && 
+        (normalizedName.includes('phu') || normalizedName.includes('phù')) && 
+        (normalizedName.includes('thuy') || normalizedName.includes('thuỷ'))) {
+      return (
+        <>
+          <li className="flex items-start gap-2">
+            <span className="text-yellow-400 mt-1">👤</span>
+            <span>Drop Nhân Phù Thuỷ</span>
+          </li>
+          <li className="flex items-start gap-2">
+            <span className="text-yellow-400 mt-1">📍</span>
+            <span>Diễn ra tại: <span className="text-green-400 font-semibold">Lorencia</span> và <span className="text-cyan-400 font-semibold">Noria</span></span>
+          </li>
+        </>
+      );
+    }
+    
+    // Sói Tân Binh (Wolf Recruit) - handles both with and without diacritics
+    if (normalizedName.includes('soi') && (normalizedName.includes('tan') || normalizedName.includes('tân')) && 
+        (normalizedName.includes('binh') || normalizedName.includes('binh'))) {
+      return (
+        <>
+          <li className="flex items-start gap-2">
+            <span className="text-yellow-400 mt-1">💍</span>
+            <span>Drop Ring Pen</span>
+          </li>
+        </>
+      );
+    }
+    
+    // Sự Kiện EroHim (Guild Event) - handles both with and without diacritics
+    if (normalizedName.includes('erohim') || normalizedName.includes('su kien erohim') || 
+        normalizedName.includes('sự kiện erohim') || normalizedName.includes('su kien erohim')) {
+      return (
+        <>
+          <li className="flex items-start gap-2">
+            <span className="text-yellow-400 mt-1">⚔️</span>
+            <span>Sự kiện chiến đấu Guild - các Guild cùng nhau chiến đấu</span>
+          </li>
+          <li className="flex items-start gap-2">
+            <span className="text-yellow-400 mt-1">👥</span>
+            <span>Điều kiện: Người chơi cùng Guild, cùng nhóm, phải gây damage lên Boss</span>
+          </li>
+          <li className="flex items-start gap-2">
+            <span className="text-yellow-400 mt-1">🏆</span>
+            <span>Guild nào kill được Boss sẽ nhận phần thưởng đặc biệt</span>
+          </li>
+          <li className="flex items-start gap-2">
+            <span className="text-yellow-400 mt-1">💎</span>
+            <span>Mỗi người chơi tham gia sẽ nhận: <span className="text-green-400 font-semibold">life</span> và <span className="text-purple-400 font-semibold">Chaos</span></span>
+          </li>
+        </>
+      );
+    }
+    
+    // Default benefits for other events
+    if (normalizedName.includes('doubleexp') || normalizedName.includes('exp')) {
+      return (
+        <>
+          <li className="flex items-start gap-2">
+            <span className="text-yellow-400 mt-1">⚡</span>
+            <span>Nhận gấp đôi kinh nghiệm khi tiêu diệt quái vật</span>
+          </li>
+          <li className="flex items-start gap-2">
+            <span className="text-yellow-400 mt-1">🎯</span>
+            <span>Áp dụng cho tất cả các map trong game</span>
+          </li>
+          <li className="flex items-start gap-2">
+            <span className="text-yellow-400 mt-1">📈</span>
+            <span>Không giới hạn level, tất cả nhân vật đều được hưởng</span>
+          </li>
+        </>
+      );
+    }
+    
+    if (normalizedName.includes('doubledrop') || normalizedName.includes('drop')) {
+      return (
+        <>
+          <li className="flex items-start gap-2">
+            <span className="text-yellow-400 mt-1">💎</span>
+            <span>Tăng tỷ lệ rơi đồ hiếm và set items</span>
+          </li>
+          <li className="flex items-start gap-2">
+            <span className="text-yellow-400 mt-1">🎁</span>
+            <span>Áp dụng cho tất cả quái vật trong game</span>
+          </li>
+          <li className="flex items-start gap-2">
+            <span className="text-yellow-400 mt-1">✨</span>
+            <span>Cơ hội nhận được các item quý giá hơn</span>
+          </li>
+        </>
+      );
+    }
+    
+    // Default generic benefits
+    return (
+      <>
+        <li className="flex items-start gap-2">
+          <span className="text-yellow-400 mt-1">🎮</span>
+          <span>Tham gia sự kiện để nhận nhiều phần thưởng hấp dẫn</span>
+        </li>
+        <li className="flex items-start gap-2">
+          <span className="text-yellow-400 mt-1">🏆</span>
+          <span>Cơ hội nhận được các item và kinh nghiệm đặc biệt</span>
+        </li>
+      </>
+    );
+  };
+
 
   // Render loading state only on client-side after mount
   if (!mounted || loading) {
@@ -426,48 +604,7 @@ const EventCountdown: React.FC = () => {
             <div className="bg-black/40 rounded-lg p-4 border border-yellow-500/30">
               <h3 className="text-xl font-bold text-yellow-300 mb-3">Lợi Ích</h3>
               <ul className="space-y-2 text-gray-300">
-                {selectedEvent.name.includes('DoubleExp') || selectedEvent.name.includes('EXP') ? (
-                  <>
-                    <li className="flex items-center gap-2">
-                      <span className="text-yellow-400">⚡</span>
-                      <span>Nhận gấp đôi kinh nghiệm khi tiêu diệt quái vật</span>
-                    </li>
-                    <li className="flex items-center gap-2">
-                      <span className="text-yellow-400">🎯</span>
-                      <span>Áp dụng cho tất cả các map trong game</span>
-                    </li>
-                    <li className="flex items-center gap-2">
-                      <span className="text-yellow-400">📈</span>
-                      <span>Không giới hạn level, tất cả nhân vật đều được hưởng</span>
-                    </li>
-                  </>
-                ) : selectedEvent.name.includes('DoubleDrop') || selectedEvent.name.includes('Drop') ? (
-                  <>
-                    <li className="flex items-center gap-2">
-                      <span className="text-yellow-400">💎</span>
-                      <span>Tăng tỷ lệ rơi đồ hiếm và set items</span>
-                    </li>
-                    <li className="flex items-center gap-2">
-                      <span className="text-yellow-400">🎁</span>
-                      <span>Áp dụng cho tất cả quái vật trong game</span>
-                    </li>
-                    <li className="flex items-center gap-2">
-                      <span className="text-yellow-400">✨</span>
-                      <span>Cơ hội nhận được các item quý giá hơn</span>
-                    </li>
-                  </>
-                ) : (
-                  <>
-                    <li className="flex items-center gap-2">
-                      <span className="text-yellow-400">🎮</span>
-                      <span>Tham gia sự kiện để nhận nhiều phần thưởng hấp dẫn</span>
-                    </li>
-                    <li className="flex items-center gap-2">
-                      <span className="text-yellow-400">🏆</span>
-                      <span>Cơ hội nhận được các item và kinh nghiệm đặc biệt</span>
-                    </li>
-                  </>
-                )}
+                {getEventBenefits(selectedEvent.name)}
               </ul>
             </div>
           </div>

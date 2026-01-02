@@ -444,6 +444,42 @@ export default function HomePage() {
 - Sự kiện hàng tuần với phần thưởng hấp dẫn`
     },
     {
+      title: 'HỆ THỐNG RESET',
+      date: '10/01/2025',
+      type: 'Notice',
+      link: '/news/reset',
+      content: `Thông tin chi tiết về hệ thống Reset trong game!
+
+**Reset Khi Khai Mở Server:**
+- Server khai mở sẽ được reset 50 lần miễn phí
+- Đây là cơ hội đặc biệt cho người chơi mới
+
+**Giới Hạn Reset Hàng Ngày:**
+- Mỗi ngày sẽ có 2 lần reset
+- Reset được tính từ 0h00 mỗi ngày
+- Sử dụng reset một cách thông minh để phát triển nhân vật hiệu quả
+
+**Cách Reset:**
+- Lệnh Reset: /reset - Reset nhân vật về level 1 và nhận thêm stat points
+- Reset Auto: /reset auto - Tự động reset khi đạt level 400
+
+**Chi Phí Reset:**
+
+**Tài Khoản VIP:**
+- Chi phí: 10.000.000 Zen
+- Ưu đãi đặc biệt cho thành viên VIP
+
+**Tài Khoản Thường:**
+- Cần: 1 Ngọc Sáng Tạo + 30.000.000 Zen
+- Ngọc Sáng Tạo có thể kiếm được từ các sự kiện hoặc mua từ shop
+
+**Lưu Ý:**
+- Reset sẽ đưa nhân vật về level 1
+- Bạn sẽ nhận được thêm stat points sau mỗi lần reset
+- Đảm bảo có đủ vật phẩm và zen trước khi reset
+- Reset là cách tốt để tăng sức mạnh nhân vật lâu dài`
+    },
+    {
       title: 'UPDATE SERVER',
       date: '27/08/2025',
       type: 'Update',

@@ -179,6 +179,88 @@ export default function NewsGuide() {
                       </AnimatedSection>
 
                       <AnimatedSection direction="up" delay={0.5}>
+                        <h2 className="text-2xl font-bold text-yellow-400 mb-4" style={{ fontFamily: 'Arial, sans-serif' }}>💎 Drop Item</h2>
+                        <p className="text-gray-300 mb-6 leading-relaxed">
+                          Hướng dẫn về hệ thống drop item theo từng map:
+                        </p>
+                        
+                        <div className="space-y-6 mb-8">
+                          {[
+                            { 
+                              title: '🔮 Map Lorencia & Devias', 
+                              color: 'blue',
+                              items: [
+                                'Rơi: Ngọc Ước Nguyện và Ngọc Tâm Linh',
+                                'Đây là các map chính để farm ngọc socket',
+                                'Thích hợp cho người chơi level trung bình'
+                              ]
+                            },
+                            { 
+                              title: '⚔️ Map Dungeon', 
+                              color: 'purple',
+                              items: [
+                                'Rơi: Các loại ngọc và Vũ khí Box 3',
+                                'Map có độ khó cao, cần chuẩn bị tốt',
+                                'Phần thưởng giá trị cao cho người chơi mạnh'
+                              ]
+                            },
+                            { 
+                              title: '📈 Tỷ Lệ EXP', 
+                              color: 'green',
+                              items: [
+                                'Tỷ lệ EXP 150% cho các map khác',
+                                'Giúp leveling nhanh hơn so với map thường',
+                                'Tham gia các sự kiện để nhận EXP bonus thêm'
+                              ]
+                            }
+                          ].map((section, idx) => (
+                            <motion.div
+                              key={idx}
+                              className={`relative bg-black/40 rounded-lg p-6 border ${
+                                section.color === 'blue' 
+                                  ? 'border-blue-500/30 hover:border-blue-400/60' 
+                                  : section.color === 'purple'
+                                  ? 'border-purple-500/30 hover:border-purple-400/60'
+                                  : 'border-green-500/30 hover:border-green-400/60'
+                              } transition-all duration-300 mu-command-card`}
+                              initial={{ opacity: 0, x: -20 }}
+                              animate={{ opacity: 1, x: 0 }}
+                              transition={{ delay: 0.5 + idx * 0.1 }}
+                              whileHover={{ scale: 1.02, y: -5 }}
+                            >
+                              {/* Corner decorations */}
+                              <div className="absolute top-0 left-0 w-3 h-3 border-t border-l border-yellow-500/50"></div>
+                              <div className="absolute top-0 right-0 w-3 h-3 border-t border-r border-yellow-500/50"></div>
+                              <div className="absolute bottom-0 left-0 w-3 h-3 border-b border-l border-yellow-500/50"></div>
+                              <div className="absolute bottom-0 right-0 w-3 h-3 border-b border-r border-yellow-500/50"></div>
+                              
+                              <h3 className={`text-xl font-bold mb-4 ${
+                                section.color === 'blue'
+                                  ? 'text-blue-400'
+                                  : section.color === 'purple'
+                                  ? 'text-purple-400'
+                                  : 'text-green-400'
+                              }`} style={{ fontFamily: 'Arial, sans-serif' }}>{section.title}</h3>
+                              <ul className="text-gray-300 space-y-2">
+                                {section.items.map((item, i) => (
+                                  <li key={i} className="flex items-start gap-2">
+                                    <span className={`w-2 h-2 rounded-full mt-2 animate-pulse ${
+                                      section.color === 'blue'
+                                        ? 'bg-blue-400 mu-dot-glow'
+                                        : section.color === 'purple'
+                                        ? 'bg-purple-400 mu-dot-glow'
+                                        : 'bg-green-400 mu-dot-glow'
+                                    }`} style={{animationDelay: `${i * 0.2}s`}}></span>
+                                    <span>{item}</span>
+                                  </li>
+                                ))}
+                              </ul>
+                            </motion.div>
+                          ))}
+                        </div>
+                      </AnimatedSection>
+
+                      <AnimatedSection direction="up" delay={0.6}>
                         <h2 className="text-2xl font-bold text-yellow-400 mb-4" style={{ fontFamily: 'Arial, sans-serif' }}>🎯 Tips & Tricks</h2>
                         <div className="grid md:grid-cols-2 gap-6">
                           {[
