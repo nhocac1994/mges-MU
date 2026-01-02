@@ -43,8 +43,8 @@ export default function Donate() {
     {
       id: 'chaos',
       title: 'Gói Chaos',
-      price: '12.000đ',
-      pricePer: '/ 1 Chaos',
+      price: '',
+      pricePer: '',
       icon: '💎',
       color: 'green',
       benefits: [
@@ -67,7 +67,7 @@ export default function Donate() {
     {
       id: 'gold',
       title: 'Gold Member',
-      price: '100.000đ',
+      price: '200.000đ',
       pricePer: '/ 30 ngày',
       icon: '👑',
       color: 'yellow',
@@ -83,6 +83,7 @@ export default function Donate() {
         description: 'Gói Gold Member mang lại nhiều lợi ích đặc biệt trong 30 ngày. Đây là gói phổ biến nhất.',
         features: [
           'Tăng 5% tỷ lệ thành công khi up đồ',
+          'Tăng 10% tỷ lệ drop item',
           'Có thể up đồ lên +10, +11, +12, +13',
           'Thời hạn sử dụng: 30 ngày kể từ ngày kích hoạt',
           'Nhận hỗ trợ ưu tiên từ admin',
@@ -94,8 +95,8 @@ export default function Donate() {
     {
       id: 'life',
       title: 'Gói Life',
-      price: '500đ',
-      pricePer: '/ 1 Life',
+      price: '',
+      pricePer: '',
       icon: '❤️',
       color: 'blue',
       benefits: [
