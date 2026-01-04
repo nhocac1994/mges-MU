@@ -749,6 +749,18 @@ export default function Info() {
                 <ul className="text-gray-300 space-y-2">
                       <li className="flex items-start gap-2">
                         <span className="text-yellow-400 mt-1">•</span>
+                        <span>Chú ý: Lệnh /pack và /unpack chaos ,b = bless ,s = soul, l = life ,c = creation</span>
+                      </li>
+                      <li className="flex items-start gap-2">
+                        <span className="text-yellow-400 mt-1">•</span>
+                        <span>Chú ý: Lệnh /pick và /pickclear, /pick 1 1 1 1 để nhặt toàn bộ item có trong pack</span>
+                      </li>
+                      <li className="flex items-start gap-2">
+                        <span className="text-yellow-400 mt-1">•</span>
+                        <span>Chú ý: Lệnh /reset auto str agi vit ene cmd ,vd /reset auto 100 100 100 100 100 khi reset sẽ tự động cộng điểm str agi vit ene cmd</span>
+                      </li>
+                      <li className="flex items-start gap-2">
+                        <span className="text-yellow-400 mt-1">•</span>
                         <span>Tất cả lệnh phải được nhập chính xác, phân biệt chữ hoa/thường</span>
                       </li>
                       <li className="flex items-start gap-2">
