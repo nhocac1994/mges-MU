@@ -265,27 +265,43 @@ export default function RootLayout({
             __html: `
               if ('serviceWorker' in navigator) {
                 window.addEventListener('load', function() {
-                  navigator.serviceWorker.register('/sw.js', { scope: '/' })
+                  navigator.serviceWorker.register('/sw.js', { scope: '/', updateViaCache: 'none' })
                     .then(function(registration) {
-                      // Chỉ log khi có lỗi hoặc update, không log mỗi lần load
-                      
                       // Kiểm tra và update service worker
                       registration.addEventListener('updatefound', () => {
                         const newWorker = registration.installing;
                         if (newWorker) {
                           newWorker.addEventListener('statechange', () => {
                             if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
-
+                              // Có service worker mới, clear cache và reload
+                              if ('caches' in window) {
+                                caches.keys().then(function(cacheNames) {
+                                  return Promise.all(
+                                    cacheNames.map(function(cacheName) {
+                                      return caches.delete(cacheName);
+                                    })
+                                  );
+                                }).then(function() {
+                                  window.location.reload();
+                                });
+                              } else {
+                                window.location.reload();
+                              }
                             } else if (newWorker.state === 'activated') {
-                              // Force reload để dùng service worker mới
+                              // Service worker mới đã activate, reload
                               window.location.reload();
                             }
                           });
                         }
                       });
+                      
+                      // Check for updates mỗi phút
+                      setInterval(function() {
+                        registration.update();
+                      }, 60000);
                     })
                     .catch(function(registrationError) {
-
+                      console.log('SW registration failed: ', registrationError);
                     });
                 });
               }

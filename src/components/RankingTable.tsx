@@ -11,6 +11,8 @@ interface CharacterRank {
   resets: number;
   level?: number;
   pkcount?: number;
+  isOnline?: boolean | number;
+  mapName?: string;
 }
 
 interface RankingTableProps {
@@ -267,7 +269,18 @@ export default function RankingTable({ title, endpoint }: RankingTableProps) {
                           {isSearchMode ? `#${index + 1}` : getRankIcon(index)}
                         </td>
                         <td className="py-3 px-2 sm:px-4 text-white font-medium" style={{ fontFamily: 'Arial, sans-serif' }}>
-                          {char.character}
+                          <span>{char.character}</span>
+                          {(() => {
+                            const isOnline = char.isOnline === 1 || char.isOnline === true;
+                            const status = isOnline ? 'online' : 'offline';
+                            const map = char.mapName ? `-${char.mapName.toLowerCase()}` : '';
+                            const statusClass = isOnline ? 'text-green-400' : 'text-gray-500';
+                            return (
+                              <span className={`ml-2 font-semibold ${statusClass}`}>
+                                ({status}{map})
+                              </span>
+                            );
+                          })()}
                         </td>
                         <td className="py-3 px-2 sm:px-4 text-blue-300" style={{ fontFamily: 'Arial, sans-serif' }}>
                           {getClassName(char.class)}

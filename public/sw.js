@@ -46,15 +46,48 @@ self.addEventListener('activate', (event) => {
   self.clients.claim();
 });
 
-// Fetch event
+// Fetch event - Network First Strategy (ưu tiên network, chỉ dùng cache khi offline)
 self.addEventListener('fetch', (event) => {
-  event.respondWith(
-    caches.match(event.request)
-      .then((response) => {
-        // Return cached version or fetch from network
-        return response || fetch(event.request);
-      })
-  );
+  // Chỉ xử lý GET requests (Cache API không hỗ trợ POST/PUT/DELETE)
+  if (event.request.method !== 'GET') {
+    // Với các request không phải GET, chỉ fetch trực tiếp từ network
+    event.respondWith(fetch(event.request));
+    return;
+  }
+
+  // Skip cache cho các request HTML và API để luôn lấy version mới
+  if (event.request.headers.get('accept')?.includes('text/html') ||
+      event.request.url.includes('/api/') ||
+      event.request.url.includes('/_next/')) {
+    // Network first cho HTML và API - KHÔNG cache
+    event.respondWith(
+      fetch(event.request)
+        .then((response) => {
+          return response;
+        })
+        .catch(() => {
+          // Fallback to cache chỉ khi offline
+          return caches.match(event.request);
+        })
+    );
+  } else {
+    // Cache first cho static assets (images, CSS, JS, etc) - CHỈ GET requests
+    event.respondWith(
+      caches.match(event.request)
+        .then((response) => {
+          return response || fetch(event.request).then((fetchResponse) => {
+            // Cache response mới (chỉ GET requests)
+            if (fetchResponse.ok && event.request.method === 'GET') {
+              const responseToCache = fetchResponse.clone();
+              caches.open(CACHE_NAME).then((cache) => {
+                cache.put(event.request, responseToCache);
+              });
+            }
+            return fetchResponse;
+          });
+        })
+    );
+  }
 });
 
 // Background sync for notifications
